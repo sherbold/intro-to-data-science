@@ -23,13 +23,7 @@
 
 # Top-level page
 - title: Home
-  url: /intro
-  not_numbered: true
-
-# External link
-- title: GitHub repository
-  url: https://github.com/jupyter/jupyter-book
-  external: true
+  url: /00_Preface
   not_numbered: true
 
 # Adds a searchbar link
@@ -39,8 +33,7 @@
 # Divider for meta-pages and content page
 - divider: true
 
-# Add a header and sample content section
-- header: Demo textbook
+- header: Chapters
 
 # A chapter w/ a collection of sections beneath it
 - title: Features and customization
@@ -54,3 +47,11 @@
   - title: Jupyter notebooks
     url: /features/notebooks
     not_numbered: true
+
+- title: Big Data and Data Science
+  url: /01_Introduction
+  not_numbered: false
+
+- title: The Process of Data Science Projects
+  url: /02_Process
+  not_numbered: false
