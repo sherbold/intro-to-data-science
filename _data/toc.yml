@@ -42,3 +42,7 @@
 - title: The Process of Data Science Projects
   url: /02_Process
   not_numbered: false
+  
+- title: Data Exploration
+  url: /03_Data-Exploration
+  not_numbered: false
