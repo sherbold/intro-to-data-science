@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: 
 suffix: .ipynb
-search: data mean e not value x values arithmetic median also statistics standard density distribution central deviation range g tendency variability descriptive where example y exploration less thus n normal plot histogram line used however misleading means same q visualization understand simple command only because statistical defined such equal using upper lower shows learn well between consider information case single within chapter described mode above should outliers actually numeric quartile plots knows different head non metadata without any works features good following instead measure frac xi similar assumptions parametric m both very lot likely bob function scientist tools aspects text format
+search: data mean e x not value values arithmetic median also statistics standard density distribution central deviation range y g tendency variability descriptive where example exploration less thus n normal plot histogram line used however misleading means same q visualization understand simple command only because statistical defined such equal using upper lower shows well between consider information case following single within chapter described mode above should outliers actually numeric quartile plots learn knows different head non metadata without any works features good instead measure frac xi similar assumptions parametric m both very lot likely bob function scientist tools aspects text format
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -451,24 +451,10 @@ median: 2.465
 <div class="jb_output_wrapper }}">
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/usr/local/lib/python3.6/dist-packages/networkx/drawing/nx_pylab.py:579: MatplotlibDeprecationWarning: 
-The iterable function was deprecated in Matplotlib 3.1 and will be removed in 3.3. Use np.iterable instead.
-  if not cb.iterable(width):
-/usr/local/lib/python3.6/dist-packages/networkx/drawing/nx_pylab.py:676: MatplotlibDeprecationWarning: 
-The iterable function was deprecated in Matplotlib 3.1 and will be removed in 3.3. Use np.iterable instead.
-  if cb.iterable(node_size):  # many node sizes
-</pre>
-</div>
-</div>
-</div>
-<div class="jb_output_wrapper }}">
-<div class="output_area">
-
 
 
 <div class="output_png output_subarea ">
-<img src="images/03_Data-Exploration_16_1.png"
+<img src="images/03_Data-Exploration_16_0.png"
 >
 </div>
 
@@ -485,14 +471,116 @@ The iterable function was deprecated in Matplotlib 3.1 and will be removed in 3.
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The graph is easy to read and gives us an intuitive understanding of the relationship between the four actors. Please note that for this - and all other graphs in this chapter - we leave out legends, detailed styling, etc. Instead, we create the graphs with minimal code such that they allow us to get the insights we want. This is because we consider visualization as a tool for data exploration. If we would consider visualization in general, especially how you should create graphs that should be used in written text (books, scientific publications, student thesis), other aspects would also be relevant, e.g., consistent font types and sizes, consistent coloring, legends, and titles.</p>
-<h3 id="Anscombe's-Quartet">Anscombe's Quartet<a class="anchor-link" href="#Anscombe's-Quartet"> </a></h3><p>Anscombe's quartet is a famous example for how statistical values may be misleading. The example is based on four different sets of data $(x_1, y_1), ..., (x_4, y_4)$ where with 11 values and for two variables $x_i$ and $y_i$, $i=1, ..., 4$. When we look at the data with descriptive statistics, they look very similar.</p>
+<h3 id="Anscombe's-Quartet">Anscombe's Quartet<a class="anchor-link" href="#Anscombe's-Quartet"> </a></h3><p>Anscombe's quartet is a famous example for how statistical values may be misleading. The example is based on four different sets of data $(x_1, y_1), ..., (x_4, y_4)$ where with 11 values and for two variables $x_i$ and $y_i$, $i=1, ..., 4$.</p>
+<table>
+<thead><tr>
+<th>$x_{1,2,3}$</th>
+<th>$y_1$</th>
+<th>$y_2$</th>
+<th>$y_3$</th>
+<th>$x_4$</th>
+<th>$y_4$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>8.04</td>
+<td>9.14</td>
+<td>7.46</td>
+<td>8</td>
+<td>6.58</td>
+</tr>
+<tr>
+<td>8</td>
+<td>6.95</td>
+<td>8.14</td>
+<td>6.77</td>
+<td>8</td>
+<td>5.76</td>
+</tr>
+<tr>
+<td>13</td>
+<td>7.58</td>
+<td>8.74</td>
+<td>12.74</td>
+<td>8</td>
+<td>7.71</td>
+</tr>
+<tr>
+<td>9</td>
+<td>8.81</td>
+<td>8.77</td>
+<td>7.11</td>
+<td>8</td>
+<td>8.84</td>
+</tr>
+<tr>
+<td>11</td>
+<td>8.33</td>
+<td>9.26</td>
+<td>7.81</td>
+<td>8</td>
+<td>8.47</td>
+</tr>
+<tr>
+<td>14</td>
+<td>9.96</td>
+<td>8.10</td>
+<td>8.84</td>
+<td>8</td>
+<td>7.04</td>
+</tr>
+<tr>
+<td>6</td>
+<td>7.24</td>
+<td>6.13</td>
+<td>6.08</td>
+<td>8</td>
+<td>5.25</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4.26</td>
+<td>3.10</td>
+<td>5.39</td>
+<td>19</td>
+<td>12.50</td>
+</tr>
+<tr>
+<td>12</td>
+<td>10.84</td>
+<td>9.13</td>
+<td>8.15</td>
+<td>8</td>
+<td>5.56</td>
+</tr>
+<tr>
+<td>7</td>
+<td>4.82</td>
+<td>7.26</td>
+<td>6.42</td>
+<td>8</td>
+<td>7.91</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5.68</td>
+<td>4.74</td>
+<td>5.73</td>
+<td>8</td>
+<td>6.89</td>
+</tr>
+</tbody>
+</table>
+<p>When we look at the data with descriptive statistics, they look very similar.</p>
 
 </div>
 </div>
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -582,7 +670,7 @@ standard deviation of y1, ..., y4
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -639,14 +727,14 @@ standard deviation of y1, ..., y4
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The orange points show the location of the data, the blue line shows the regression line for $y=3+0.5\cdot x$ which is optimal for the data. From the statistics, one may expect the data to look like $x_1$, $y_1$, i.e., data with a fairly linear relationship. This means that both $x_1$ and $y_1$ change relatively regularly in form of a line. How how the statistics can be misleading, as they may also be the result for other data. The pair $x_2$, $y_2$ shows something that looks a lot like an inverse parabola. The pair $x_3$, $y_3$ is actually perfectly linear, but with one outlier which skews the regression line. The pair $x_4$, $y_4$ is even worse. $x_4$ is actually constant with one exception.</p>
 <p>The example demonstrates how descriptive statistics about data can be misleading and should be used with care. However, the more statistical markers are used, the less likely it is that the results are misleading. The critical reader may also complain that at least $y_3$ and $x_4$ have outliers and that the arithmetic mean and the standard deviations are not good criteria anyways. However, the problem is generic can there are many more examples, also for more statistical markers, as the work by <a href="https://doi.org/10.1145/3025453.3025912">Matejka and Fitzmaurice</a> demonstrates.</p>
-<h3 id="Exploration-of-Single-Features">Exploration of Single Features<a class="anchor-link" href="#Exploration-of-Single-Features"> </a></h3><p>The basic analysis of data is that of the distribution of single features within your data to understand how the values of the feature are distributed, similar to the analysis of single features with descriptive statistics. In the following, we will do this for a features from the <a href="">Boston housing data</a>, a dataset about house prices in Boston from that was initially published in 1978. We can load the data and the description of the data directly with scikit-learn.</p>
+<h3 id="Exploration-of-Single-Features">Exploration of Single Features<a class="anchor-link" href="#Exploration-of-Single-Features"> </a></h3><p>The basic analysis of data is that of the distribution of single features within your data to understand how the values of the feature are distributed, similar to the analysis of single features with descriptive statistics. In the following, we will do this for a features from the <a href="">Boston housing data</a>, a dataset about house prices in Boston from that was initially published in 1978. The description of the data is the following.</p>
 
 </div>
 </div>
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -742,7 +830,7 @@ problems.
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -798,7 +886,7 @@ problems.
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -855,7 +943,7 @@ problems.
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
