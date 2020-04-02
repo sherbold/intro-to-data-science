@@ -3,30 +3,3 @@
     margin: 5px 2px 2px 0px !important;
     float: left !important;
 }
-
-blockquote {
-  margin: $spacing-unit-small;
-  border: 4px solid $color-dark-gray;
-  padding: $spacing-unit-tiny $spacing-unit-med;
-
-  p {
-    margin-bottom: $spacing-unit-small;
-  }
-
-  ul, ol {
-    margin-bottom: $spacing-unit-tiny;
-  }
-
-  // This should only trigger if the last child of a blockquote is an ul/ol
-  > :last-child li {
-    text-align: right;
-    list-style-type: none;
-    margin: none;
-    padding-right: 5%;
-
-    &:before {
-      content: "—";
-      padding-right: 10px;
-    }
-  }
-}

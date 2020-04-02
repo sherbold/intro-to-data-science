@@ -260,7 +260,7 @@ div.output_subarea {
 // Default
 blockquote {
   margin: $spacing-unit-small;
-  border-left: 4px solid $color-dark-gray;
+  border: 2px solid $color-dark-gray;
   padding: $spacing-unit-tiny $spacing-unit-med;
 
   p {
@@ -269,19 +269,6 @@ blockquote {
 
   ul, ol {
     margin-bottom: $spacing-unit-tiny;
-  }
-
-  // This should only trigger if the last child of a blockquote is an ul/ol
-  > :last-child li {
-    text-align: right;
-    list-style-type: none;
-    margin: none;
-    padding-right: 5%;
-
-    &:before {
-      content: "—";
-      padding-right: 10px;
-    }
   }
 }
 
