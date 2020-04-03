@@ -1,0 +1,57 @@
+---
+redirect_from:
+  - "/04-data-analysis-overview"
+interact_link: content/04_Data-Analysis-Overview.ipynb
+kernel_name: python3
+kernel_path: content
+has_widgets: false
+title: |-
+  Overview of Data Analysis
+pagenum: 4
+prev_page:
+  url: /03_Data-Exploration.html
+next_page:
+  url: 
+suffix: .ipynb
+search: algorithms algorithm data theorem lunch nfl problems free m different f let y p dmyf not better e must suitable analysis foundations into need just colloquial following dmy function getting any sumf tells us equal functions considered average instead knowledge scientists based problem experience overview content categories methods machine learning before dive creation models foundation fundamental optimization gets bit theoretical interested very important consequences modeling skip definition mathematical formulation ordered sets size cost values x should optimized conditional probability times running pair equations holds proof found literature todo equation sum probabilities certain costs meaning summarized follows possible counter intuitive because
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Overview of Data Analysis</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Overview-of-Data-Analysis">Overview of Data Analysis<a class="anchor-link" href="#Overview-of-Data-Analysis"> </a></h1><p>Content:</p>
+<ul>
+<li>No Free Lunch Theorem</li>
+<li>Categories of Data Analysis Methods</li>
+<li>Foundations of Machine Learning</li>
+</ul>
+<h2 id="No-Free-Lunch-Theorem-(NFL)">No Free Lunch Theorem (NFL)<a class="anchor-link" href="#No-Free-Lunch-Theorem-(NFL)"> </a></h2><p>Before we dive into the algorithms for the creation of models about the data, we need some foundations. The first foundation is a fundamental theorem about optimization algorithms, the <em>No Free Lunch Theorem</em> (NFL). This now gets a bit theoretical, if you are just interested into the the (very important!) consequences of the theorem on data modeling, just skip to the colloquial definition. The mathematical formulation of the NFL is the following.</p>
+<blockquote><p><strong>No Free Lunch Theorem:</strong></p>
+<p>Let $d_m^y$ be ordered sets of size $m$ with cost values $y \in Y$. Let $f: X \to Y$ a function that should be optimized. Let $P(d_m^y|f, m, a)$ the conditional probability of getting $d_m^y$ by $m$ times running the algorithm $a$ on the function $f$.</p>
+<p>For any pair of algorithms $a_1$ and $a_2$ to following equations holds:</p>
+$$\sum_f P(d_m^y|f, m, a_1) = \sum_f P(d_m^y|f, m, a_2)$$
+</blockquote>
+<p>A proof for the theorem can be <a href="TODO">found in the literature</a>. The equation of the NFL tells us the the sum of probabilities of getting certain costs is equal if all functions $f$ are considered for any two algorithms. The meaning of this can be summarized as follows.</p>
+<blockquote><p><strong>No Free Lunch Theorem (Colloquial):</strong></p>
+<p>All algorithms are equal, when all possible problems are considered.</p>
+</blockquote>
+<p>This is counter-intuitive, because we observe notable differences between different algorithms in practice. However, the NFL does not prohibit that an algorithms is better for some functions $f$ - i.e., for some problems. But if an algorithm is better than the average algorithm for some problems, the NFL tells us that the algorithm must be worse than the average algorithm for other problems. Thus, the true consequence of the NFL is that <em>there is not one algorithm that is optimal for all problems</em>. Instead, different algorithms are better on different for different problems. That is also the reason for the name: there is no "free lunch", i.e., one algorithm for all problems. Instead, data scientist must earn their lunch, i.e., find a suitable algorithm.</p>
+<p>This means that having detailed knowledge about one algorithm is not sufficient. Data scientists need a whole toolbox of algorithms. They must be able to select a suitable algorithm, based on the data, their knowledge about the problem, and their experience based on working with different algorithms. Over the time, data scientists gather experience with more and more algorithms and become experts in selecting suitable algorithms for a given problem.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

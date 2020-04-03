@@ -38,14 +38,15 @@
 - title: Big Data and Data Science
   url: /01_Introduction
   not_numbered: false
-  expand_sections: true
 
 - title: The Process of Data Science Projects
   url: /02_Process
   not_numbered: false
-  expand_sections: true
   
 - title: Data Exploration
   url: /03_Data-Exploration
   not_numbered: false
-  expand_sections: true
+
+- title: Overview of Data Analysis
+  url: /04_Data-Analysis-Overview
+  not_numbered: false
