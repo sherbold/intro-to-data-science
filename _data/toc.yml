@@ -22,8 +22,7 @@
 # See the links below for an example.
 
 # Top-level page
-- title: Preface
-  url: /00_Preface
+- url: /00_Preface
   not_numbered: true
 
 # Adds a searchbar link
