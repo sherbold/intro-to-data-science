@@ -34,18 +34,14 @@
 
 - header: Chapters
 
-- title: Big Data and Data Science
-  url: /01_Introduction
+- url: /01_Introduction
   not_numbered: false
 
-- title: The Process of Data Science Projects
-  url: /02_Process
+- url: /02_Process
   not_numbered: false
   
-- title: Data Exploration
-  url: /03_Data-Exploration
+- url: /03_Data-Exploration
   not_numbered: false
 
-- title: Overview of Data Analysis
-  url: /04_Data-Analysis-Overview
+- url: /04_Data-Analysis-Overview
   not_numbered: false
