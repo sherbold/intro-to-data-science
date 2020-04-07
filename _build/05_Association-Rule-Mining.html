@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: 
 suffix: .ipynb
-search: association items mining rule objects associations between set example basket rules related shopper store img src images png alt style width px transactions overview relationships idea behind determine allow us identify already terminology refer common analysis puts into once possible recommend associated available associationsrulesgeneral defined shoppers buy together generally speaking transaction observe apply infer describe associationsrulesabstract
+search: item rules items support x itemsets frequent rule association y itemset lift often k example confidence associations transactions e not possible rightarrow leverage together antecedent thus mining interesting consequent only defined also data consider combinations because good between subseteq occur algorithm objects set t same apriori still size relationship frac measures minimal means however expected exponential drop determine us already transaction emptyset based such create ratio minsupp just cup random likely very really single need property allow identify common basket into should above define subset where subsets moreover question our empty since cannot always used occurs present growth search length
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -28,8 +28,679 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Overview">Overview<a class="anchor-link" href="#Overview"> </a></h2><p>Associations are relationships between objects. The idea behind association rule mining is to determine rules, that allow us to identify which objects may be related to a set of objects were already know. In the association mining terminology, we refer to the objects as <em>items</em>. A common example for association rule mining is basket analysis. A shopper puts items from a store into a basket. Once there are some items in the basket, it is possible to recommend associated items that are available in the store to the shopper.</p>
 <p><img src="images/associationsrules_general.png" alt="Example for Associations" style="width: 500px;"/></p>
-<p>In this example, the association between items is defined as "shoppers buy items together". More generally speaking, we have <em>transactions</em>, and in each transaction we observe a set of related objects. We apply association rule mining to a set of transactions to infer <em>association rules</em> that describe the associations between items.</p>
+<p>In this example, the association between items is defined as "shoppers bought items together". More generally speaking, we have <em>transactions</em>, and in each transaction we observe a set of related objects. We apply association rule mining to a set of transactions to infer <em>association rules</em> that describe the associations between items.</p>
 <p><img src="images/associationsrules_abstract.png" alt="Association Rule Mining" style="width: 500px;"/></p>
+<p>The relationship that the rules describe should be "interesting". The meaning of interesting is defined by the use case. In the example above, interesting is defined as "shoppers bought items together". If the association rules should, e.g., groups of collaborators, interesting would be defined as "worked together in the past".</p>
+<p>We can also formally define the association rule mining. We have a finite set of items $I = \{i_1, ..., i_m\}$ and transactions that are a subset of the items, i.e., transactions $T = \{t_1, ..., t_n \}$ with $t_j \subseteq I, j=1, ..., n$. Association rules are logical rules of the form $X \Rightarrow Y$, where $X$ and $Y$ are disjoint subsets of items, i.e., $X, Y \subseteq I$ and $X \cap Y = \emptyset$. We refer to $X$ as the <em>antecedent</em> or left-hand-side of the rule and to $Y$ as the <em>consequent</em> or right-hand-side of the rule.</p>
+<blockquote><p><em>Note:</em></p>
+<p>You may notice that we do not speak of features, but only of items. Moreover, we do not speak of instances, but rather of transactions. The reason for this is two-fold. First, this is the common terminology with respect to association rule mining. Second, there are no real features, the objects are defined by their identity. The transactions are the same as the instances from <a href="04_Data-Analysis-Overview">Chapter 4</a>.</p>
+</blockquote>
+<p>The goal of association rule mining is to identify good rules based on a set of transactions. A generic way to define "interesting relationships" is that items occur often together in transactions. Consider the following example with ten transactions.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># we define each transaction as a list</span>
+<span class="c1"># a set of transactions is a list of lists</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;item1&#39;</span><span class="p">,</span> <span class="s1">&#39;item2&#39;</span><span class="p">,</span> <span class="s1">&#39;item3&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;item2&#39;</span><span class="p">,</span> <span class="s1">&#39;item4&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;item1&#39;</span><span class="p">,</span> <span class="s1">&#39;item5&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;item6&#39;</span><span class="p">,</span> <span class="s1">&#39;item7&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;item2&#39;</span><span class="p">,</span> <span class="s1">&#39;item3&#39;</span><span class="p">,</span> <span class="s1">&#39;item4&#39;</span><span class="p">,</span> <span class="s1">&#39;item7&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;item2&#39;</span><span class="p">,</span> <span class="s1">&#39;item3&#39;</span><span class="p">,</span> <span class="s1">&#39;item4&#39;</span><span class="p">,</span> <span class="s1">&#39;item8&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;item2&#39;</span><span class="p">,</span> <span class="s1">&#39;item4&#39;</span><span class="p">,</span> <span class="s1">&#39;item5&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;item2&#39;</span><span class="p">,</span> <span class="s1">&#39;item3&#39;</span><span class="p">,</span> <span class="s1">&#39;item4&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;item4&#39;</span><span class="p">,</span> <span class="s1">&#39;item5&#39;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s1">&#39;item6&#39;</span><span class="p">,</span> <span class="s1">&#39;item7&#39;</span><span class="p">]]</span>
+<span class="n">data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[[&#39;item1&#39;, &#39;item2&#39;, &#39;item3&#39;],
+ [&#39;item2&#39;, &#39;item4&#39;],
+ [&#39;item1&#39;, &#39;item5&#39;],
+ [&#39;item6&#39;, &#39;item7&#39;],
+ [&#39;item2&#39;, &#39;item3&#39;, &#39;item4&#39;, &#39;item7&#39;],
+ [&#39;item2&#39;, &#39;item3&#39;, &#39;item4&#39;, &#39;item8&#39;],
+ [&#39;item2&#39;, &#39;item4&#39;, &#39;item5&#39;],
+ [&#39;item2&#39;, &#39;item3&#39;, &#39;item4&#39;],
+ [&#39;item4&#39;, &#39;item5&#39;],
+ [&#39;item6&#39;, &#39;item7&#39;]]</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that the items item2, item3, and item4 occur often together. Thus, there seems to be an interesting relationship between the items. The question is, how can we find such interesting combinations of items automatically and how can we create good rules from interesting combinations of items.</p>
+<h2 id="The-Apriori-Algorithm">The Apriori Algorithm<a class="anchor-link" href="#The-Apriori-Algorithm"> </a></h2><p>The Apriori algorithm is a relatively simple, but also powerful algorithm for finding associations.</p>
+<h3 id="Support-and-Frequent-Itemsets">Support and Frequent Itemsets<a class="anchor-link" href="#Support-and-Frequent-Itemsets"> </a></h3><p>The algorithm is based on the concept of the <em>support</em> of itemsets $IS \subseteq I$. The support of an itemset $IS$ is defined as the ratio of transaction in which all items $i \in IS$ occur, i.e., $$support(IS) = \frac{|\{t \in T: IS \subseteq T\}}{|T|}.$$</p>
+<p>The support mimics our generic definition of interesting from above, because it directly measures how often combinations of items occur. Thus, support is an indirect measure for interestingness. What we are still missing is a minimal level of interestingness for us to consider building rules from an itemset. We define this using a minimal level of support that is required for such that an itemset occur often enough to be interesting. All itemsets that have a support greater than this threshold are called <em>frequent itemset</em>. Formally, we call an itemset frequent $IS \subset I$, if $support(IS) \geq minsupp$ for a minimal required support $minsupp \in [0,1]$.</p>
+<p>In our example above, the items item2, item3, and item4 would have $support(\{item2, item3, item4\}) = \frac{3}{10}$, because all three items occur together in three of the ten transactions. Thus, if we use $minsupp=0.3$, this we would call $\{item2, item3, item4\}$ frequent. Overall, we find the following frequent itemsets.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># we need pandas and mlxtend for the association rules</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">mlxtend.frequent_patterns</span> <span class="k">import</span> <span class="n">apriori</span>
+<span class="kn">from</span> <span class="nn">mlxtend.preprocessing</span> <span class="k">import</span> <span class="n">TransactionEncoder</span>
+
+<span class="c1"># we first need to create a one-hot encoding of our transactions</span>
+<span class="n">te</span> <span class="o">=</span> <span class="n">TransactionEncoder</span><span class="p">()</span>
+<span class="n">te_ary</span> <span class="o">=</span> <span class="n">te</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">te_ary</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">te</span><span class="o">.</span><span class="n">columns_</span><span class="p">)</span>
+
+<span class="c1"># we can the use this function to determine all itemsets with at least 0.3 support</span>
+<span class="c1"># what apriori is will be explained later</span>
+<span class="n">frequent_itemsets</span> <span class="o">=</span> <span class="n">apriori</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_df</span><span class="p">),</span> <span class="n">min_support</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">use_colnames</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">frequent_itemsets</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>support</th>
+      <th>itemsets</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.6</td>
+      <td>(item2)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.4</td>
+      <td>(item3)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.6</td>
+      <td>(item4)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.3</td>
+      <td>(item5)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.3</td>
+      <td>(item7)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.4</td>
+      <td>(item3, item2)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.5</td>
+      <td>(item4, item2)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.3</td>
+      <td>(item4, item3)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.3</td>
+      <td>(item4, item3, item2)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Deriving-Rules-from-Itemsets">Deriving Rules from Itemsets<a class="anchor-link" href="#Deriving-Rules-from-Itemsets"> </a></h3><p>A frequent itemset is not yet an association rule, i.e., we do not have an antecedent $X$ and a consequent $Y$ to create a rule $X \Rightarrow Y$. There is a simple way to create rules from a frequent itemset. We can just consider all possible splits of the frequent itemset in two partitions, i.e, all combinations $X, Y \subseteq IS$ such that $X \cup Y = IS$ and $X \cap Y = \emptyset$.</p>
+<p>This means we can derive eight rules from the itemset $\{item2, item3, item4\}$:</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">mlxtend.frequent_patterns</span> <span class="k">import</span> <span class="n">association_rules</span>
+
+<span class="n">association_rules</span><span class="p">(</span><span class="n">frequent_itemsets</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">9</span><span class="p">,</span> <span class="p">:],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;confidence&quot;</span><span class="p">,</span>
+                  <span class="n">min_threshold</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">support_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)[[</span><span class="s1">&#39;antecedents&#39;</span><span class="p">,</span> <span class="s1">&#39;consequents&#39;</span><span class="p">]]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>antecedents</th>
+      <th>consequents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>(item4, item3)</td>
+      <td>(item2)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(item4, item2)</td>
+      <td>(item3)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(item3, item2)</td>
+      <td>(item4)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(item4)</td>
+      <td>(item3, item2)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(item3)</td>
+      <td>(item4, item2)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>(item2)</td>
+      <td>(item4, item3)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The two remaining rules use the empty set as antecedent/consequent, i.e.,</p>
+<ul>
+<li>$\emptyset \Rightarrow \{item2, item3, item4\}$</li>
+<li>$\{item2, item3, item4\} \Rightarrow \emptyset$</li>
+</ul>
+<p>Since these rules to not allow for any meaningful associations, we ignore them.</p>
+<h3 id="Confidence,-Lift,-and-Leverage">Confidence, Lift, and Leverage<a class="anchor-link" href="#Confidence,-Lift,-and-Leverage"> </a></h3><p>The still open question is, how we may decide if these rules are good and actually show meaningful associations, or if they are just the result of random effects. This cannot be decided based on the support. For example, consider a Web shop with free items. These items are likely in very many baskets. Thus, they will be part of many frequent itemsets. However, we cannot really follow anything from this item, because it is just added randomly because it is free, not because it is associated with other items. Moreover, the support of a rule $X \Rightarrow Y$ is always the same as for the rule $Y \Rightarrow X$. However, there may be differences, because causal associations are often directed. The measures of <em>confidence</em>, <em>lift</em>, and <em>leverage</em> may be used to see if a rule a is random or if there is really an association.</p>
+<p>The confidence of a rule is defined as $$confidence(X \Rightarrow Y) = \frac{support(X \cup Y)}{support(X)},$$
+i.e. the confidence is the ratio of observing the antecedent and the consequent together in relation to only the transactions that contain $X$. A high confidence indicates that the consequent often occurs when the antecedent is in a transaction.</p>
+<p>The lift of a rule is defined as $$lift(X \Rightarrow Y) = \frac{support(X \cup Y)}{support(X) \cdot support(Y)}.$$
+The lift measures the ratio between how often the antecedent and the consequent are observed together and how often they would be expected to be observed together, given their individual support. The denominator is the expected value, given that antecedent and consequent are independent of each other. Thus, as lift of 2 means, that $X$ and $Y$ occur twice as often together, as would be expected if there would be no association between the two.  If the antecedent and the consequent are completely independent of each other, the lift is 1.</p>
+<p>The leverage of a rule is defined as $$leverage(X \Rightarrow Y) = support(X \cup Y) - support(X) \cdot support(Y).$$
+This definition is almost the same as for the lift, except that the difference is used instead of the ratio. Thus, there is a close relationship between lift an leverage. In general, leverage slightly favors itemsets with small support.</p>
+<p>To better understand how the confidence, lift, and leverage work, we look at the values for the rules we derived from the itemset $\{item2, item3, item4\}$.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># all rules for our data</span>
+<span class="c1"># we drop the column conviction, because this metric is not covered here</span>
+<span class="c1"># we also drop all rules from other itemsets than above. </span>
+<span class="n">association_rules</span><span class="p">(</span><span class="n">frequent_itemsets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;confidence&quot;</span><span class="p">,</span>
+                  <span class="n">min_threshold</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;conviction&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">6</span><span class="p">:]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>antecedents</th>
+      <th>consequents</th>
+      <th>antecedent support</th>
+      <th>consequent support</th>
+      <th>support</th>
+      <th>confidence</th>
+      <th>lift</th>
+      <th>leverage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>(item4, item3)</td>
+      <td>(item2)</td>
+      <td>0.3</td>
+      <td>0.6</td>
+      <td>0.3</td>
+      <td>1.00</td>
+      <td>1.666667</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(item4, item2)</td>
+      <td>(item3)</td>
+      <td>0.5</td>
+      <td>0.4</td>
+      <td>0.3</td>
+      <td>0.60</td>
+      <td>1.500000</td>
+      <td>0.10</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(item3, item2)</td>
+      <td>(item4)</td>
+      <td>0.4</td>
+      <td>0.6</td>
+      <td>0.3</td>
+      <td>0.75</td>
+      <td>1.250000</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(item4)</td>
+      <td>(item3, item2)</td>
+      <td>0.6</td>
+      <td>0.4</td>
+      <td>0.3</td>
+      <td>0.50</td>
+      <td>1.250000</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(item3)</td>
+      <td>(item4, item2)</td>
+      <td>0.4</td>
+      <td>0.5</td>
+      <td>0.3</td>
+      <td>0.75</td>
+      <td>1.500000</td>
+      <td>0.10</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>(item2)</td>
+      <td>(item4, item3)</td>
+      <td>0.6</td>
+      <td>0.3</td>
+      <td>0.3</td>
+      <td>0.50</td>
+      <td>1.666667</td>
+      <td>0.12</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Based on the metrics, the best rules seem to be $\{item3, item4\} \Rightarrow \{item2\}$. This rule has a perfect confidence of 1, i.e., item2 is always present when item4 and item3 are also present. Moreover, the lift of 1.66 indicates that this is 1.66 times more often than expected. The counterpart to this rule is $\{item2\} \Rightarrow \{item3, item4\}$. The rule has the same lift, but the confidence is only 0.5. This means that item2 appears twice as often alone, as together with the items item3 and item4. Thus, we can estimate that this rule would be wrong about 50% of the time.</p>
+<p>The best rule with a single item as antecedent is $\{item3\} \Rightarrow \{item2, item4\}$ with a confidence of 0.75 and a lfit of 1.5. Thus, in 75% of the transactions in which item3 occurs, the items item2 and item4 are also present, which is 1.5 times more often than expected.</p>
+<p>The example also shows some general properties of the measures. Most importantly, lift and leverage are the same, if lift and leverage are switched, same as the support. Thus, confidence is the only measure we have introduced that takes the causality of the associations into account. We can also observe that the changes in lift an leverage are similar. The lift has the advantage that there the values allow a straight forward interpretation.</p>
+<h3 id="Exponential-Growth">Exponential Growth<a class="anchor-link" href="#Exponential-Growth"> </a></h3><p>We have now shown how we can determine rules: we need to find frequent itemsets and can then derive rules from these sets. Unfortunately, finding the frequent itemsets is not trivial. The problem is that the number of itemsets grows exponentially with the number of items. The possible itemsets are the powerset $\mathcal{P}$ of $I$, which means there are $|\mathcal{P}(I)|=2^{|I|}$ possible itemsets. Obviously, there are only very few use cases, where we would really need to consider all items, because often shorter rules are preferable. Unfortunately, the growth is still exponential, even if we restrict the size. We can use the binomial coefficient $${{|I|}\choose k} = \frac{|I|!}{(|I|-k)!k!}$$
+to calculate the number of itemsets of size k. For example, if we have |I|=100 items, there are already 161,700 possible itemsets of size $k=3$. From we can generate eight rules for each of these itemsets, thus we already have 1,293,600 possible rules. If we ignore rules with the empty itemset, we still have 970,200 possible rules.</p>
+<p>Thus, we need a way to search the possible itemsets strategically to deal with the exponential nature, as attempt to find association rules could easily run out of memory or require massive amounts of computational resources, otherwise.</p>
+<h3 id="The-Apriori-Property">The Apriori Property<a class="anchor-link" href="#The-Apriori-Property"> </a></h3><p>Finally, we come to the reason why this approach is called the Apriori algorithm.</p>
+<blockquote><p><strong>Apriori Property</strong></p>
+<p>Let $IS \subseteq I$ be a frequent itemset. All subsets $IS' \subseteq IS$ are also frequent and $support(IS') \geq support(IS)$.</p>
+</blockquote>
+<p>This property allows us to search for frequent itemsets in a bounded way. Instead of calculating all itemsets and then checking if they are frequent, we can <em>grow</em> frequent itemsets. Since we know that all subsets of a frequent itemset must be frequent, we know that any itemset that contains a non-frequent subset cannot be frequent. We use this to prune the search space as follows.</p>
+<ol>
+<li>Start with itemsets of size $k=1$.</li>
+<li>Drop all itemsets that do not have the minimal support, so that we only have frequent itemsets left.</li>
+<li>Create all combinations of the currently known frequent itemsets of size $k+1$</li>
+<li>Repeat steps 2 and 3 until<ul>
+<li>No frequent itemsets of length $k+1$ are found</li>
+<li>A threshold for $k$ is reached, i.e., a maximal length of itemsets.</li>
+</ul>
+</li>
+</ol>
+<p>This algorithm can still be exponential. For example, if all transactions contain all items, all possible itemsets are frequent and we still have exponential growth. However, in practice this algorithm scales well, if the support is sufficiently high.</p>
+<p>For example, let us consider how we can grow frequent itemsets with $minsupp=0.3$ for our example data. Here is the data again.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[[&#39;item1&#39;, &#39;item2&#39;, &#39;item3&#39;],
+ [&#39;item2&#39;, &#39;item4&#39;],
+ [&#39;item1&#39;, &#39;item5&#39;],
+ [&#39;item6&#39;, &#39;item7&#39;],
+ [&#39;item2&#39;, &#39;item3&#39;, &#39;item4&#39;, &#39;item7&#39;],
+ [&#39;item2&#39;, &#39;item3&#39;, &#39;item4&#39;, &#39;item8&#39;],
+ [&#39;item2&#39;, &#39;item4&#39;, &#39;item5&#39;],
+ [&#39;item2&#39;, &#39;item3&#39;, &#39;item4&#39;],
+ [&#39;item4&#39;, &#39;item5&#39;],
+ [&#39;item6&#39;, &#39;item7&#39;]]</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We start by looking at the support of the individual items:</p>
+<table>
+<thead><tr>
+<th>Itemset with $k=1$</th>
+<th>support</th>
+<th>Drop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\{item1\}$</td>
+<td>0.2</td>
+<td>x</td>
+</tr>
+<tr>
+<td>$\{item2\}$</td>
+<td>0.6</td>
+<td></td>
+</tr>
+<tr>
+<td>$\{item3\}$</td>
+<td>0.4</td>
+<td></td>
+</tr>
+<tr>
+<td>$\{item4\}$</td>
+<td>0.5</td>
+<td></td>
+</tr>
+<tr>
+<td>$\{item5\}$</td>
+<td>0.3</td>
+<td></td>
+</tr>
+<tr>
+<td>$\{item6\}$</td>
+<td>0.2</td>
+<td>x</td>
+</tr>
+<tr>
+<td>$\{item7\}$</td>
+<td>0.3</td>
+<td></td>
+</tr>
+<tr>
+<td>$\{item8\}$</td>
+<td>0.1</td>
+<td>x</td>
+</tr>
+</tbody>
+</table>
+<p>Since the items item1, item6, and item8 do not have the minimal support, we can drop them and do not need to consider them when we go to the itemsets of size $k=2$.</p>
+<table>
+<thead><tr>
+<th>Itemset with $k=2$</th>
+<th>support</th>
+<th>Drop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\{item2, item3\}$</td>
+<td>0.4</td>
+<td></td>
+</tr>
+<tr>
+<td>$\{item2, item4\}$</td>
+<td>0.5</td>
+<td></td>
+</tr>
+<tr>
+<td>$\{item2, item5\}$</td>
+<td>0.1</td>
+<td>x</td>
+</tr>
+<tr>
+<td>$\{item2, item7\}$</td>
+<td>0.1</td>
+<td>x</td>
+</tr>
+<tr>
+<td>$\{item3, item4\}$</td>
+<td>0.3</td>
+<td></td>
+</tr>
+<tr>
+<td>$\{item3, item5\}$</td>
+<td>0.0</td>
+<td>x</td>
+</tr>
+<tr>
+<td>$\{item3, item7\}$</td>
+<td>0.1</td>
+<td>x</td>
+</tr>
+<tr>
+<td>$\{item4, item5\}$</td>
+<td>0.2</td>
+<td>x</td>
+</tr>
+<tr>
+<td>$\{item4, item7\}$</td>
+<td>0.1</td>
+<td>x</td>
+</tr>
+<tr>
+<td>$\{item5, item7\}$</td>
+<td>0.0</td>
+<td>x</td>
+</tr>
+</tbody>
+</table>
+<p>As can see, only the combinations with the items item2, item3, and item4 are frequent, all others can be dropped. This leaves is with a single combination for $k=3$.</p>
+<table>
+<thead><tr>
+<th>Itemset with $k=3$</th>
+<th>support</th>
+<th>Drop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\{item2, item3, item4\}$</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+<p>There are no combinations of length $k=4$ possible and we are finished. We only had to evaluate the support for $8+10+1=19$ itemsets to find all frequent itemsets among all possible $2^8=256$ itemsets, i.e., we could reduce the effort by about 93% by exploiting the Apriori property and growing the itemsets.</p>
+<h3 id="Restrictions-for-Rules">Restrictions for Rules<a class="anchor-link" href="#Restrictions-for-Rules"> </a></h3><p>So far, we always consider all possible combinations of antecedent and consequent as rules, except rules with the empty itemset. Another common restriction is to only consider rules with a single item as consequent. The advantage of such rules is that they have a higher confidence than other combinations. This means that the associations are usually strong and, consequently, more often correct.</p>
+<h2 id="Evaluating-Association-Rules">Evaluating Association Rules<a class="anchor-link" href="#Evaluating-Association-Rules"> </a></h2><p>The final question that we have not yet answered is how we can determine if associations rules we determined are good, i.e., we found real associations and not random rules. The confidence, lift, and leverage already support this and if these measures are used in combination they are a good tool to identify rules. Confidence tells you if the relationship may be random, because the antecedent occurs very often, lift and leverage can tell you if the relationship is coincidental.</p>
+<p>However, there are additional ways to validate that the association rules are good. For example, you can split your data into training and test data. You can then evaluate how often the associations you find in the training data also appear in the test data. If there is a big overlap, the association rules are likely good. You can also go one step further and remove items from transaction in the test data and see if your rules can predict the missing items correctly.</p>
+<p>Finally, association rule mining is a typical example of a problem where you can achieve decent results with full automation, but likely require manual intervention to achieve very good results. Just think back to a strange recommendation you may have seen in a Web shop at some point. This was likely because there was no manual validation of the rules and the result of strange buying behavior of single customers. This can be further improved, e.g., through manual inspection of rules and filtering the automatically inferred rules. However, this is not a task for the data scientist alone, but should be supported by domain experts. The goal is to determine for the rules if the associations really make sense and only use the valid rules.</p>
 
 </div>
 </div>
