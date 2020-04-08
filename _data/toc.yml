@@ -53,3 +53,7 @@
 - url: /05_Association-Rule-Mining
   not_numbered: false
   expand_sections: true
+  
+- url: /06_Clustering
+  not_numbered: false
+  expand_sections: true
