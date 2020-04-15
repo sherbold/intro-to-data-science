@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: 
 suffix: .ipynb
-search: k cluster clusters x clustering means distance objects not points middle algorithm because data center between also wss such similar values instances example based results distances yellow thus different y centers determine top bottom purple features must d manhatten concept best update right groups within smilies into used e mathcal f c euclidean large green above norm cannot good domain houses town location iteration teal sum variance img src images png alt style width px left just simple chebyshev same case really should city belongs even instance xi arithmetic mean assigned split however decrease income get g bit general o
+search: k clusters cluster clustering x means not distance objects algorithm points because data also middle center between values wss based d such houses example e thus similar different instances features results distances concept determine mean used yellow c y town centers top bottom purple must manhatten large cities best update right groups within smilies into just mathcal f euclidean same hall describe instance ci location green above bit described general norm cannot good domain city belongs while our assigned iteration teal however sum variance distribution normal following img src images png alt style width px left consequently simple any defined
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -70,7 +70,7 @@ $$d(x,y) = ||y-x||_\infty = \max_{i=1, ..., n} |y_1-x_1|.$$</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="General-Idea">General Idea<a class="anchor-link" href="#General-Idea"> </a></h3><p>When we think about how we can define a cities, we may do so by using the town halls as reference points. A simple concept would be to say that each house belongs to the city, whose town hall is closest. This is the essence of the concept of the $k$-Means algorithm: we describe clusters by their <em>center</em>. These centers are also called <em>centroids</em> and $k$-means is an example for <em>centroid-based clustering</em>.</p>
-<p>If we want to know to which cluster an instance belongs, we just look for the closest center. The $k$ defines the number of clusters. Formally, we have cluster centers $C_1, ..., C_k \in \mathcal {F}$ and a distance metric $d$. We can determine the cluster of any instance $x \in \mathcal{F}$ as $c(x) = argmin_{i=1,...,k} d(x, C_i)$. The following figure visualizes how data is divided into $k=4$ clusters. The centers are shown by the large grey points, the colors indicate to which cluster each instance belongs.</p>
+<p>If we want to know to which cluster an instance belongs, we just look for the closest center. The $k$ defines the number of clusters. Formally, we have cluster centers $C_1, ..., C_k \in \mathcal {F}$ and a distance metric $d$. We can determine the cluster of any instance $x \in \mathcal{F}$ as $$c(x) = argmin_{i=1,...,k} d(x, C_i).$$ The following figure visualizes how data is divided into $k=4$ clusters. The centers are shown by the large grey points, the colors indicate to which cluster each instance belongs.</p>
 
 </div>
 </div>
@@ -416,7 +416,12 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$</li>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="EM-Clustering">EM Clustering<a class="anchor-link" href="#EM-Clustering"> </a></h2>
+<h2 id="EM-Clustering">EM Clustering<a class="anchor-link" href="#EM-Clustering"> </a></h2><h3 id="General-Idea">General Idea<a class="anchor-link" href="#General-Idea"> </a></h3><p>Another way to look at cities and houses is to think of them as random variables. The assignment of houses to cities is then guided by probability distributions. This is an extension of the idea behind $k$-Means. Our town hall is still the same, i.e., the center. However, we acknowledge that houses closer to the town hall are more likely to belong the the city than houses that are farther away. We actually go one step further and define cities not only based on the location of the town hall, but also by the variability of the houses, i.e., how spread out the houses of the cities are. This concept is called <em>distribution-based clustering</em>.</p>
+<p>Formally, we have a number of clusters $k$ that are described by random variables $C_1, ..., C_k$. We can calculate the probability that an instance belongs to a cluster $P(C_i = x), i=1,...,k$. Each instance is assigned to the <em>most likely</em> cluster, i.e., the cluster $C_i$ where the $P(C_i = x)$ is maximized. Consequently, our clustering is defined as 
+$$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
+<p>While this concepts work in general with any probability distribution, we only use normally distributed random variables to describe the clusters in the following. This is also known as <em>Gaussian Mixture Model</em>. Please note that these normal distributions are multivariate, i.e., not just for one dimension, but for as many dimensions as we have features. A univariate normal distribution is described by the mean value and the standard deviation. In comparison, a multivariate normal distribution is described by a vector of mean values and a <em>covariance matrix</em>. The covariances describe the relationship between the variances in the different dimensions. A bit simplified, you can think of the covariances as the stretching of the bell-shape of the normal distribution in the different directions. Mathematically, the covariances describe an ellipse. One aspect that is important for us that the covariance matrix is square matrix. Thus, if we have $d$ features, there are $d+d^2$ parameters that describe the multivariate normal distribution, $d$ mean values and a $d\times d$ covariance matrix. This means that we have $k(d+d^2)$ parameters when we want to describe $k$ clusters.</p>
+<p>The following figure shows an example for the result of EM clustering with $k=4$ normal distributions fit to the same data we already used to show how $k$-Means works. The mean values are shown by the large gray points, the covariances by the colored ellipses.</p>
+
 </div>
 </div>
 </div>
@@ -501,6 +506,18 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$</li>
 </div>
 </div>
 
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>While the concept of clustering with random variables as clusters is a bit more complex, the figure already shows the advantage: because we do not just have the mean value, but also the covariances, the clusters also describe how they are <em>spread</em>. Thus, we have more information about the data encoded in the cluster.</p>
+<h3 id="The-Algorithm">The Algorithm<a class="anchor-link" href="#The-Algorithm"> </a></h3><p>This type of clustering has is called EM clustering because of the algorithm used to determine the parameters of the clusters is called the <em>Expectation-Maximization algorithm</em>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
 <div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
@@ -547,7 +564,7 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$</li>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_14_0.png"
+<img src="images/06_Clustering_15_0.png"
 >
 </div>
 
@@ -597,7 +614,7 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$</li>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_15_0.png"
+<img src="images/06_Clustering_16_0.png"
 >
 </div>
 
@@ -619,7 +636,7 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$</li>
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -664,7 +681,7 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$</li>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_17_0.png"
+<img src="images/06_Clustering_18_0.png"
 >
 </div>
 
@@ -676,7 +693,7 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$</li>
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -767,7 +784,7 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$</li>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_18_0.png"
+<img src="images/06_Clustering_19_0.png"
 >
 </div>
 
