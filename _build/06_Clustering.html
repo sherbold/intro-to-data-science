@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: 
 suffix: .ipynb
-search: k clusters cluster clustering x means not distance objects algorithm points because data also middle center between values wss based d such houses example e thus similar different instances features results distances concept determine mean used yellow c y town centers top bottom purple must manhatten large cities best update right groups within smilies into just mathcal f euclidean same hall describe instance ci location green above bit described general norm cannot good domain city belongs while our assigned iteration teal however sum variance distribution normal following img src images png alt style width px left consequently simple any defined
+search: k cluster clusters x means clustering not algorithm because instances data middle values distance points also mean objects between example e center green bottom purple left covariance yellow similar such top wss based d different houses update iteration thus c distances large determine right features results mathcal f same concept covariances used must y town centers ci em normal into above bit manhatten cities belongs instance best only still sum groups within smilies general just euclidean cannot hall describe location assigned start random already described norm good really domain city belong called while our anymore teal however step variance distributions
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -511,7 +511,20 @@ $$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>While the concept of clustering with random variables as clusters is a bit more complex, the figure already shows the advantage: because we do not just have the mean value, but also the covariances, the clusters also describe how they are <em>spread</em>. Thus, we have more information about the data encoded in the cluster.</p>
-<h3 id="The-Algorithm">The Algorithm<a class="anchor-link" href="#The-Algorithm"> </a></h3><p>This type of clustering has is called EM clustering because of the algorithm used to determine the parameters of the clusters is called the <em>Expectation-Maximization algorithm</em>.</p>
+<h3 id="The-Algorithm">The Algorithm<a class="anchor-link" href="#The-Algorithm"> </a></h3><p>This type of clustering has is called EM clustering because of the algorithm used to determine the parameters of the clusters is called the <em>Expectation-Maximization algorithm</em>. The algorithm is in general similar to the $k$-Means algorithm we already know: we start with randomly initialized clusters and then iteratively update the clusters to better match the data. For the EM algorithm, the initialization means random mean values and random covariance matrices. Updates mean that the mean values and covariances are updated such that the <em>likelihood</em> that the data can be explained by the clusters is increased. We do not discuss the complete mathematical description of the EM algorithm, but rather look at a simplified version, where we update only the mean values and ignore the updates of the covariances.</p>
+<ol>
+<li>Randomly select initial normal distributions $C_1 \sim (\mu_1, \Sigma_1), ..., C_k \sim (\mu_k, \Sigma_k)$ with $\mu_i \in \mathcal{F}$ the mean values and $\Sigma_i \in \mathcal{F}\times\mathcal{F}$ the covariance matrices.</li>
+<li>Expectation Step: Determine weights $$w_i(x) = \frac{p(x|\mu_i, \Sigma_i)}{\sum_{j=1}^k p(x|\mu_j, \Sigma_j)}$$ for all $x \in X$. </li>
+<li>Maximization Step: Update mean values as
+$$\mu_i = \frac{1}{|X|}\sum_{x \in X} w_i(x)\cdot x$$</li>
+<li>Repeat steps 2 and 3 until<ul>
+<li>Convergence, i.e., the clusters $C_i, i=1,...,k$  do no change anymore.</li>
+<li>A predefined maximum number of iterations is reached.</li>
+</ul>
+</li>
+</ol>
+<p>The biggest difference between the EM algorithm and the $k$-Means algorithm are the weights. The weights specify the likelihood that and instance $x \in X$ belongs the a specific cluster. For example, if $w_i(x)=0.9$ it means that the likelihood is that $x$ belongs to cluster $C_i$ is 90%. The cluster assignment follows the same rule as above, i.e., $x$ is assigned to the cluster with that maximizes the weight $c(x) = max_{i=1, ..., k} w_i(x)$. Still, EM also allows insights if points are uncertain, i.e., multiple clusters have similar likelihoods. This is called <em>soft clustering</em>, because theoretically each point does not belong to a single cluster, but to all clusters with a certain likelihood.</p>
+<p>To better understand how the EM algorithm works, we again look at how the update steps work to fit the data.</p>
 
 </div>
 </div>
@@ -576,6 +589,25 @@ $$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
 </div>
 </div>
 
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is what happens:</p>
+<ul>
+<li>Iteration 1: We start with four normal distributions that are almost the same. The mean values are in the middle of the data, the covariances are ellipses that elongated in the diagonal, but slightly different. For example, we can see that the green covariance ellipse goes a bit more to the bottom left, and that the yellow one goes a bit more to the top right. This already shows in the assignment of the instances to the clusters: the instances in the top-right corner belong to the yellow cluster, the instances on the left side belong to the green cluster. The other two clusters are not really visible due to the overlap. </li>
+<li>Iteration 21: After 21 iterations we see that the four normal distributions start to drift apart. The yellow one is pulled into the top-right corner, but still has a large covariance ellipse. The green one actually is "torn" between the instances on the left and the instances at the bottom. The blue one is in the middle with a relatively small covariance. The small covariance is an indicator that the blue cluster will not move strongly anymore and stay in the middle. The purple cluster is also in the middle, but still has a very large covariance, which means that it will likely still move elsewhere. </li>
+<li>Iteration 41: The clusters begin to converge. The yellow cluster finished its journey to the top-left corner and now covers only that region. Similarly, the blue cluster covers the points in the middle. This pushed the purple cluster to the left side, where it is now residing with a considerably smaller covariance than in iteration 21. The green cluster is still torn between the left side and the bottom, but start to drift to the bottom, because purple now claims most of the left. </li>
+<li>Iteration 61: The clusters converged. Purple now covers the instances on the left and green moved to the instances at the bottom.</li>
+</ul>
+<p>In the above example we also see two important properties of EM clustering. First, the convergence is much slower than with $k$-Means. There are more parameters that must be optimized, i.e., not only the mean values but also the covariances. Additionally, the soft clustering means that instances belong to all clusters. This slows the movement of the mean values, because they get a (weak) pull from many instances, especially when the covariance is large.</p>
+<p>Second, we see that the clusters may cover disjoint regions. For example, in iteration 41, the green cluster contains the instances at the bottom, and some instances on the left side. Between these instances are purple instances, i.e., there are two disjoint regions of the green cluster. This is possible due to the shape of the covariances. Because green has a larger covariance, points that are farther away from the mean have a higher probability of being green than purple, because of the low covariance. This effect of disjoint regions is something that cannot be observed with many clustering algorithms. For example, this is impossible with $k$-Means, because distances change the same in all directions.</p>
+<h3 id="Selecting-$k$">Selecting $k$<a class="anchor-link" href="#Selecting-$k$"> </a></h3>
+</div>
+</div>
+</div>
+</div>
+
 <div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
@@ -614,7 +646,7 @@ $$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_16_0.png"
+<img src="images/06_Clustering_17_0.png"
 >
 </div>
 
@@ -681,7 +713,7 @@ $$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_18_0.png"
+<img src="images/06_Clustering_19_0.png"
 >
 </div>
 
@@ -784,7 +816,7 @@ $$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_19_0.png"
+<img src="images/06_Clustering_20_0.png"
 >
 </div>
 
