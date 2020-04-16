@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: 
 suffix: .ipynb
-search: k cluster clusters x means clustering not algorithm because instances data middle values distance points also mean objects between example e center green bottom purple left covariance yellow similar such top wss based d different houses update iteration thus c distances large determine right features results mathcal f same concept covariances used must y town centers ci em normal into above bit manhatten cities belongs instance best only still sum groups within smilies general just euclidean cannot hall describe location assigned start random already described norm good really domain city belong called while our anymore teal however step variance distributions
+search: k clusters cluster x clustering means algorithm not data also values because instances between middle e distance points em mean objects bic example similar wss center green bottom purple covariance left based c such yellow thus d different same top houses determine update iteration covariances likelihood features used results distances value large right only parameters must mathcal f y concept describe still normal into above general should town centers ci best however result bit cdot manhatten cannot good cities belongs instance random sum distribution groups within smilies just consequently approach euclidean case domain even hall ck location our assigned start
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -440,6 +440,8 @@ $$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
 <span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_blobs</span>
 <span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="k">import</span> <span class="n">GaussianMixture</span>
 
+<span class="c1"># we silence some annyoing warnings</span>
+<span class="c1"># if something is not working properly, remove this part and restart the kernel</span>
 <span class="k">def</span> <span class="nf">warn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">pass</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -602,7 +604,83 @@ $$\mu_i = \frac{1}{|X|}\sum_{x \in X} w_i(x)\cdot x$$</li>
 </ul>
 <p>In the above example we also see two important properties of EM clustering. First, the convergence is much slower than with $k$-Means. There are more parameters that must be optimized, i.e., not only the mean values but also the covariances. Additionally, the soft clustering means that instances belong to all clusters. This slows the movement of the mean values, because they get a (weak) pull from many instances, especially when the covariance is large.</p>
 <p>Second, we see that the clusters may cover disjoint regions. For example, in iteration 41, the green cluster contains the instances at the bottom, and some instances on the left side. Between these instances are purple instances, i.e., there are two disjoint regions of the green cluster. This is possible due to the shape of the covariances. Because green has a larger covariance, points that are farther away from the mean have a higher probability of being green than purple, because of the low covariance. This effect of disjoint regions is something that cannot be observed with many clustering algorithms. For example, this is impossible with $k$-Means, because distances change the same in all directions.</p>
-<h3 id="Selecting-$k$">Selecting $k$<a class="anchor-link" href="#Selecting-$k$"> </a></h3>
+<blockquote><p><strong>Note:</strong></p>
+<p>The similarities between $k$-Means and EM clustering go beyond the descriptions above. In fact, $k$-Means is a special case of the EM clustering, in which <a href="">Voronoi cells</a> are used to model the distribution.</p>
+</blockquote>
+<h3 id="Selecting-$k$">Selecting $k$<a class="anchor-link" href="#Selecting-$k$"> </a></h3><p>Same as for $k$-Means, the number of clusters must be determined by the user of the EM clustering. The general approach is the same Domain knowledge and visualizations are important to select appropriate values of $k$.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">k</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">for</span> <span class="nb">iter</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+    <span class="n">em</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="nb">iter</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="n">rs</span><span class="p">)</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">y_em</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">means_</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">iter</span><span class="o">-</span><span class="mi">2</span><span class="p">)),</span> <span class="p">(</span><span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>]
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Results for $k=</span><span class="si">%i</span><span class="s1">$&#39;</span> <span class="o">%</span> <span class="nb">iter</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_em</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">centers</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">centers</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">);</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">iter</span><span class="p">]):</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">covariances_</span><span class="p">[</span><span class="n">n</span><span class="p">][:</span><span class="mi">2</span><span class="p">,:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">*</span> <span class="n">angle</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># convert to degrees</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">ell</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Ellipse</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">means_</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                  <span class="mi">180</span> <span class="o">+</span> <span class="n">angle</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">ell</span><span class="o">.</span><span class="n">set_clip_box</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
+        <span class="n">ell</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">ell</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/06_Clustering_17_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that a simple normal distribution is not sufficient to describe the data, the covariance of the data with only one cluster is huge. The results for $k=2,3,4$ all seem better. However, only with $k=4$ the clusters seem to have similar covariances.</p>
+<p>There is also a analytic approach for the selection $k$, based on the <em>Bayesian Infomation Criterion</em> (BIC). Similar to the WSS, BIC is a measure for what the algorithm tries to optimize and can be used to determine how different values of $k$ perform with respect to the objective of the clustering algorithm. The EM algorithm maximizes the likelihood, i.e., tries to find distributions such that the data can be explained by the the clusters. Formally, this is measured by a likelihood function $\hat{L}(C_1, ..., C_k; X)$ that we have ignored in the discussion of the algorithm so far and that we will also not define in detail here. The likelihood increases, when the clusters are a better explanation for the data. Similar to the WSS, the likelihood usually decreases with more clusters. However, BIC also takes the complexity of the model into account. We mentioned at the beginning, that there are $k' = k(d+d^2)$ parameters if there are $d$ features. <a href="">Occam's Razor</a> tells us that the simplest explanation is usually correct. This means that if we can achieve a similar likelihood with fewer parameters, we have a simpler explanation and should use this. The more complex information, i.e., more clustes with more parameters, may be overfitting. Based on these ideas, BIC is defined as 
+$$BIC = \log(|X|)\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$</p>
+<p>Thus, the value increases with more parameters and more training data and decreases if the likelihood increases, i.e., the clusters are a better explanation. Thus, BIC should be minimized. In comparison to WSS, BIC is not monotone but has a minimal value, because BIC increases if the parameters in the model are increasing without an equally strong increase in the likelihood. From this follows that, according to BIC, there is an <em>optimal</em> number of clusters that can be automatically determined as the value of $k$ that minimizes BIC. This is demonstrated by the evaluation of BIC for our example.</p>
+
 </div>
 </div>
 </div>
@@ -646,7 +724,7 @@ $$\mu_i = \frac{1}{|X|}\sum_{x \in X} w_i(x)\cdot x$$</li>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_17_0.png"
+<img src="images/06_Clustering_19_0.png"
 >
 </div>
 
@@ -655,6 +733,28 @@ $$\mu_i = \frac{1}{|X|}\sum_{x \in X} w_i(x)\cdot x$$</li>
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The minimal value is at $k=4$ meaning that four clusters are the optimal trade-off between number of parameters required to describe the clusters on the one hand, and the likelihood of the cluster result on the other hand. Please note that the actual values of BIC should usually be ignored. Whether BIC is positive or negative, if the values are in the order of $10^2$ or $10^5$ usually depends more on the data than on the quality of the clustering result. Consequently, one could even remove the values from the y-axis of the plot.</p>
+<blockquote><p><strong>Note:</strong></p>
+<p>BIC is derived from the <em>Akitake Information Criterion</em> (AIC), which is defind as 
+$$AIC = 2\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$
+AIC is directly derived from the Kullback-Leibler divergence, an information theoretic measure for the difference between random variables. This is also the reason for the logarithms in the AIC formula and, consequently, the BIC formula. The difference between AIC and BIC is only in the first term, where AIC uses a factor of 2 for the number of parameters and BIC uses the logarithm of the size of the data.</p>
+</blockquote>
+<h3 id="Problems-of-EM-Clustering">Problems of EM Clustering<a class="anchor-link" href="#Problems-of-EM-Clustering"> </a></h3><p>EM clustering resolves two of the problems of the $k$-Means algorithm: scale effects and the roundness of clusters. The ranges of scales are irrelevant, because this can be covered by the covariances. Similarly, the EM goes beyond round clusters and can describe ellipses, which are more versatile. Otherwise, EM clustering and $k$-Means clustering still share problem.</p>
+<ul>
+<li>EM clustering is also sensitive to the initialization. Bad initializations may lead to bad clusters, but also to a very slow convergence speed, i.e., many iterations may be required, which can be computationally expensive and the result may not even converge to a solution. A good approach to initialize the EM algorithm is to actually use the centroids of the $k$-Means algorithm. </li>
+<li>The choice of $k$ may be bad. However, the BIC yields a good approach for finding a suitable value for $k$. Please note that sometimes the optimal value for number of clusters can require too many clusters for a reasonable result. In this case, BIC should be interpreted the same way as WSS by looking for elbows. </li>
+<li>Shapes that are not ellipsoid usually cannot be clusters by EM, e.g., the half moons could still not be clustered correctly. In general, EM works best for normally distributed data, and may fail for any other kind of data.  </li>
+</ul>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -713,7 +813,7 @@ $$\mu_i = \frac{1}{|X|}\sum_{x \in X} w_i(x)\cdot x$$</li>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_19_0.png"
+<img src="images/06_Clustering_22_0.png"
 >
 </div>
 
@@ -816,7 +916,7 @@ $$\mu_i = \frac{1}{|X|}\sum_{x \in X} w_i(x)\cdot x$$</li>
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_20_0.png"
+<img src="images/06_Clustering_23_0.png"
 >
 </div>
 
