@@ -11,9 +11,9 @@ pagenum: 6
 prev_page:
   url: /05_Association-Rule-Mining.html
 next_page:
-  url: 
+  url: /Appendix.html
 suffix: .ipynb
-search: k clusters cluster x clustering means algorithm not data also values because instances between middle e distance points em mean objects bic example similar wss center green bottom purple covariance left based c such yellow thus d different same top houses determine update iteration covariances likelihood features used results distances value large right only parameters must mathcal f y concept describe still normal into above general should town centers ci best however result bit cdot manhatten cannot good cities belongs instance random sum distribution groups within smilies just consequently approach euclidean case domain even hall ck location our assigned start
+search: k clusters cluster x clustering means algorithm not data points also instances because values e em between distance middle mean objects bic similar example wss based same center green neighbors such houses bottom purple covariance left thus d c different yellow results determine ci top concept update iteration covariances likelihood features used must distances value large belongs town instance right only however parameters general mathcal f y cities describe still normal core into above just should belong centers best result within bit approach cdot manhatten cannot good city our start random sum distribution groups smilies consequently any defined euclidean case
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -762,7 +762,10 @@ AIC is directly derived from the Kullback-Leibler divergence, an information the
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="DBSCAN">DBSCAN<a class="anchor-link" href="#DBSCAN"> </a></h2>
+<h2 id="DBSCAN">DBSCAN<a class="anchor-link" href="#DBSCAN"> </a></h2><h3 id="General-Idea">General Idea<a class="anchor-link" href="#General-Idea"> </a></h3><p>So far, we relied on the town halls as reference points for the definition of cities. However, we can also ignore the town halls and just look at the neighbors. Just look outside. The houses that are close to your house are your neighbors and belong to the same city. The neighbors of your neighbors as well. And all neighbors of neighbors of .... of neighbors, until all houses that have a direct or indirect neighborhood relationship are part of the city. This is the concept of <em>density-based clustering</em>: regions that are <em>dense</em>, i.e., where all points are neighbors of each other, as well as all neighbors of neighbors belong to the same cluster.</p>
+<p>This approach for clustering is fundamentally different from $k$-Means and EM clustering, because we do not have a formula that we can use to determine to which cluster an instance belongs. Instead, the instances themselves define the clusters. Thus, if we want to know to which cluster an instance belongs, we must look at the neighbors.</p>
+<p>The most common density based clustering algorithm is DBSCAN. The following figure visualizes the results of the DBSCAN clustering of our sample data.</p>
+
 </div>
 </div>
 </div>
@@ -822,6 +825,24 @@ AIC is directly derived from the Kullback-Leibler divergence, an information the
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see four clusters that are similar to the results of $k$-Means and EM clustering. However, there are also some instances that are marked as grey x. These are <em>noise</em>, i.e., instance that do not belong to any cluster. This can happen, if instances are not in a dense neighborhood. This is the same as houses that are outside the boundaries of cities.</p>
+<h3 id="The-Algorithm">The Algorithm<a class="anchor-link" href="#The-Algorithm"> </a></h3><p>The algorithm for DBSCAN requires a concept for what a <em>dense neighborhood</em> is. A neighborhood is defined using a distance $\epsilon\in \mathbb{R}$ such that $neighbors(x) = \{x' \in X: d(x, x') \leq \epsilon\}$. A neighborhood is called dense, if it has more than $minPts \in \mathbb{N}$ points. We call all points $x \in X$ that have a dense neighborhood core points.</p>
+<p>Once we know all core points, we simply <em>grow</em> clusters. We randomly pick a core point and define that this core point belongs to the first cluster. We then add all instances that are neighbors of the core point to the cluster. We repeat this for all core points there were added to the cluster, until we have all neighbors of all core points within the cluster.</p>
+<ol>
+<li>Pick a core point $x \in X$ and start a new cluster $C_i$. </li>
+<li>Add all neighbors of core points in $C_i$ to the cluster, i.e., $C_i = \bigcup_{x \in core(C_i)} neighbors(x)$.</li>
+<li>Repeat step two until no additional points are added. </li>
+</ol>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -916,7 +937,7 @@ AIC is directly derived from the Kullback-Leibler divergence, an information the
 
 
 <div class="output_png output_subarea ">
-<img src="images/06_Clustering_23_0.png"
+<img src="images/06_Clustering_24_0.png"
 >
 </div>
 

@@ -36,24 +36,23 @@
 
 - url: /01_Introduction
   not_numbered: false
-  expand_sections: true
 
 - url: /02_Process
   not_numbered: false
-  expand_sections: true
   
 - url: /03_Data-Exploration
   not_numbered: false
-  expand_sections: true
 
 - url: /04_Data-Analysis-Overview
   not_numbered: false
-  expand_sections: true
   
 - url: /05_Association-Rule-Mining
   not_numbered: false
-  expand_sections: true
   
 - url: /06_Clustering
   not_numbered: false
-  expand_sections: true
+  
+- divider: true
+
+- url: /Appendix
+  not_numbered: true
