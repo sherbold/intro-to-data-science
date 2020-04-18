@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Appendix.html
 suffix: .ipynb
-search: k clusters cluster x clustering means algorithm not data points also instances because values e em between distance middle mean objects bic similar example wss based same center green neighbors such houses bottom purple covariance left thus d c different yellow results determine ci top concept update iteration covariances likelihood features used must distances value large belongs town instance right only however parameters general mathcal f y cities describe still normal core into above just should belong centers best result within bit approach cdot manhatten cannot good city our start random sum distribution groups smilies consequently any defined euclidean case
+search: k clusters cluster x clustering points not means algorithm also core data instances values because e between em distance middle example similar mean objects same bic based such neighbors left results green wss thus c different houses center bottom purple epsilon minpts top covariance used yellow d determine only however must value good large ci point right parameters likelihood general concept update iteration still result covariances into features distances any should belongs town instance our assigned dbscan mathcal f y cities belong describe normal within above bit just defined cannot very city centers best random where small neighborhood usually consequently
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -779,10 +779,11 @@ AIC is directly derived from the Kullback-Leibler divergence, an information the
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_blobs</span>
 <span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">DBSCAN</span>
 
-<span class="n">rs</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;indigo&#39;</span><span class="p">,</span> <span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="s1">&#39;mediumseagreen&#39;</span><span class="p">,</span> <span class="s1">&#39;gold&#39;</span><span class="p">]</span>
 
 <span class="n">X</span><span class="p">,</span> <span class="n">y_true</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">center_box</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
                        <span class="n">cluster_std</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -833,13 +834,16 @@ AIC is directly derived from the Kullback-Leibler divergence, an information the
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We can see four clusters that are similar to the results of $k$-Means and EM clustering. However, there are also some instances that are marked as grey x. These are <em>noise</em>, i.e., instance that do not belong to any cluster. This can happen, if instances are not in a dense neighborhood. This is the same as houses that are outside the boundaries of cities.</p>
-<h3 id="The-Algorithm">The Algorithm<a class="anchor-link" href="#The-Algorithm"> </a></h3><p>The algorithm for DBSCAN requires a concept for what a <em>dense neighborhood</em> is. A neighborhood is defined using a distance $\epsilon\in \mathbb{R}$ such that $neighbors(x) = \{x' \in X: d(x, x') \leq \epsilon\}$. A neighborhood is called dense, if it has more than $minPts \in \mathbb{N}$ points. We call all points $x \in X$ that have a dense neighborhood core points.</p>
-<p>Once we know all core points, we simply <em>grow</em> clusters. We randomly pick a core point and define that this core point belongs to the first cluster. We then add all instances that are neighbors of the core point to the cluster. We repeat this for all core points there were added to the cluster, until we have all neighbors of all core points within the cluster.</p>
+<h3 id="The-Algorithm">The Algorithm<a class="anchor-link" href="#The-Algorithm"> </a></h3><p>The algorithm for DBSCAN requires a concept for what a <em>dense neighborhood</em> is. A neighborhood is defined using a distance $\epsilon\in \mathbb{R}$ such that $neighbors(x) = \{x' \in X: d(x, x') \leq \epsilon\}$. A neighborhood is called dense, if it has more than $minPts \in \mathbb{N}$ points. We call all points $x \in X$ that have a dense neighborhood core points. We use the notation $core(C) = \{x \in X: |neighbors(x)| \geq minPts\}$ to denote all core points within a cluster $C \subset X$,  $core(X)$ to denote all core points.</p>
+<p>Once we know all core points, we simply <em>grow</em> clusters. We randomly pick a core point and define that this core point belongs to the first cluster. We then add all instances that are neighbors of the core point to the cluster. We repeat this for all core points there were added to the cluster, until we have all neighbors of all core points within the cluster. Then, we pick the next core point that was not yet assigned to a cluster and grow the next cluster.</p>
 <ol>
-<li>Pick a core point $x \in X$ and start a new cluster $C_i$. </li>
+<li>Set $i=1$, i.e., we are working on the first cluster.</li>
+<li>Pick a core point that does not yet belong to any cluster and initialize a new cluster, i.e. $x \in core(X) \setminus \bigcup_{j_i} C_j$ and initialize $C_i = \{x\}$ to start a new cluster. </li>
 <li>Add all neighbors of core points in $C_i$ to the cluster, i.e., $C_i = \bigcup_{x \in core(C_i)} neighbors(x)$.</li>
-<li>Repeat step two until no additional points are added. </li>
+<li>Repeat step three until no additional points are added. </li>
+<li>If there are still core points not yet assigned to a cluster increment $i=i+1$ and go back to step 2. </li>
 </ol>
+<p>The formal explanation of the algorithm is a bit convoluted. How the algorithm works gets clearer when we look at the example.</p>
 
 </div>
 </div>
@@ -946,6 +950,235 @@ AIC is directly derived from the Kullback-Leibler divergence, an information the
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is what happens:</p>
+<ul>
+<li>At the beginning, all core points are determined. These points will definitively assigned to a cluster later, because they are in a dense neighborhood. </li>
+<li>Then, the first cluster is grown. For this, a core point is picked at random. In the example, the initial core point is one of the core points in the top-right cluster. Then all other core points in the region are added, but also some points that are not core points, marked as purple x. These points are in the neighborhood of a core point, but not core points themselves. You may think of these points at the houses at the boundary of a city. There are also some grey x left in the top-right area. These are not in the neighborhood of any core point and will become noise. </li>
+<li>A new core point is picked randomly to grow a second cluster, this time at the bottom. We see the same thing happening again. All core points in the region, as well as some not core points are added, marked as blue x. Other are not close enough to any core point and left as noise. </li>
+<li>This is repeated twice more, first with the green cluster on the left and, finally, with the yellow cluster in the middle. </li>
+<li>Since all core points are now assigned to one of the four clusters, the DBSCAN algorithm stops. All instances that are still marked with a grey x are noise. </li>
+</ul>
+<h3 id="Picking-$\epsilon$-and-$minPts$">Picking $\epsilon$ and $minPts$<a class="anchor-link" href="#Picking-$\epsilon$-and-$minPts$"> </a></h3><p>An advantage of DBSCAN is that the number of clusters does not have to be defined. Instead, this is automatically determined based on the neighborhoods of the core points. Instead, the two parameters $\epsilon$ and $minPts$ are required, to define what a neighbor is and how many neighbors are required or density. Unsuitable values may lead to bad results. For our example, we used $\epsilon=0.03$ and $minPts=4$. Below are some results that are achieved with other values.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="o">&lt;</span><span class="mi">0</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Result with $\epsilon=0.01, minPts=4$&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;Grey&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="o">&lt;</span><span class="mi">0</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Result with $\epsilon=0.05$, minPts=4&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;Grey&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="o">&lt;</span><span class="mi">0</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Result with $\epsilon=0.01, minPts=2$&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;Grey&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="o">&lt;</span><span class="mi">0</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Result with $\epsilon=0.05$, minPts=20&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;Grey&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/06_Clustering_26_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the first column, we have a very low $\epsilon$ of 0.01. If we keep the minPts at 4, we find no real clusters, i.e., there are almost no core points anymore. When we decrease the minPts to 2, we find clusters again. There are four larger clusters that look similar to our initial result. However, There are also many smaller clusters with only three points. Thus, this is not a good result, because such small clusters usually do not make sense and should either be merged into larger clusters or considered as noise. The second column shows what happens when we use a large $\epsilon$ of 0.05. The results actually look good and similar to our prior results. With minPts at 4, we find the three clusters we can also find with $k=3$ with $k$-Means and EM clustering. When we increase the minPts to 20, we have fewer core points that have larger neighborhoods. This leads to almost the same result as we have with $\epsilon=0.03$ and $minPts=4$, but with less noise. In general, reducing $\epsilon$ will always lead to more and smaller clusters, increasing $\epsilon$ will merge existing clusters. Reducing minPts leads to more clusters, but may also allow very small clusters that do not make sense. Increasing minPts avoids small clusters but can also lead to no clusters or lots of noise if $\epsilon$ is small. Thus, both parameters should always be used together and there is no general rule for their optimization.</p>
+<p>However, there is one analytic tool other than visualizing the clusters that can help to determine good values for $\epsilon$. We can plot how far away the $k$-th nearest neighbor of instances are.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">NearestNeighbors</span>
+
+<span class="c1"># we use sklearn to find the nearest neighbors</span>
+<span class="n">neigh</span> <span class="o">=</span> <span class="n">NearestNeighbors</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">nbrs</span> <span class="o">=</span> <span class="n">neigh</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">distances</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">nbrs</span><span class="o">.</span><span class="n">kneighbors</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">distances_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">distances</span><span class="p">[:,</span><span class="n">k</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">distances_k</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;minPts=</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;epsilon&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of core points&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/06_Clustering_28_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Such a plot shows us, how many core points we would have for a combination min. A good value for $\epsilon$ is where the curvature is largest, i.e, where you see that sharpest change of direction in the curve. For example, we see that this is somewhere in the between 0.3 and 0.4 with $minPts=4$.</p>
+<h3 id="Problems-of-DBSCAN">Problems of DBSCAN<a class="anchor-link" href="#Problems-of-DBSCAN"> </a></h3><p>While DBSCAN does not have the problem that the number of clusters must be defined by the user and can also find clusters of any shape, there are other aspects of the algorithm that may be problematic.</p>
+<ul>
+<li>The biggest problem of DBSCAN is that it can be difficult to find good values for $\epsilon$ and $minPts$. Especially if clusters are very close to each other, it can be very difficult to separate the data into two clusters. The reason is that the instances where the clusters are close to each other act as <em>bridge points</em> between the clusters. This can only be avoided by using a large value for minPts that decreases the likelihood that points at the border of clusters are core points. However, this means that $\epsilon$ must be relatively high, which can also lead to problems. </li>
+<li>Another problem is that clusters may have different densities. The example below shows the clustering of circles. With only 100 instances per circle, the data in the outer circle is not very dense in comparison to the inner circle. As a consequence, there are some breaks in the outer circle and it is not detected as a single cluster, but rather as many clusters. When the instances in the outer circle are increased, both clusters are detected correctly. This problem can be quite severe, if every cluster has different densities.</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_circles</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="o">&lt;</span><span class="mi">0</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Two circles with 100 instances&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;Grey&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="o">&lt;</span><span class="mi">0</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Two circles with 200 instances&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;Grey&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/06_Clustering_30_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Consequently, you cannot easily apply DBSCAN to a subsample  of data, because the values for $\epsilon$ and minPts depend on the density of the sample which usually decreases when a subsample is used. </li>
+<li>DBSCAN is also distance based and as such sensitive to scale effects in the same way as $k$-Means clustering. </li>
+</ul>
+
+</div>
+</div>
 </div>
 </div>
 
