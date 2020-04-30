@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Appendix.html
 suffix: .ipynb
-search: classification class positive predicted negative spam hypothesis classes h b tdtd example false e scores x prediction emails objects not confusion matrix frac whale c binary concept td tr percentage categories images threshold o f case often instances correctly performance incorrectly table values pictures features target score predictions fp rate because our whales black even description mathcal scoring thus flagged metrics test actual true fn tn shows bear assign image general get also data algorithm usually such only sum t mean different mistakenly instance correct tp positives negatives type cdot following img src png alt style width px set algorithms
+search: classification class positive predicted negative spam hypothesis classes h b example false e scores x prediction emails objects not confusion matrix tdtd frac whale c binary concept td tr percentage categories images threshold o f case often instances correctly performance incorrectly table values pictures features target score predictions fp rate because our whales black even description mathcal scoring thus flagged metrics test actual true fn tn shows bear assign image general get also data algorithm usually such only sum t mean different mistakenly instance correct trtd tp positives negatives type cdot following img src png alt style width px set
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -170,16 +170,16 @@ $$h_t(x) = \cases{ positive &amp; if $h'(x) \geq t$ \\ negative &amp; if $h' &lt
 <p>The first instance is predicted correctly, the prediction of the second instance is incorrect. If there are thousands or even millions of instance in the test data, we cannot evaluate the prediction by looking at such a table. Instead, we need to summarize the comparison between the classes and the prediction.</p>
 <h3 id="The-Confusion-Matrix">The Confusion Matrix<a class="anchor-link" href="#The-Confusion-Matrix"> </a></h3><p>The most important tool for the analysis of the quality of hypothesis is the <em>confusion matrix</em>, a tabular description of how often the hypothesis is correct and how often it is incorrect, i.e., confused. The confusion matrix four our image classification example may look like this.</p>
 <table>
-    <tr><td rowspan=5><br><br><b>Predicted class</b></td><td></td><td colspan=2><b>Actual class</b></td><td></td></tr>
-    <tr><td><td><b>whale</b></td><td><b>bear</b></td><td><b>other</b></td></tr>
+    <tr><td></td><td colspan=4><b>Actual class</b></td></tr>
+    <tr><td rowspan=4><br><br><b>Predicted class</b></td><td><td><b>whale</b></td><td><b>bear</b></td><td><b>other</b></td></tr>
     <tr><td><b>whale</b></td><td>29</td><td>1</td><td>3</td></tr>
     <tr><td><b>bear</b></td><td>2</td><td>22</td><td>13</td></tr>
     <tr><td><b>other</b></td><td>4</td><td>11</td><td>51</td></tr>
 </table><p>The confusion matrix basically counts how often each instance of each class is predicted as which class. For example, how often whales are predicted as whales, how often they are predicted as bears, and how often they are predicted as something else. The columns are the actual values of the classes, i.e., the target concept. The rows are the predicted values, i.e., the hypothesis. In the example, we have 35 actual pictures of whales. This is the sum of the values in the first row. 29 of these whale pictures are predicted correctly, 2 are incorrectly predicted as bears, 4 are incorrectly predicted as something else. Thus, the confusion matrix gives us detailed statistical information about how many instances we have and how they are predicted. Values on the diagonal of the confusion matrix are the correct prediction, the other values show incorrect predictions.</p>
 <h3 id="The-Binary-Confusion-Matrix">The Binary Confusion Matrix<a class="anchor-link" href="#The-Binary-Confusion-Matrix"> </a></h3><p>The binary confusion matrix is the special case of the confusion matrix for binary classification problems with the classes true and false. In general, the binary confusion matrix looks like this.</p>
 <table>
-    <tr><td rowspan=4><br><br><b>Predicted class</b></td><td colspan=2><b>Actual class</b></td><td></td></tr>
-    <tr><td><td><b>true</b></td><td><b>false</b></td></tr>
+    <tr><td></td><td colspan=3><b>Actual class</b></td></tr>
+    <tr><td rowspan=3><br><br><b>Predicted class</b></td><td><td><b>true</b></td><td><b>false</b></td></tr>
     <tr><td><b>true</b></td><td>true positive (TP)</td><td>false positive (FP)</td></tr>
     <tr><td><b>false</b></td><td>false negative (FN)</td><td>true negative (TN)</td></tr>
 </table><p>Thus, we have actually positive and negative classes and depending on whether the prediction is correct or not, we get true positives (TP), true negatives (TN), false positives (FP), or false negatives (FN). The binary confusion matrix is well known and not only used for the evaluation of machine learning, but also, e.g., in medical studies to evaluate the quality of tests. From medical studies also originate the terms <em>type I error</em> and <em>type II Error</em>. The type I error are the false positives. In medicine, this could mean a mistakenly positive result of an antibody test for an illness that may lead to the wrong conclusion that a person as antibodies for the illness. The type II errors are the false negatives. In medicine, this could mean a mistakenly negative result of an antibody test with the wrong conclusion that there are no antibodies. In the spam example, emails mistakenly flagged as spam would be false positives, the spam emails that are missed would be false negatives.</p>
