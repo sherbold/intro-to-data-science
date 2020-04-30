@@ -1,0 +1,394 @@
+---
+redirect_from:
+  - "/07-classification"
+interact_link: content/07_Classification.ipynb
+kernel_name: python3
+kernel_path: content
+has_widgets: false
+title: |-
+  Classification
+pagenum: 7
+prev_page:
+  url: /06_Clustering.html
+next_page:
+  url: /Appendix.html
+suffix: .ipynb
+search: classification class positive predicted negative spam hypothesis classes h b tdtd example false e scores x prediction emails objects not confusion matrix frac whale c binary concept td tr percentage categories images threshold o f case often instances correctly performance incorrectly table values pictures features target score predictions fp rate because our whales black even description mathcal scoring thus flagged metrics test actual true fn tn shows bear assign image general get also data algorithm usually such only sum t mean different mistakenly instance correct tp positives negatives type cdot following img src png alt style width px set algorithms
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Classification</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Overview">Overview<a class="anchor-link" href="#Overview"> </a></h2><p>Classification is about assigning categories to objects. Consider the following example.</p>
+<p><img src="images/classification_general.png" alt="Example for Classification" style="width: 500px;"/></p>
+<p>We have two images, one shows a whale in the sea in front of an iceberg, the other shows a bear in the woods. When we look at these pictures, we immediately see this, because we instinctively assign these categories to the images. Classification is a less powerful approximation of what we instinctively do. The main difference is that we need to work with a fixed and known set of categories. For example, our categories could be "whale picture", "bear picture", and "other image". The images can then be assigned to one of these three categories. The categories to which classification algorithms assign objects are commonly referred to as <em>classes</em>. Categories that are not part of the classes, e.g., if there is water in the image, are ignored. A bit more abstract, classification can be described as follows.</p>
+<p><img src="images/classification_abstract.png" alt="Classification in general" style="width: 500px;"/></p>
+<p>We have objects for which we know a <em>concept</em>. When we apply our concept to the objects, we get the categories. For example, we have a concept that describes whales, which we can apply to images to determine if something is within the category whale. The task of classification algorithms is to derive a hypothesis that we can use to infer the class of objects from their features. Let us consider the features of the whale pictures.</p>
+<p><img src="images/whale_hypothesis.png" alt="The whale hypothesis" style="width: 500px;"/></p>
+<p>Based on these features, we may derive the following hypothesis: <em>"Objects with fins, an oval general shape that are black on top and white on the bottom in front of a blue background are whales."</em> This hypothesis works reasonably well, even though there may also be other objects that fit the description, e.g., a submarine that with a black/white painting. This general approach is used by all classification algorithms. The form of the hypothesis, as well as the way the hypothesis is derived from data depends on the algorithm.</p>
+<h3 id="The-Formal-Problem">The Formal Problem<a class="anchor-link" href="#The-Formal-Problem"> </a></h3><p>Formally, we have a set of objects $O = \{object_1, object_2, ...\}$ that may be infinite. Moreover, we have representations of these objects in a feature space $\mathcal{F} \{\phi(o): o \in O\}$ and a finite set of classes $C = \{class_1, ..., class_n\}$.</p>
+<p>The classification is defined by a <em>target concept</em> that maps objects to classes, i.e.,  $$h^*: O \to C.$$ The target concept is our ground truth, i.e., a perfect assignment of objects to the classes. Usually, we have no mathematical description for the target concept. For example, there is no such mathematical description for the classification of images as whale pictures and bear pictures. The <em>hypothesis</em> maps features to classes $$h: \mathcal{F} \to C.$$ The hypothesis is determined by a classification algorithm algorithm with the goal to approximate the target concept such that $$h^*(o) \approx h(\phi(o)).$$</p>
+<h3 id="Scores">Scores<a class="anchor-link" href="#Scores"> </a></h3><p>A variant of classification is that the hypothesis computes <em>scores</em> for each class $c \in C$. In this case, we a scoring function for each class of the form $$h_c': \mathcal{F} \to \mathbb{R}.$$ Scores are similar to <em>soft clustering</em>: instead of deciding for only a single class, the classification determines a value for each class, which we can use to evaluate how certain the algorithm is with the decision for a class. When we want to assign the class based on the scores, we usually just assign the class with the highest score. Thus, we have $$h(x) = \arg\max_{c \in C} h_c'(x)$$ for $x \in \mathcal{F}$.</p>
+<p>Often, the scores are probability distributions, i.e., the scores for each class are in the interval [0,1] and the sum of all scores is 1, i.e., $$\sum_{c \in C} h_c'(x) = 1$ for all $x \in \mathcal{F}.$$</p>
+<h3 id="Binary-Classification-and-Thresholds">Binary Classification and Thresholds<a class="anchor-link" href="#Binary-Classification-and-Thresholds"> </a></h3><p>A special case of classification problems is where we have exactly two classes. While this is a strong restriction, there are many problems that can be solved using binary classification. For example, the prediction if a borrower will pay back money, the prediction if a transaction is fraudulent, or the prediction of whether an email is spam or not.</p>
+<p>For binary classification, we usually say that one class is <em>positive</em> and the other class is <em>negative</em>. Thus, we have exactly two classes. If we have only two classes $C = \{positive, negative\}$ and the scores, we can calculate the score of one class based on the score of the other class, in case the scores a probability distribution, i.e., $$h_{negative}'(x) = 1-h_{positive}'(x)$$ because the sum of the probabilities is one. Because it is sufficient to use the scoring function for the $positive$, we use the notation $h'(x) = h_{positive}$ for binary classification. In this case, we can also use a <em>threshold</em> $t \in [0,1]$ to determine the classes from the scoring function instead of just taking the class with the highest score. If $h'(x) \geq t$, $x$ is positive, if the score is less than the threshold it is negative, i.e., 
+$$h_t(x) = \cases{ positive &amp; if $h'(x) \geq t$ \\ negative &amp; if $h' &lt; t$ }$$</p>
+<p>Why thresholds and scoring functions are important for classification is best demonstrated through an example. The histogram below shows the scores of instances of a spam detection simulation where positive means that an email is spam.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_blobs</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+
+
+<span class="c1"># generate sample data</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">center_box</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                  <span class="n">cluster_std</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># split the data into 50% training data and 50% test data</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span>
+                                                    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># predict scores with a random forest</span>
+<span class="n">classifier</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
+<span class="n">y_score</span> <span class="o">=</span> <span class="n">classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">([</span><span class="n">y_score</span><span class="p">[</span><span class="n">y_test</span><span class="o">==</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">y_score</span><span class="p">[</span><span class="n">y_test</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;No Spam&#39;</span><span class="p">,</span> <span class="s1">&#39;Spam&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Histogram of predicted probabilities&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Predicted probability&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper center&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/07_Classification_1_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The orange bars show the scores of spam emails, the blue bars the scores of other emails. Without picking a specific threshold, we would just predict the class with the highest score. This is the same as a threshold of 0.5, indicated by the gray line. This would mean that most emails would be predicted correctly but there would be some emails that would not be flagged as spam, even though they are, and some emails that are flagged as spam, even though they are not. These are different types of errors, and they are not equal in this use case. While spam is annoying, deletion of the spam emails is not a lot of effort, unless there are hundreds of spam emails. On the other hand, even a single email that is mistakenly flagged as spam and not shown to the recipient can have strong negative consequences. We can solve this problem by picking a suitable threshold. The black line indicates a threshold of 0.1. With this threshold, only spam emails would be flagged as spam. While more spam emails would not be detected, at least all normal emails would pass through the spam filter. Thus, classification with scoring and a suitable threshold can make the difference between solving a problem and building a model that is unsuitable for the use case.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Performance-Metrics">Performance Metrics<a class="anchor-link" href="#Performance-Metrics"> </a></h2><p>The key question of classification is how good the hypothesis $h$ approximates the target concept $h^*$. Usually, we do not get perfect solution, which means that there are some instances that are predicted incorrectly by the hypothesis. The spam example above already demonstrates that there are different kinds of mistakes. The basis for any performance evaluation of classification models is the use test data. The hypothesis is applied to the features of the test data. From this, we get a prediction result we can compare with actual classes. The following table shows the five features of two instances of our image classification example, the actual class, and the prediction.</p>
+<table>
+<thead><tr>
+<th>shape</th>
+<th>top color</th>
+<th>bottom color</th>
+<th>background color</th>
+<th>has fins</th>
+<th>class</th>
+<th>prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>oval</td>
+<td>black</td>
+<td>black</td>
+<td>blue</td>
+<td>true</td>
+<td>whale</td>
+<td>whale</td>
+</tr>
+<tr>
+<td>rectangle</td>
+<td>brown</td>
+<td>brown</td>
+<td>green</td>
+<td>false</td>
+<td>bear</td>
+<td>whale</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<p>The first instance is predicted correctly, the prediction of the second instance is incorrect. If there are thousands or even millions of instance in the test data, we cannot evaluate the prediction by looking at such a table. Instead, we need to summarize the comparison between the classes and the prediction.</p>
+<h3 id="The-Confusion-Matrix">The Confusion Matrix<a class="anchor-link" href="#The-Confusion-Matrix"> </a></h3><p>The most important tool for the analysis of the quality of hypothesis is the <em>confusion matrix</em>, a tabular description of how often the hypothesis is correct and how often it is incorrect, i.e., confused. The confusion matrix four our image classification example may look like this.</p>
+<table>
+    <tr><td rowspan=5><br><br><b>Predicted class</b></td><td></td><td colspan=2><b>Actual class</b></td><td></td></tr>
+    <tr><td><td><b>whale</b></td><td><b>bear</b></td><td><b>other</b></td></tr>
+    <tr><td><b>whale</b></td><td>29</td><td>1</td><td>3</td></tr>
+    <tr><td><b>bear</b></td><td>2</td><td>22</td><td>13</td></tr>
+    <tr><td><b>other</b></td><td>4</td><td>11</td><td>51</td></tr>
+</table><p>The confusion matrix basically counts how often each instance of each class is predicted as which class. For example, how often whales are predicted as whales, how often they are predicted as bears, and how often they are predicted as something else. The columns are the actual values of the classes, i.e., the target concept. The rows are the predicted values, i.e., the hypothesis. In the example, we have 35 actual pictures of whales. This is the sum of the values in the first row. 29 of these whale pictures are predicted correctly, 2 are incorrectly predicted as bears, 4 are incorrectly predicted as something else. Thus, the confusion matrix gives us detailed statistical information about how many instances we have and how they are predicted. Values on the diagonal of the confusion matrix are the correct prediction, the other values show incorrect predictions.</p>
+<h3 id="The-Binary-Confusion-Matrix">The Binary Confusion Matrix<a class="anchor-link" href="#The-Binary-Confusion-Matrix"> </a></h3><p>The binary confusion matrix is the special case of the confusion matrix for binary classification problems with the classes true and false. In general, the binary confusion matrix looks like this.</p>
+<table>
+    <tr><td rowspan=4><br><br><b>Predicted class</b></td><td colspan=2><b>Actual class</b></td><td></td></tr>
+    <tr><td><td><b>true</b></td><td><b>false</b></td></tr>
+    <tr><td><b>true</b></td><td>true positive (TP)</td><td>false positive (FP)</td></tr>
+    <tr><td><b>false</b></td><td>false negative (FN)</td><td>true negative (TN)</td></tr>
+</table><p>Thus, we have actually positive and negative classes and depending on whether the prediction is correct or not, we get true positives (TP), true negatives (TN), false positives (FP), or false negatives (FN). The binary confusion matrix is well known and not only used for the evaluation of machine learning, but also, e.g., in medical studies to evaluate the quality of tests. From medical studies also originate the terms <em>type I error</em> and <em>type II Error</em>. The type I error are the false positives. In medicine, this could mean a mistakenly positive result of an antibody test for an illness that may lead to the wrong conclusion that a person as antibodies for the illness. The type II errors are the false negatives. In medicine, this could mean a mistakenly negative result of an antibody test with the wrong conclusion that there are no antibodies. In the spam example, emails mistakenly flagged as spam would be false positives, the spam emails that are missed would be false negatives.</p>
+<h3 id="Binary-Performance-Metrics">Binary Performance Metrics<a class="anchor-link" href="#Binary-Performance-Metrics"> </a></h3><p>We can define performance metrics that summarize aspects of the performance of a hypothesis in a single statistical marker. There are many different performance metrics that all measure different aspects of the performance. The table below lists eleven such metrics.</p>
+<table>
+<thead><tr>
+<th>Metric</th>
+<th>Description</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>True positive rate, recall, sensitivity</td>
+<td>Percentage of positive instances that are predicted correctly.</td>
+<td>$TPR = \frac{FP}{TP+FN}$</td>
+</tr>
+<tr>
+<td>False negative rate, specificity</td>
+<td>Percentage of negative instances that are predicted correctly.</td>
+<td>$TNR = \frac{TN}{TN+FP}$</td>
+</tr>
+<tr>
+<td>False negative rate</td>
+<td>Percentage of positive instances that are predicted incorrectly as negative.</td>
+<td>$TNR = \frac{FN}{FN+TP}$</td>
+</tr>
+<tr>
+<td>False positive rate</td>
+<td>Percentage of negative values that are predicted incorrectly as positive.</td>
+<td>$FPR = \frac{FP}{FP+TN}$</td>
+</tr>
+<tr>
+<td>Positive predictive value, precision</td>
+<td>Percentage of positive predictions that are predicted correctly.</td>
+<td>$PPV = \frac{TP}{TP+FP}$</td>
+</tr>
+<tr>
+<td>Negative predictive value</td>
+<td>Percentage of negative predictions that are predicted correctly.</td>
+<td>$NPV = \frac{TN}{TN+FN}$</td>
+</tr>
+<tr>
+<td>False discovery rate</td>
+<td>Percentage of positive predictions that are predicted incorrectly because they should be negative.</td>
+<td>$FDR = \frac{FP}{TP+FP}$</td>
+</tr>
+<tr>
+<td>False omission rate</td>
+<td>Percentage of negative predictions that are predicted incorrectly because they should be positive.</td>
+<td>$FOR = \frac{FN}{FN+TN}$</td>
+</tr>
+<tr>
+<td>Accuracy</td>
+<td>Percentage of correct predictions.</td>
+<td>$accuracy = \frac{TP+TN}{TP+TN+FP+FN}$</td>
+</tr>
+<tr>
+<td>F1 measure</td>
+<td>Harmonic mean of precision and recall.</td>
+<td>$F_1 = 2\cdot\frac{precision \cdot recall}{precision+recall}$</td>
+</tr>
+<tr>
+<td>Matthews correlation coefficient (MCC)</td>
+<td>Correlation between the prediction and the actual values.</td>
+<td>$MCC = \frac{TP\cdot TN - FP\cdot FN}{\sqrt{(TP+FP)(FP+FN)(TN+FP)(TN+FN)}}$</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span>
+
+<span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">_</span><span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_score</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
+
+<span class="c1"># Plot ROC Curve with AUC</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span>
+         <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ROC curve (AUC = </span><span class="si">%0.2f</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">roc_auc</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Receiver operating characteristic example&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/07_Classification_4_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="$k$-Nearest-Neighbor">$k$-Nearest Neighbor<a class="anchor-link" href="#$k$-Nearest-Neighbor"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Decision-Trees">Decision Trees<a class="anchor-link" href="#Decision-Trees"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Random-Forests">Random Forests<a class="anchor-link" href="#Random-Forests"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Logistic-Regression">Logistic Regression<a class="anchor-link" href="#Logistic-Regression"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Naive-Bayes">Naive Bayes<a class="anchor-link" href="#Naive-Bayes"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Support-Vector-Machines">Support Vector Machines<a class="anchor-link" href="#Support-Vector-Machines"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Neural-Networks">Neural Networks<a class="anchor-link" href="#Neural-Networks"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Comparison-of-Classification-Models">Comparison of Classification Models<a class="anchor-link" href="#Comparison-of-Classification-Models"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

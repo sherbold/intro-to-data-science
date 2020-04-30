@@ -52,6 +52,9 @@
 - url: /06_Clustering
   not_numbered: false
   
+- url: /07_Classification
+  not_numbered: false
+  
 - divider: true
 
 - url: /Appendix
