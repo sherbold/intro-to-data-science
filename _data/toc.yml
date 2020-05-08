@@ -57,5 +57,8 @@
   
 - divider: true
 
+- url: /Exercises
+  not_numbered: true
+
 - url: /Appendix
   not_numbered: true
