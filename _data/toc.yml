@@ -59,6 +59,7 @@
 
 - url: /Exercises
   not_numbered: true
+  expand_sections: false
   sections: 
     - url: /exercises/Exercise_Getting_Started
     - url: /exercises/Exercise_CSV_and_DataFrames
