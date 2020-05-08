@@ -59,6 +59,10 @@
 
 - url: /Exercises
   not_numbered: true
+  sections: 
+    - url: /exercises/Exercise_Getting_Started
+    - url: /exercises/Exercise_CSV_and_DataFrames
+    - url: /exercises/Exercise_Data_Exploration
 
 - url: /Appendix
   not_numbered: true

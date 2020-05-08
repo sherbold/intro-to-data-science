@@ -1,0 +1,119 @@
+---
+redirect_from:
+  - "/exercises/exercise-csv-and-dataframes"
+interact_link: content/exercises/Exercise_CSV_and_DataFrames.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  CSV Files and Data Frames
+pagenum: 10
+prev_page:
+  url: /exercises/Exercise_Getting_Started.html
+next_page:
+  url: /exercises/Exercise_Data_Exploration.html
+suffix: .ipynb
+search: data columns frame ta features instances task rows csv frames file e missing values files should often value load remove feature removed new re only exercise analysis just such available uci g loaded wc ebit less python loading common names following please archive types also case must before not merge part merged bankrupt equal get started handling yet filtering step always accessing stored database within generic exchange format comma separated line indicates lines contain single instance download bankruptcy set user informatik uni goettingen de sherbold analcatdatabankruptcy prepared upload jupyter notebook note slightly modified original ics edu ml index php include
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">CSV Files and Data Frames</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This exercise should get you started with handling data in Python. There is no data analysis yet, just some loading and filtering of the data.</p>
+<h2 id="Loading-data-from-CSV">Loading data from CSV<a class="anchor-link" href="#Loading-data-from-CSV"> </a></h2><p>Your first step is always accessing the data. Often, the data is stored in a database or within files. One common and generic exchange format for files are Comma Separated Value (CSV) files. The first line of such a file indicates the names of the features, the following lines each contain a single instance.</p>
+<p>First, download the <a href="http://user.informatik.uni-goettingen.de/~sherbold/analcatdata_bankruptcy.csv">bankruptcy data set</a> we prepared for you and and upload it to your Jupyter notebook. Please note, that we slightly modified the data from the original available in the <a href="https://archive.ics.uci.edu/ml/index.php">UCI archive</a> UCI for this exercise, e.g., to include missing values.</p>
+<p>Use the cell below to load the data from the CSV file. The data should be loaded into a <em>data frame</em>. Data frames are available in python using the <code>pandas</code> library. In comparison to matrices or similar types, they allow different types of columns, are usually easier to manipulate, e.g., by adding or removing rows/columns, and rows and columns can be named.</p>
+<p>Once you have done this, print some information about the data:</p>
+<ul>
+<li>number of instances</li>
+<li>number of features</li>
+<li>names of the features</li>
+</ul>
+<p>You should have 55 instances with 7 features.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Remove-features">Remove features<a class="anchor-link" href="#Remove-features"> </a></h2><p>If you load all data from a file, you often also load irrelevant features for a task. In case of the data you just loaded, the feature is called <code>Company</code>. This is an ID feature for the instances in the data. Such data must often be removed before further analysis of the data. Your second task is to remove this feature from the data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Remove-instances-with-missing-values">Remove instances with missing values<a class="anchor-link" href="#Remove-instances-with-missing-values"> </a></h2><p>Real-life data is often not clean, i.e., the data has many problems which must be addressed first, before it can be used for analysis. One common problem are missing features, i.e., not all features are available for all data. This is also the case for the data you just loaded. All missing values are marked as NA in the CSV file.</p>
+<p>Your third task is to remove all instances from the data, that have any missing values and store the remaining instances in a new data frame. If this works correctly, five instances should be removed. You can check this, e.g., by comparing the sizes of the data frames or printing the instances that were removed.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Computing-with-data-frames">Computing with data frames<a class="anchor-link" href="#Computing-with-data-frames"> </a></h2><p>Sometimes you have to compute new columns from the values of existing columns. Please append two new columns to the data frame: The sum of the columns WC/TA and RE/TA and the product of the columns EBIT/TA and S/TA.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Merging-data-frames">Merging data frames<a class="anchor-link" href="#Merging-data-frames"> </a></h2><p>The next task of this exercise is to merge data frames. For this, load the data from the same CSV file as above again. Then merge the data frame with the result from task 2.4, such that:</p>
+<ul>
+<li>the dropped feature from task 2.2 is part of the merged data frame; and</li>
+<li>the removed instances from task 2.3 are still gone; and</li>
+<li>the indirectly computed features from task 2.4 are part of the merged data frame. </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Selecting-subsets">Selecting subsets<a class="anchor-link" href="#Selecting-subsets"> </a></h2><p>Based on the data frame from task 2.5, create new data frames according to the following criteria.</p>
+<ul>
+<li>A data frame with only the rows 10 to 20 and all columns. </li>
+<li>A data frame with only the columns 1 to 4 and all rows. </li>
+<li>A data frame with only the columns WC/TA and EBIT/TA and all rows. </li>
+<li>A data frame with all rows that have the value RE/TA less than -20 and all columns.</li>
+<li>A data frame with all rows that have the value RE/TA less than -20 and bankrupt equal to 0 and all columns. </li>
+<li>A data frame with all rows that have the value RE/TA less than -20 and bankrupt equal to 0 and only the columns WC/TA and EBIT/TA. </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
