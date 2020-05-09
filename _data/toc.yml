@@ -64,6 +64,8 @@
     - url: /exercises/Exercise_Getting_Started
     - url: /exercises/Exercise_CSV_and_DataFrames
     - url: /exercises/Exercise_Data_Exploration
+    - url: /exercises/Exercise_Association_Rule_Mining
+    - url: /exercises/Exercise_Clustering
 
 - url: /Appendix
   not_numbered: true

@@ -1,0 +1,96 @@
+---
+redirect_from:
+  - "/exercises/exercise-clustering"
+interact_link: content/exercises/Exercise_Clustering.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Cluster Analysis
+pagenum: 13
+prev_page:
+  url: /exercises/Exercise_Association_Rule_Mining.html
+next_page:
+  url: /Appendix.html
+suffix: .ipynb
+search: clustering data clusters sklearn suitable results determine k exercise different algorithms means version em cluster learn boston using least hierarchical between note python problems also dbscan analysis parameters available part scikit org stable html week both fourteen dimensions get combination knowledge already visualizations within known mixture found algorithm bic values under development packages jupyter here cut off relationship pick interpret high dimensional please biggest challenge not good represents libraries house price modules classes module datasets last explored apply db columns functions experience ensure matplotlib seaborn couple solve during features scales influences makes visualizing difficult try dimension reduction technique principle component
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Cluster Analysis</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With this exercise you can learn more about clustering. You learn how to pick suitable parameters for different algorithms and how to interpret results of the clustering of high-dimensional data.</p>
+<p>Please note that the biggest challenge of this exercise is not to determine some clusters, but to determine if these clusters are good and what each cluster represents.</p>
+<h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>We use the boston house price data in this exercise. The data is available as part of <code>sklearn</code> for <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.datasets">Python</a>.</p>
+<p>Last week we explored the boston data, this week we use it for clustering. You will apply both $k$-means clustering and DB clustering to the boston data using all fourteen columns. Functions for all clustering algorithms are available in <code>sklearn</code> for Python. If you experience problems, ensure that your <code>sklearn</code> version is at least 0.22, your <code>matplotlib</code> version is at least 3.0.1, and your <code>seaborn</code> version is at least 0.9.0.</p>
+<p>There are a couple of problems with clustering data like the boston data, that you will have to solve during this exercise.</p>
+<ul>
+<li>The different features of the data are on different scales, which influences the results. </li>
+<li>The data has fourteen dimensions. This makes visualizing the clusters difficult. You can try a dimension reduction technique like Principle Component Analysis (PCA) to get only two dimensions or use pair-wise plots. Both have advantages and drawbacks, which you should explore as part of this exercise. </li>
+</ul>
+<h2 id="$k$-Means-Clustering">$k$-Means Clustering<a class="anchor-link" href="#$k$-Means-Clustering"> </a></h2><p>Use $k$-Means to cluster the data and find a suitable number of clusters for $k$. Use a combination of knowledge you already have about the data, visualizations, as well as the within-sum-of-squares to determine a suitable number of clusters.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="EM-Clustering">EM Clustering<a class="anchor-link" href="#EM-Clustering"> </a></h2><p>(Note: EM clustering is also known as Gaussian Mixture Models and can be found in the mixture package of <code>sklearn</code>.)</p>
+<p>Use the EM algorithm to determine multivariate clusters in the data. Determine a suitable number of clusters using the Bayesian Information Criterion (BIC).</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="DBSCAN-Clustering">DBSCAN Clustering<a class="anchor-link" href="#DBSCAN-Clustering"> </a></h2><p>Use DBSCAN to cluster the data and find suitable values for $epsilon$ and $minPts$.  Use a combination of knowledge you already have about the data and visualizations.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hierarchical-Clustering">Hierarchical Clustering<a class="anchor-link" href="#Hierarchical-Clustering"> </a></h2><p>(Note: Hierarchical clustering is also known as agglomerative clustering and can be found under that name in <code>sklearn</code>. This task requires at least <code>sklearn</code> version 0.22, which is still under development (October 2019). You can find guidance on how to install packages in Jupyter notebook <a href="https://jakevdp.github.io/blog/2017/12/05/installing-python-packages-from-jupyter/">here</a> and regarding the development version of <code>sklearn</code> <a href="https://scikit-learn.org/stable/developers/advanced_installation.html">here</a>.)</p>
+<p>Use hierarchical clustering with single linkage to determine clusters within the housing data. Find a suitable cut-off for the clusters using a dendrogram.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Compare-the-Clustering-Results">Compare the Clustering Results<a class="anchor-link" href="#Compare-the-Clustering-Results"> </a></h2><p>How are the clustering results different between the algorithms? Consider, e.g., the number of clusters, the shape of clusters, general problems with using the algorithms, and the insights you get from each algorithm.</p>
+<p>You may also use this to better understand the differences between the algorithms. For example, how are the results from EM clustering different/similar to the results of the $k$-Means clustering? Is there a relationship between the WSS and the BIC? How are the mean values of EM related to the centroids of $k$-Means? What is the relationship between the parameters for DBSCAN and the cut-off for the hierarchical clustering?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

@@ -1,0 +1,95 @@
+---
+redirect_from:
+  - "/exercises/exercise-association-rule-mining"
+interact_link: content/exercises/Exercise_Association_Rule_Mining.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Association Rule Mining
+pagenum: 12
+prev_page:
+  url: /exercises/Exercise_Data_Exploration.html
+next_page:
+  url: /exercises/Exercise_Clustering.html
+suffix: .ipynb
+search: rules data mining association rule exercise records frequent itemsets threshold sets good part code list apriori algorithm suitable support determine both within get deeper understanding learn identify sample set libraries python mlxtend library store baskets user informatik uni goettingen de sherbold storedata csv following load creates where record items transaction finding once transactional try minimal such state clear reason why picked results lift confidence metrics evaluations validation randomly split into roughly similar does similarity differences indicate
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Association Rule Mining</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Within this exercise, you can get a deeper understanding of association rule mining and learn how to identify good rules for a sample data set.</p>
+<h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>The first part of the exercise is about association rule mining. In Python, you can use the <code>mlxtend</code> library for the mining of association rules.</p>
+<p>We use data about <a href="https://user.informatik.uni-goettingen.de/~sherbold/store_data.csv">store baskets</a> in this exercise. You can use the following code to load the data. The code creates a list of records, where each record is a list of the items that are part of the transaction.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;store_data.csv&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Finding-frequent-itemsets">Finding frequent itemsets<a class="anchor-link" href="#Finding-frequent-itemsets"> </a></h2><p>Once you have the transactional records, use the apriori algorithm to find frequent itemsets with a suitable threshold for support for this data. Try to find a suitable threshold for the minimal support such that you can state a clear reason why you picked this threshold.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Mining-rules-from-the-frequent-itemsets">Mining rules from the frequent itemsets<a class="anchor-link" href="#Mining-rules-from-the-frequent-itemsets"> </a></h2><p>Determine good rules from the results for this data. Use lift and confidence as metrics for your evaluations.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Validation-of-the-rules">Validation of the rules<a class="anchor-link" href="#Validation-of-the-rules"> </a></h2><p>Randomly split your records into two sets with roughly 50% of data each. Now use the Apriori algorithm to determine rules on both of these sets. Do you find similar rules on both sets? What does the similarity/the differences indicate?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
