@@ -1,0 +1,4157 @@
+---
+redirect_from:
+  - "/exercises/solution-csv-and-dataframes"
+interact_link: content/exercises/Solution_CSV_and_DataFrames.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  CSV Files and Data Frames
+pagenum: 15
+prev_page:
+  url: /Solutions.html
+next_page:
+  url: /exercises/Solution_Data_Exploration.html
+suffix: .ipynb
+search: data columns frame ta task features instances csv frames rows only file e missing values files exercise often value load remove feature removed new re not also analysis such available uci g should loaded wc ebit less any same problem common names following please archive types case just must before merge part merged bankrupt equal sample solution does mean solve programming tasks multiple solutions loading step always accessing stored database within generic exchange format comma separated line indicates lines contain single instance download bankruptcy set user informatik uni goettingen de sherbold analcatdatabankruptcy prepared upload jupyter notebook note slightly modified original
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">CSV Files and Data Frames</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is a sample solution for the CSV and data frames exercise. This does not mean that this is the only way to solve this exercise. As with any programming task - and also with most data analysis tasks - there are multiple solutions for the same problem.</p>
+<h2 id="Loading-data-from-CSV">Loading data from CSV<a class="anchor-link" href="#Loading-data-from-CSV"> </a></h2><p>Your first step is always accessing the data. Often, the data is stored in a database or within files. One common and generic exchange format for files are Comma Separated Value (CSV) files. The first line of such a file indicates the names of the features, the following lines each contain a single instance.</p>
+<p>First, download the <a href="http://user.informatik.uni-goettingen.de/~sherbold/analcatdata_bankruptcy.csv">bankruptcy data set</a> we prepared for you and and upload it to your Jupyter notebook. Please note, that we slightly modified the data from the original available in the <a href="https://archive.ics.uci.edu/ml/index.php">UCI archive</a> UCI for this exercise, e.g., to include missing values.</p>
+<p>Use the cell below to load the data from the CSV file. The data should be loaded into a <em>data frame</em>. Data frames are available in python using the <code>pandas</code> library. In comparison to matrices or similar types, they allow different types of columns, are usually easier to manipulate, e.g., by adding or removing rows/columns, and rows and columns can be named.</p>
+<p>Once you have done this, print some information about the data:</p>
+<ul>
+<li>number of instances</li>
+<li>number of features</li>
+<li>names of the features</li>
+</ul>
+<p>You should have 55 instances with 7 features.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Remove-features">Remove features<a class="anchor-link" href="#Remove-features"> </a></h2><p>If you load all data from a file, you often also load irrelevant features for a task. In case of the data you just loaded, the feature is called <code>Company</code>. This is an ID feature for the instances in the data. Such data must often be removed before further analysis of the data. Your second task is to remove this feature from the data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># load the data directly from the URL. This is supported since pandas 0.19.2</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="s1">&#39;http://user.informatik.uni-goettingen.de/~sherbold/analcatdata_bankruptcy.csv&#39;</span><span class="p">)</span>
+<span class="c1"># since jupyter notebooks show the return value of the last statement, this shows the data frame</span>
+<span class="c1"># jupyter also provides a nice HTML rendering for the data</span>
+<span class="n">data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Company</th>
+      <th>WC/TA</th>
+      <th>RE/TA</th>
+      <th>EBIT/TA</th>
+      <th>S/TA</th>
+      <th>BVE/BVL</th>
+      <th>Bankrupt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>360Networks</td>
+      <td>9.3</td>
+      <td>-7.7</td>
+      <td>1.6</td>
+      <td>9.1</td>
+      <td>3.726</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Advanced_Radio_Telecom</td>
+      <td>42.6</td>
+      <td>-60.1</td>
+      <td>-10.1</td>
+      <td>0.3</td>
+      <td>4.130</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Ardent_Communications</td>
+      <td>-28.8</td>
+      <td>-203.2</td>
+      <td>-51.0</td>
+      <td>14.7</td>
+      <td>0.111</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>At_Home_Corp.</td>
+      <td>2.5</td>
+      <td>-433.1</td>
+      <td>-6.0</td>
+      <td>29.3</td>
+      <td>1.949</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Convergent_Communications</td>
+      <td>26.1</td>
+      <td>-57.4</td>
+      <td>-23.5</td>
+      <td>54.2</td>
+      <td>0.855</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Covad_Communications</td>
+      <td>39.2</td>
+      <td>-111.8</td>
+      <td>-77.8</td>
+      <td>10.5</td>
+      <td>0.168</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>e.spire</td>
+      <td>-5.4</td>
+      <td>-105.2</td>
+      <td>-5.8</td>
+      <td>38.9</td>
+      <td>0.028</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>eGlobe</td>
+      <td>-35.2</td>
+      <td>-92.4</td>
+      <td>-32.5</td>
+      <td>48.5</td>
+      <td>11.280</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Exodus_Communications</td>
+      <td>10.5</td>
+      <td>-12.4</td>
+      <td>-2.3</td>
+      <td>21.0</td>
+      <td>2.500</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>General_Datacomm_Industries</td>
+      <td>-22.4</td>
+      <td>-124.5</td>
+      <td>-7.9</td>
+      <td>125.6</td>
+      <td>1.595</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Global_Telesystems</td>
+      <td>24.6</td>
+      <td>-29.0</td>
+      <td>-2.0</td>
+      <td>21.3</td>
+      <td>1.968</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>GST_Telecom</td>
+      <td>6.6</td>
+      <td>-50.9</td>
+      <td>-2.6</td>
+      <td>28.9</td>
+      <td>0.258</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Metricom</td>
+      <td>33.9</td>
+      <td>-46.5</td>
+      <td>-17.5</td>
+      <td>0.9</td>
+      <td>0.828</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Net2000_Communications</td>
+      <td>19.1</td>
+      <td>-66.3</td>
+      <td>-25.5</td>
+      <td>22.3</td>
+      <td>0.460</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>NetVoice_Technologies</td>
+      <td>-21.1</td>
+      <td>-46.0</td>
+      <td>-26.8</td>
+      <td>81.4</td>
+      <td>0.698</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>PSINet</td>
+      <td>2.5</td>
+      <td>-228.7</td>
+      <td>-6.7</td>
+      <td>38.6</td>
+      <td>0.030</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Rhythms_NetConnections</td>
+      <td>47.0</td>
+      <td>-78.2</td>
+      <td>-42.0</td>
+      <td>4.4</td>
+      <td>0.168</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>RSL_Communications</td>
+      <td>9.1</td>
+      <td>-40.2</td>
+      <td>-0.7</td>
+      <td>81.5</td>
+      <td>0.522</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>FictionCorp</td>
+      <td>NaN</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>SSE_Telecom</td>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Startec_Global_Communications</td>
+      <td>-34.9</td>
+      <td>-79.0</td>
+      <td>-13.5</td>
+      <td>127.8</td>
+      <td>0.197</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>Teligent</td>
+      <td>20.6</td>
+      <td>-146.3</td>
+      <td>-36.0</td>
+      <td>12.6</td>
+      <td>0.075</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>U.S._Wireless</td>
+      <td>-51.6</td>
+      <td>-326.1</td>
+      <td>-98.7</td>
+      <td>0.9</td>
+      <td>2.402</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>Viatel</td>
+      <td>-93.0</td>
+      <td>-95.2</td>
+      <td>-7.3</td>
+      <td>34.8</td>
+      <td>0.071</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>AweSomeCorp</td>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>NaN</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>WebLink_Wireless</td>
+      <td>-127.5</td>
+      <td>-121.3</td>
+      <td>6.4</td>
+      <td>65.7</td>
+      <td>0.248</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Winstar</td>
+      <td>-1.2</td>
+      <td>-47.5</td>
+      <td>-9.7</td>
+      <td>14.5</td>
+      <td>0.456</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>Aether_Systems</td>
+      <td>30.6</td>
+      <td>-14.4</td>
+      <td>-4.9</td>
+      <td>2.2</td>
+      <td>3.482</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>Akamai_Technologies</td>
+      <td>9.8</td>
+      <td>-33.8</td>
+      <td>-7.1</td>
+      <td>3.2</td>
+      <td>5.965</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>Allegiance_Telecom</td>
+      <td>37.8</td>
+      <td>-45.4</td>
+      <td>-7.1</td>
+      <td>17.1</td>
+      <td>3.450</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>UnknownCorp</td>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>NaN</td>
+      <td>2.919</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>ALLTEL_Corp.</td>
+      <td>2.2</td>
+      <td>31.6</td>
+      <td>22.0</td>
+      <td>58.0</td>
+      <td>2.758</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>BellSouth</td>
+      <td>-11.5</td>
+      <td>27.6</td>
+      <td>24.4</td>
+      <td>51.4</td>
+      <td>2.266</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>Broadwing</td>
+      <td>-4.1</td>
+      <td>-5.8</td>
+      <td>7.7</td>
+      <td>31.6</td>
+      <td>1.222</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>CenturyTel</td>
+      <td>-5.7</td>
+      <td>21.1</td>
+      <td>14.3</td>
+      <td>28.9</td>
+      <td>1.153</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>Citizens_Communications</td>
+      <td>25.2</td>
+      <td>0.0</td>
+      <td>7.9</td>
+      <td>25.9</td>
+      <td>0.717</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>Commonwealth_Telephone</td>
+      <td>-5.7</td>
+      <td>0.0</td>
+      <td>16.3</td>
+      <td>49.9</td>
+      <td>1.517</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>FancyCorp</td>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>NaN</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>Conestoga_Enterprises</td>
+      <td>1.7</td>
+      <td>11.4</td>
+      <td>14.1</td>
+      <td>48.0</td>
+      <td>1.347</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>Digex</td>
+      <td>13.8</td>
+      <td>-37.6</td>
+      <td>-13.0</td>
+      <td>32.3</td>
+      <td>13.768</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>Equant</td>
+      <td>8.2</td>
+      <td>-15.6</td>
+      <td>0.3</td>
+      <td>87.7</td>
+      <td>5.444</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>Garmin</td>
+      <td>74.7</td>
+      <td>54.6</td>
+      <td>27.9</td>
+      <td>74.6</td>
+      <td>3.720</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>Gilat_Satellite_Networks</td>
+      <td>43.1</td>
+      <td>-0.4</td>
+      <td>3.4</td>
+      <td>40.0</td>
+      <td>0.925</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>IDT_Corp.</td>
+      <td>48.7</td>
+      <td>38.4</td>
+      <td>-9.2</td>
+      <td>65.4</td>
+      <td>0.705</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>Infonet</td>
+      <td>40.7</td>
+      <td>0.6</td>
+      <td>1.8</td>
+      <td>49.2</td>
+      <td>7.497</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>AnotherCorp</td>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>Openwave_Systems</td>
+      <td>20.3</td>
+      <td>-61.3</td>
+      <td>1.9</td>
+      <td>27.0</td>
+      <td>35.178</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>Price_Communications</td>
+      <td>16.1</td>
+      <td>3.6</td>
+      <td>11.6</td>
+      <td>21.4</td>
+      <td>0.856</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>Qwest</td>
+      <td>-6.1</td>
+      <td>0.0</td>
+      <td>9.4</td>
+      <td>22.6</td>
+      <td>2.123</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>SBC_Communications</td>
+      <td>-7.2</td>
+      <td>18.6</td>
+      <td>20.8</td>
+      <td>52.2</td>
+      <td>2.413</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>Telephone_and_Data_Systems</td>
+      <td>-5.3</td>
+      <td>31.0</td>
+      <td>4.9</td>
+      <td>26.9</td>
+      <td>1.362</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>51</th>
+      <td>Time_Warner_Telecom</td>
+      <td>4.1</td>
+      <td>-10.1</td>
+      <td>9.7</td>
+      <td>36.0</td>
+      <td>7.623</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>52</th>
+      <td>U.S._Cellular</td>
+      <td>0.3</td>
+      <td>27.9</td>
+      <td>16.1</td>
+      <td>49.5</td>
+      <td>4.357</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>Verizon_Communications</td>
+      <td>-7.4</td>
+      <td>8.9</td>
+      <td>15.3</td>
+      <td>39.3</td>
+      <td>1.273</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>54</th>
+      <td>Western_Wireless</td>
+      <td>1.1</td>
+      <td>-39.5</td>
+      <td>15.7</td>
+      <td>41.8</td>
+      <td>1.449</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Now we drop the column company</span>
+<span class="c1"># inplace means that the current data frame is modified</span>
+<span class="c1"># without inplace, a copy is created that we would have to assign again</span>
+<span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="s1">&#39;Company&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WC/TA</th>
+      <th>RE/TA</th>
+      <th>EBIT/TA</th>
+      <th>S/TA</th>
+      <th>BVE/BVL</th>
+      <th>Bankrupt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>9.3</td>
+      <td>-7.7</td>
+      <td>1.6</td>
+      <td>9.1</td>
+      <td>3.726</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>42.6</td>
+      <td>-60.1</td>
+      <td>-10.1</td>
+      <td>0.3</td>
+      <td>4.130</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-28.8</td>
+      <td>-203.2</td>
+      <td>-51.0</td>
+      <td>14.7</td>
+      <td>0.111</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2.5</td>
+      <td>-433.1</td>
+      <td>-6.0</td>
+      <td>29.3</td>
+      <td>1.949</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>26.1</td>
+      <td>-57.4</td>
+      <td>-23.5</td>
+      <td>54.2</td>
+      <td>0.855</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>39.2</td>
+      <td>-111.8</td>
+      <td>-77.8</td>
+      <td>10.5</td>
+      <td>0.168</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-5.4</td>
+      <td>-105.2</td>
+      <td>-5.8</td>
+      <td>38.9</td>
+      <td>0.028</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-35.2</td>
+      <td>-92.4</td>
+      <td>-32.5</td>
+      <td>48.5</td>
+      <td>11.280</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>10.5</td>
+      <td>-12.4</td>
+      <td>-2.3</td>
+      <td>21.0</td>
+      <td>2.500</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-22.4</td>
+      <td>-124.5</td>
+      <td>-7.9</td>
+      <td>125.6</td>
+      <td>1.595</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>24.6</td>
+      <td>-29.0</td>
+      <td>-2.0</td>
+      <td>21.3</td>
+      <td>1.968</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>6.6</td>
+      <td>-50.9</td>
+      <td>-2.6</td>
+      <td>28.9</td>
+      <td>0.258</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>33.9</td>
+      <td>-46.5</td>
+      <td>-17.5</td>
+      <td>0.9</td>
+      <td>0.828</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>19.1</td>
+      <td>-66.3</td>
+      <td>-25.5</td>
+      <td>22.3</td>
+      <td>0.460</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>-21.1</td>
+      <td>-46.0</td>
+      <td>-26.8</td>
+      <td>81.4</td>
+      <td>0.698</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>2.5</td>
+      <td>-228.7</td>
+      <td>-6.7</td>
+      <td>38.6</td>
+      <td>0.030</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>47.0</td>
+      <td>-78.2</td>
+      <td>-42.0</td>
+      <td>4.4</td>
+      <td>0.168</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>9.1</td>
+      <td>-40.2</td>
+      <td>-0.7</td>
+      <td>81.5</td>
+      <td>0.522</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>NaN</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>-34.9</td>
+      <td>-79.0</td>
+      <td>-13.5</td>
+      <td>127.8</td>
+      <td>0.197</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>20.6</td>
+      <td>-146.3</td>
+      <td>-36.0</td>
+      <td>12.6</td>
+      <td>0.075</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>-51.6</td>
+      <td>-326.1</td>
+      <td>-98.7</td>
+      <td>0.9</td>
+      <td>2.402</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>-93.0</td>
+      <td>-95.2</td>
+      <td>-7.3</td>
+      <td>34.8</td>
+      <td>0.071</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>NaN</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>-127.5</td>
+      <td>-121.3</td>
+      <td>6.4</td>
+      <td>65.7</td>
+      <td>0.248</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>-1.2</td>
+      <td>-47.5</td>
+      <td>-9.7</td>
+      <td>14.5</td>
+      <td>0.456</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>30.6</td>
+      <td>-14.4</td>
+      <td>-4.9</td>
+      <td>2.2</td>
+      <td>3.482</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>9.8</td>
+      <td>-33.8</td>
+      <td>-7.1</td>
+      <td>3.2</td>
+      <td>5.965</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>37.8</td>
+      <td>-45.4</td>
+      <td>-7.1</td>
+      <td>17.1</td>
+      <td>3.450</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>NaN</td>
+      <td>2.919</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>2.2</td>
+      <td>31.6</td>
+      <td>22.0</td>
+      <td>58.0</td>
+      <td>2.758</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>-11.5</td>
+      <td>27.6</td>
+      <td>24.4</td>
+      <td>51.4</td>
+      <td>2.266</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>-4.1</td>
+      <td>-5.8</td>
+      <td>7.7</td>
+      <td>31.6</td>
+      <td>1.222</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>-5.7</td>
+      <td>21.1</td>
+      <td>14.3</td>
+      <td>28.9</td>
+      <td>1.153</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>25.2</td>
+      <td>0.0</td>
+      <td>7.9</td>
+      <td>25.9</td>
+      <td>0.717</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>-5.7</td>
+      <td>0.0</td>
+      <td>16.3</td>
+      <td>49.9</td>
+      <td>1.517</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>NaN</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>1.7</td>
+      <td>11.4</td>
+      <td>14.1</td>
+      <td>48.0</td>
+      <td>1.347</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>13.8</td>
+      <td>-37.6</td>
+      <td>-13.0</td>
+      <td>32.3</td>
+      <td>13.768</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>8.2</td>
+      <td>-15.6</td>
+      <td>0.3</td>
+      <td>87.7</td>
+      <td>5.444</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>74.7</td>
+      <td>54.6</td>
+      <td>27.9</td>
+      <td>74.6</td>
+      <td>3.720</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>43.1</td>
+      <td>-0.4</td>
+      <td>3.4</td>
+      <td>40.0</td>
+      <td>0.925</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>48.7</td>
+      <td>38.4</td>
+      <td>-9.2</td>
+      <td>65.4</td>
+      <td>0.705</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>40.7</td>
+      <td>0.6</td>
+      <td>1.8</td>
+      <td>49.2</td>
+      <td>7.497</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>20.3</td>
+      <td>-61.3</td>
+      <td>1.9</td>
+      <td>27.0</td>
+      <td>35.178</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>16.1</td>
+      <td>3.6</td>
+      <td>11.6</td>
+      <td>21.4</td>
+      <td>0.856</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>-6.1</td>
+      <td>0.0</td>
+      <td>9.4</td>
+      <td>22.6</td>
+      <td>2.123</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>-7.2</td>
+      <td>18.6</td>
+      <td>20.8</td>
+      <td>52.2</td>
+      <td>2.413</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>-5.3</td>
+      <td>31.0</td>
+      <td>4.9</td>
+      <td>26.9</td>
+      <td>1.362</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>51</th>
+      <td>4.1</td>
+      <td>-10.1</td>
+      <td>9.7</td>
+      <td>36.0</td>
+      <td>7.623</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>52</th>
+      <td>0.3</td>
+      <td>27.9</td>
+      <td>16.1</td>
+      <td>49.5</td>
+      <td>4.357</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>-7.4</td>
+      <td>8.9</td>
+      <td>15.3</td>
+      <td>39.3</td>
+      <td>1.273</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>54</th>
+      <td>1.1</td>
+      <td>-39.5</td>
+      <td>15.7</td>
+      <td>41.8</td>
+      <td>1.449</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Remove-instances-with-missing-values">Remove instances with missing values<a class="anchor-link" href="#Remove-instances-with-missing-values"> </a></h2><p>Real-life data is often not clean, i.e., the data has many problems which must be addressed first, before it can be used for analysis. One common problem are missing features, i.e., not all features are available for all data. This is also the case for the data you just loaded. All missing values are marked as NA in the CSV file.</p>
+<p>Your third task is to remove all instances from the data, that have any missing values and store the remaining instances in a new data frame. If this works correctly, five instances should be removed. You can check this, e.g., by comparing the sizes of the data frames or printing the instances that were removed.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of instance before dropping instances with missing values:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of instance after dropping instances with missing values:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Number of instance before dropping instances with missing values: 55
+Number of instance after dropping instances with missing values: 50
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Computing-with-data-frames">Computing with data frames<a class="anchor-link" href="#Computing-with-data-frames"> </a></h2><p>Sometimes you have to compute new columns from the values of existing columns. Please append two new columns to the data frame: The sum of the columns WC/TA and RE/TA and the product of the columns EBIT/TA and S/TA.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># columns can be access by their name</span>
+<span class="c1"># new columns can be added by using their name</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;WC/TA+RE/TA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;WC/TA&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;RE/TA&#39;</span><span class="p">]</span>
+<span class="c1"># the above way to access the columns is shorthand for using loc (location)</span>
+<span class="c1"># : selects all rows</span>
+<span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;EBIT/TA*S/TA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;EBIT/TA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;S/TA&#39;</span><span class="p">]</span>
+<span class="n">data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WC/TA</th>
+      <th>RE/TA</th>
+      <th>EBIT/TA</th>
+      <th>S/TA</th>
+      <th>BVE/BVL</th>
+      <th>Bankrupt</th>
+      <th>WC/TA+RE/TA</th>
+      <th>EBIT/TA*S/TA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>9.3</td>
+      <td>-7.7</td>
+      <td>1.6</td>
+      <td>9.1</td>
+      <td>3.726</td>
+      <td>1.0</td>
+      <td>1.6</td>
+      <td>14.56</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>42.6</td>
+      <td>-60.1</td>
+      <td>-10.1</td>
+      <td>0.3</td>
+      <td>4.130</td>
+      <td>1.0</td>
+      <td>-17.5</td>
+      <td>-3.03</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-28.8</td>
+      <td>-203.2</td>
+      <td>-51.0</td>
+      <td>14.7</td>
+      <td>0.111</td>
+      <td>1.0</td>
+      <td>-232.0</td>
+      <td>-749.70</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2.5</td>
+      <td>-433.1</td>
+      <td>-6.0</td>
+      <td>29.3</td>
+      <td>1.949</td>
+      <td>1.0</td>
+      <td>-430.6</td>
+      <td>-175.80</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>26.1</td>
+      <td>-57.4</td>
+      <td>-23.5</td>
+      <td>54.2</td>
+      <td>0.855</td>
+      <td>1.0</td>
+      <td>-31.3</td>
+      <td>-1273.70</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>39.2</td>
+      <td>-111.8</td>
+      <td>-77.8</td>
+      <td>10.5</td>
+      <td>0.168</td>
+      <td>1.0</td>
+      <td>-72.6</td>
+      <td>-816.90</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-5.4</td>
+      <td>-105.2</td>
+      <td>-5.8</td>
+      <td>38.9</td>
+      <td>0.028</td>
+      <td>1.0</td>
+      <td>-110.6</td>
+      <td>-225.62</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-35.2</td>
+      <td>-92.4</td>
+      <td>-32.5</td>
+      <td>48.5</td>
+      <td>11.280</td>
+      <td>1.0</td>
+      <td>-127.6</td>
+      <td>-1576.25</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>10.5</td>
+      <td>-12.4</td>
+      <td>-2.3</td>
+      <td>21.0</td>
+      <td>2.500</td>
+      <td>1.0</td>
+      <td>-1.9</td>
+      <td>-48.30</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-22.4</td>
+      <td>-124.5</td>
+      <td>-7.9</td>
+      <td>125.6</td>
+      <td>1.595</td>
+      <td>1.0</td>
+      <td>-146.9</td>
+      <td>-992.24</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>24.6</td>
+      <td>-29.0</td>
+      <td>-2.0</td>
+      <td>21.3</td>
+      <td>1.968</td>
+      <td>1.0</td>
+      <td>-4.4</td>
+      <td>-42.60</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>6.6</td>
+      <td>-50.9</td>
+      <td>-2.6</td>
+      <td>28.9</td>
+      <td>0.258</td>
+      <td>1.0</td>
+      <td>-44.3</td>
+      <td>-75.14</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>33.9</td>
+      <td>-46.5</td>
+      <td>-17.5</td>
+      <td>0.9</td>
+      <td>0.828</td>
+      <td>1.0</td>
+      <td>-12.6</td>
+      <td>-15.75</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>19.1</td>
+      <td>-66.3</td>
+      <td>-25.5</td>
+      <td>22.3</td>
+      <td>0.460</td>
+      <td>1.0</td>
+      <td>-47.2</td>
+      <td>-568.65</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>-21.1</td>
+      <td>-46.0</td>
+      <td>-26.8</td>
+      <td>81.4</td>
+      <td>0.698</td>
+      <td>1.0</td>
+      <td>-67.1</td>
+      <td>-2181.52</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>2.5</td>
+      <td>-228.7</td>
+      <td>-6.7</td>
+      <td>38.6</td>
+      <td>0.030</td>
+      <td>1.0</td>
+      <td>-226.2</td>
+      <td>-258.62</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>47.0</td>
+      <td>-78.2</td>
+      <td>-42.0</td>
+      <td>4.4</td>
+      <td>0.168</td>
+      <td>1.0</td>
+      <td>-31.2</td>
+      <td>-184.80</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>9.1</td>
+      <td>-40.2</td>
+      <td>-0.7</td>
+      <td>81.5</td>
+      <td>0.522</td>
+      <td>1.0</td>
+      <td>-31.1</td>
+      <td>-57.05</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+      <td>-6.2</td>
+      <td>-10479.26</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>-34.9</td>
+      <td>-79.0</td>
+      <td>-13.5</td>
+      <td>127.8</td>
+      <td>0.197</td>
+      <td>1.0</td>
+      <td>-113.9</td>
+      <td>-1725.30</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>20.6</td>
+      <td>-146.3</td>
+      <td>-36.0</td>
+      <td>12.6</td>
+      <td>0.075</td>
+      <td>1.0</td>
+      <td>-125.7</td>
+      <td>-453.60</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>-51.6</td>
+      <td>-326.1</td>
+      <td>-98.7</td>
+      <td>0.9</td>
+      <td>2.402</td>
+      <td>1.0</td>
+      <td>-377.7</td>
+      <td>-88.83</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>-93.0</td>
+      <td>-95.2</td>
+      <td>-7.3</td>
+      <td>34.8</td>
+      <td>0.071</td>
+      <td>1.0</td>
+      <td>-188.2</td>
+      <td>-254.04</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>-127.5</td>
+      <td>-121.3</td>
+      <td>6.4</td>
+      <td>65.7</td>
+      <td>0.248</td>
+      <td>1.0</td>
+      <td>-248.8</td>
+      <td>420.48</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>-1.2</td>
+      <td>-47.5</td>
+      <td>-9.7</td>
+      <td>14.5</td>
+      <td>0.456</td>
+      <td>1.0</td>
+      <td>-48.7</td>
+      <td>-140.65</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>30.6</td>
+      <td>-14.4</td>
+      <td>-4.9</td>
+      <td>2.2</td>
+      <td>3.482</td>
+      <td>0.0</td>
+      <td>16.2</td>
+      <td>-10.78</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>9.8</td>
+      <td>-33.8</td>
+      <td>-7.1</td>
+      <td>3.2</td>
+      <td>5.965</td>
+      <td>0.0</td>
+      <td>-24.0</td>
+      <td>-22.72</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>37.8</td>
+      <td>-45.4</td>
+      <td>-7.1</td>
+      <td>17.1</td>
+      <td>3.450</td>
+      <td>0.0</td>
+      <td>-7.6</td>
+      <td>-121.41</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>2.2</td>
+      <td>31.6</td>
+      <td>22.0</td>
+      <td>58.0</td>
+      <td>2.758</td>
+      <td>0.0</td>
+      <td>33.8</td>
+      <td>1276.00</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>-11.5</td>
+      <td>27.6</td>
+      <td>24.4</td>
+      <td>51.4</td>
+      <td>2.266</td>
+      <td>0.0</td>
+      <td>16.1</td>
+      <td>1254.16</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>-4.1</td>
+      <td>-5.8</td>
+      <td>7.7</td>
+      <td>31.6</td>
+      <td>1.222</td>
+      <td>0.0</td>
+      <td>-9.9</td>
+      <td>243.32</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>-5.7</td>
+      <td>21.1</td>
+      <td>14.3</td>
+      <td>28.9</td>
+      <td>1.153</td>
+      <td>0.0</td>
+      <td>15.4</td>
+      <td>413.27</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>25.2</td>
+      <td>0.0</td>
+      <td>7.9</td>
+      <td>25.9</td>
+      <td>0.717</td>
+      <td>0.0</td>
+      <td>25.2</td>
+      <td>204.61</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>-5.7</td>
+      <td>0.0</td>
+      <td>16.3</td>
+      <td>49.9</td>
+      <td>1.517</td>
+      <td>0.0</td>
+      <td>-5.7</td>
+      <td>813.37</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>1.7</td>
+      <td>11.4</td>
+      <td>14.1</td>
+      <td>48.0</td>
+      <td>1.347</td>
+      <td>0.0</td>
+      <td>13.1</td>
+      <td>676.80</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>13.8</td>
+      <td>-37.6</td>
+      <td>-13.0</td>
+      <td>32.3</td>
+      <td>13.768</td>
+      <td>0.0</td>
+      <td>-23.8</td>
+      <td>-419.90</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>8.2</td>
+      <td>-15.6</td>
+      <td>0.3</td>
+      <td>87.7</td>
+      <td>5.444</td>
+      <td>0.0</td>
+      <td>-7.4</td>
+      <td>26.31</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>74.7</td>
+      <td>54.6</td>
+      <td>27.9</td>
+      <td>74.6</td>
+      <td>3.720</td>
+      <td>0.0</td>
+      <td>129.3</td>
+      <td>2081.34</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>43.1</td>
+      <td>-0.4</td>
+      <td>3.4</td>
+      <td>40.0</td>
+      <td>0.925</td>
+      <td>0.0</td>
+      <td>42.7</td>
+      <td>136.00</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>48.7</td>
+      <td>38.4</td>
+      <td>-9.2</td>
+      <td>65.4</td>
+      <td>0.705</td>
+      <td>0.0</td>
+      <td>87.1</td>
+      <td>-601.68</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>40.7</td>
+      <td>0.6</td>
+      <td>1.8</td>
+      <td>49.2</td>
+      <td>7.497</td>
+      <td>0.0</td>
+      <td>41.3</td>
+      <td>88.56</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>20.3</td>
+      <td>-61.3</td>
+      <td>1.9</td>
+      <td>27.0</td>
+      <td>35.178</td>
+      <td>0.0</td>
+      <td>-41.0</td>
+      <td>51.30</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>16.1</td>
+      <td>3.6</td>
+      <td>11.6</td>
+      <td>21.4</td>
+      <td>0.856</td>
+      <td>0.0</td>
+      <td>19.7</td>
+      <td>248.24</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>-6.1</td>
+      <td>0.0</td>
+      <td>9.4</td>
+      <td>22.6</td>
+      <td>2.123</td>
+      <td>0.0</td>
+      <td>-6.1</td>
+      <td>212.44</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>-7.2</td>
+      <td>18.6</td>
+      <td>20.8</td>
+      <td>52.2</td>
+      <td>2.413</td>
+      <td>0.0</td>
+      <td>11.4</td>
+      <td>1085.76</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>-5.3</td>
+      <td>31.0</td>
+      <td>4.9</td>
+      <td>26.9</td>
+      <td>1.362</td>
+      <td>0.0</td>
+      <td>25.7</td>
+      <td>131.81</td>
+    </tr>
+    <tr>
+      <th>51</th>
+      <td>4.1</td>
+      <td>-10.1</td>
+      <td>9.7</td>
+      <td>36.0</td>
+      <td>7.623</td>
+      <td>0.0</td>
+      <td>-6.0</td>
+      <td>349.20</td>
+    </tr>
+    <tr>
+      <th>52</th>
+      <td>0.3</td>
+      <td>27.9</td>
+      <td>16.1</td>
+      <td>49.5</td>
+      <td>4.357</td>
+      <td>0.0</td>
+      <td>28.2</td>
+      <td>796.95</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>-7.4</td>
+      <td>8.9</td>
+      <td>15.3</td>
+      <td>39.3</td>
+      <td>1.273</td>
+      <td>0.0</td>
+      <td>1.5</td>
+      <td>601.29</td>
+    </tr>
+    <tr>
+      <th>54</th>
+      <td>1.1</td>
+      <td>-39.5</td>
+      <td>15.7</td>
+      <td>41.8</td>
+      <td>1.449</td>
+      <td>0.0</td>
+      <td>-38.4</td>
+      <td>656.26</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Merging-data-frames">Merging data frames<a class="anchor-link" href="#Merging-data-frames"> </a></h2><p>The next task of this exercise is to merge data frames. For this, load the data from the same CSV file as above again. Then merge the data frame with the result from task 2.4, such that:</p>
+<ul>
+<li>the dropped feature from task 2.2 is part of the merged data frame; and</li>
+<li>the removed instances from task 2.3 are still gone; and</li>
+<li>the indirectly computed features from task 2.4 are part of the merged data frame. </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="s1">&#39;http://user.informatik.uni-goettingen.de/~sherbold/analcatdata_bankruptcy.csv&#39;</span><span class="p">)</span>
+<span class="c1"># merge combines two data frames with a join operation</span>
+<span class="c1"># by default an &quot;inner join&quot; on the index is performed, i.e., all instances with the same index are joined</span>
+<span class="n">merged_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">data2</span><span class="p">)</span>
+<span class="n">merged_data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WC/TA</th>
+      <th>RE/TA</th>
+      <th>EBIT/TA</th>
+      <th>S/TA</th>
+      <th>BVE/BVL</th>
+      <th>Bankrupt</th>
+      <th>WC/TA+RE/TA</th>
+      <th>EBIT/TA*S/TA</th>
+      <th>Company</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>9.3</td>
+      <td>-7.7</td>
+      <td>1.6</td>
+      <td>9.1</td>
+      <td>3.726</td>
+      <td>1.0</td>
+      <td>1.6</td>
+      <td>14.56</td>
+      <td>360Networks</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>42.6</td>
+      <td>-60.1</td>
+      <td>-10.1</td>
+      <td>0.3</td>
+      <td>4.130</td>
+      <td>1.0</td>
+      <td>-17.5</td>
+      <td>-3.03</td>
+      <td>Advanced_Radio_Telecom</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-28.8</td>
+      <td>-203.2</td>
+      <td>-51.0</td>
+      <td>14.7</td>
+      <td>0.111</td>
+      <td>1.0</td>
+      <td>-232.0</td>
+      <td>-749.70</td>
+      <td>Ardent_Communications</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2.5</td>
+      <td>-433.1</td>
+      <td>-6.0</td>
+      <td>29.3</td>
+      <td>1.949</td>
+      <td>1.0</td>
+      <td>-430.6</td>
+      <td>-175.80</td>
+      <td>At_Home_Corp.</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>26.1</td>
+      <td>-57.4</td>
+      <td>-23.5</td>
+      <td>54.2</td>
+      <td>0.855</td>
+      <td>1.0</td>
+      <td>-31.3</td>
+      <td>-1273.70</td>
+      <td>Convergent_Communications</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>39.2</td>
+      <td>-111.8</td>
+      <td>-77.8</td>
+      <td>10.5</td>
+      <td>0.168</td>
+      <td>1.0</td>
+      <td>-72.6</td>
+      <td>-816.90</td>
+      <td>Covad_Communications</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-5.4</td>
+      <td>-105.2</td>
+      <td>-5.8</td>
+      <td>38.9</td>
+      <td>0.028</td>
+      <td>1.0</td>
+      <td>-110.6</td>
+      <td>-225.62</td>
+      <td>e.spire</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-35.2</td>
+      <td>-92.4</td>
+      <td>-32.5</td>
+      <td>48.5</td>
+      <td>11.280</td>
+      <td>1.0</td>
+      <td>-127.6</td>
+      <td>-1576.25</td>
+      <td>eGlobe</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>10.5</td>
+      <td>-12.4</td>
+      <td>-2.3</td>
+      <td>21.0</td>
+      <td>2.500</td>
+      <td>1.0</td>
+      <td>-1.9</td>
+      <td>-48.30</td>
+      <td>Exodus_Communications</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-22.4</td>
+      <td>-124.5</td>
+      <td>-7.9</td>
+      <td>125.6</td>
+      <td>1.595</td>
+      <td>1.0</td>
+      <td>-146.9</td>
+      <td>-992.24</td>
+      <td>General_Datacomm_Industries</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>24.6</td>
+      <td>-29.0</td>
+      <td>-2.0</td>
+      <td>21.3</td>
+      <td>1.968</td>
+      <td>1.0</td>
+      <td>-4.4</td>
+      <td>-42.60</td>
+      <td>Global_Telesystems</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>6.6</td>
+      <td>-50.9</td>
+      <td>-2.6</td>
+      <td>28.9</td>
+      <td>0.258</td>
+      <td>1.0</td>
+      <td>-44.3</td>
+      <td>-75.14</td>
+      <td>GST_Telecom</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>33.9</td>
+      <td>-46.5</td>
+      <td>-17.5</td>
+      <td>0.9</td>
+      <td>0.828</td>
+      <td>1.0</td>
+      <td>-12.6</td>
+      <td>-15.75</td>
+      <td>Metricom</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>19.1</td>
+      <td>-66.3</td>
+      <td>-25.5</td>
+      <td>22.3</td>
+      <td>0.460</td>
+      <td>1.0</td>
+      <td>-47.2</td>
+      <td>-568.65</td>
+      <td>Net2000_Communications</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>-21.1</td>
+      <td>-46.0</td>
+      <td>-26.8</td>
+      <td>81.4</td>
+      <td>0.698</td>
+      <td>1.0</td>
+      <td>-67.1</td>
+      <td>-2181.52</td>
+      <td>NetVoice_Technologies</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>2.5</td>
+      <td>-228.7</td>
+      <td>-6.7</td>
+      <td>38.6</td>
+      <td>0.030</td>
+      <td>1.0</td>
+      <td>-226.2</td>
+      <td>-258.62</td>
+      <td>PSINet</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>47.0</td>
+      <td>-78.2</td>
+      <td>-42.0</td>
+      <td>4.4</td>
+      <td>0.168</td>
+      <td>1.0</td>
+      <td>-31.2</td>
+      <td>-184.80</td>
+      <td>Rhythms_NetConnections</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>9.1</td>
+      <td>-40.2</td>
+      <td>-0.7</td>
+      <td>81.5</td>
+      <td>0.522</td>
+      <td>1.0</td>
+      <td>-31.1</td>
+      <td>-57.05</td>
+      <td>RSL_Communications</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+      <td>-6.2</td>
+      <td>-10479.26</td>
+      <td>SSE_Telecom</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>-34.9</td>
+      <td>-79.0</td>
+      <td>-13.5</td>
+      <td>127.8</td>
+      <td>0.197</td>
+      <td>1.0</td>
+      <td>-113.9</td>
+      <td>-1725.30</td>
+      <td>Startec_Global_Communications</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>20.6</td>
+      <td>-146.3</td>
+      <td>-36.0</td>
+      <td>12.6</td>
+      <td>0.075</td>
+      <td>1.0</td>
+      <td>-125.7</td>
+      <td>-453.60</td>
+      <td>Teligent</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>-51.6</td>
+      <td>-326.1</td>
+      <td>-98.7</td>
+      <td>0.9</td>
+      <td>2.402</td>
+      <td>1.0</td>
+      <td>-377.7</td>
+      <td>-88.83</td>
+      <td>U.S._Wireless</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>-93.0</td>
+      <td>-95.2</td>
+      <td>-7.3</td>
+      <td>34.8</td>
+      <td>0.071</td>
+      <td>1.0</td>
+      <td>-188.2</td>
+      <td>-254.04</td>
+      <td>Viatel</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>-127.5</td>
+      <td>-121.3</td>
+      <td>6.4</td>
+      <td>65.7</td>
+      <td>0.248</td>
+      <td>1.0</td>
+      <td>-248.8</td>
+      <td>420.48</td>
+      <td>WebLink_Wireless</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>-1.2</td>
+      <td>-47.5</td>
+      <td>-9.7</td>
+      <td>14.5</td>
+      <td>0.456</td>
+      <td>1.0</td>
+      <td>-48.7</td>
+      <td>-140.65</td>
+      <td>Winstar</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>30.6</td>
+      <td>-14.4</td>
+      <td>-4.9</td>
+      <td>2.2</td>
+      <td>3.482</td>
+      <td>0.0</td>
+      <td>16.2</td>
+      <td>-10.78</td>
+      <td>Aether_Systems</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>9.8</td>
+      <td>-33.8</td>
+      <td>-7.1</td>
+      <td>3.2</td>
+      <td>5.965</td>
+      <td>0.0</td>
+      <td>-24.0</td>
+      <td>-22.72</td>
+      <td>Akamai_Technologies</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>37.8</td>
+      <td>-45.4</td>
+      <td>-7.1</td>
+      <td>17.1</td>
+      <td>3.450</td>
+      <td>0.0</td>
+      <td>-7.6</td>
+      <td>-121.41</td>
+      <td>Allegiance_Telecom</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>2.2</td>
+      <td>31.6</td>
+      <td>22.0</td>
+      <td>58.0</td>
+      <td>2.758</td>
+      <td>0.0</td>
+      <td>33.8</td>
+      <td>1276.00</td>
+      <td>ALLTEL_Corp.</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>-11.5</td>
+      <td>27.6</td>
+      <td>24.4</td>
+      <td>51.4</td>
+      <td>2.266</td>
+      <td>0.0</td>
+      <td>16.1</td>
+      <td>1254.16</td>
+      <td>BellSouth</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>-4.1</td>
+      <td>-5.8</td>
+      <td>7.7</td>
+      <td>31.6</td>
+      <td>1.222</td>
+      <td>0.0</td>
+      <td>-9.9</td>
+      <td>243.32</td>
+      <td>Broadwing</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>-5.7</td>
+      <td>21.1</td>
+      <td>14.3</td>
+      <td>28.9</td>
+      <td>1.153</td>
+      <td>0.0</td>
+      <td>15.4</td>
+      <td>413.27</td>
+      <td>CenturyTel</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>25.2</td>
+      <td>0.0</td>
+      <td>7.9</td>
+      <td>25.9</td>
+      <td>0.717</td>
+      <td>0.0</td>
+      <td>25.2</td>
+      <td>204.61</td>
+      <td>Citizens_Communications</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>-5.7</td>
+      <td>0.0</td>
+      <td>16.3</td>
+      <td>49.9</td>
+      <td>1.517</td>
+      <td>0.0</td>
+      <td>-5.7</td>
+      <td>813.37</td>
+      <td>Commonwealth_Telephone</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>1.7</td>
+      <td>11.4</td>
+      <td>14.1</td>
+      <td>48.0</td>
+      <td>1.347</td>
+      <td>0.0</td>
+      <td>13.1</td>
+      <td>676.80</td>
+      <td>Conestoga_Enterprises</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>13.8</td>
+      <td>-37.6</td>
+      <td>-13.0</td>
+      <td>32.3</td>
+      <td>13.768</td>
+      <td>0.0</td>
+      <td>-23.8</td>
+      <td>-419.90</td>
+      <td>Digex</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>8.2</td>
+      <td>-15.6</td>
+      <td>0.3</td>
+      <td>87.7</td>
+      <td>5.444</td>
+      <td>0.0</td>
+      <td>-7.4</td>
+      <td>26.31</td>
+      <td>Equant</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>74.7</td>
+      <td>54.6</td>
+      <td>27.9</td>
+      <td>74.6</td>
+      <td>3.720</td>
+      <td>0.0</td>
+      <td>129.3</td>
+      <td>2081.34</td>
+      <td>Garmin</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>43.1</td>
+      <td>-0.4</td>
+      <td>3.4</td>
+      <td>40.0</td>
+      <td>0.925</td>
+      <td>0.0</td>
+      <td>42.7</td>
+      <td>136.00</td>
+      <td>Gilat_Satellite_Networks</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>48.7</td>
+      <td>38.4</td>
+      <td>-9.2</td>
+      <td>65.4</td>
+      <td>0.705</td>
+      <td>0.0</td>
+      <td>87.1</td>
+      <td>-601.68</td>
+      <td>IDT_Corp.</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>40.7</td>
+      <td>0.6</td>
+      <td>1.8</td>
+      <td>49.2</td>
+      <td>7.497</td>
+      <td>0.0</td>
+      <td>41.3</td>
+      <td>88.56</td>
+      <td>Infonet</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>20.3</td>
+      <td>-61.3</td>
+      <td>1.9</td>
+      <td>27.0</td>
+      <td>35.178</td>
+      <td>0.0</td>
+      <td>-41.0</td>
+      <td>51.30</td>
+      <td>Openwave_Systems</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>16.1</td>
+      <td>3.6</td>
+      <td>11.6</td>
+      <td>21.4</td>
+      <td>0.856</td>
+      <td>0.0</td>
+      <td>19.7</td>
+      <td>248.24</td>
+      <td>Price_Communications</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>-6.1</td>
+      <td>0.0</td>
+      <td>9.4</td>
+      <td>22.6</td>
+      <td>2.123</td>
+      <td>0.0</td>
+      <td>-6.1</td>
+      <td>212.44</td>
+      <td>Qwest</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>-7.2</td>
+      <td>18.6</td>
+      <td>20.8</td>
+      <td>52.2</td>
+      <td>2.413</td>
+      <td>0.0</td>
+      <td>11.4</td>
+      <td>1085.76</td>
+      <td>SBC_Communications</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>-5.3</td>
+      <td>31.0</td>
+      <td>4.9</td>
+      <td>26.9</td>
+      <td>1.362</td>
+      <td>0.0</td>
+      <td>25.7</td>
+      <td>131.81</td>
+      <td>Telephone_and_Data_Systems</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>4.1</td>
+      <td>-10.1</td>
+      <td>9.7</td>
+      <td>36.0</td>
+      <td>7.623</td>
+      <td>0.0</td>
+      <td>-6.0</td>
+      <td>349.20</td>
+      <td>Time_Warner_Telecom</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>0.3</td>
+      <td>27.9</td>
+      <td>16.1</td>
+      <td>49.5</td>
+      <td>4.357</td>
+      <td>0.0</td>
+      <td>28.2</td>
+      <td>796.95</td>
+      <td>U.S._Cellular</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>-7.4</td>
+      <td>8.9</td>
+      <td>15.3</td>
+      <td>39.3</td>
+      <td>1.273</td>
+      <td>0.0</td>
+      <td>1.5</td>
+      <td>601.29</td>
+      <td>Verizon_Communications</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>1.1</td>
+      <td>-39.5</td>
+      <td>15.7</td>
+      <td>41.8</td>
+      <td>1.449</td>
+      <td>0.0</td>
+      <td>-38.4</td>
+      <td>656.26</td>
+      <td>Western_Wireless</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Selecting-subsets">Selecting subsets<a class="anchor-link" href="#Selecting-subsets"> </a></h2><p>Based on the data frame from task 2.5, create new data frames according to the following criteria.</p>
+<ul>
+<li>A data frame with only the rows 10 to 20 and all columns. </li>
+<li>A data frame with only the columns 1 to 4 and all rows. </li>
+<li>A data frame with only the columns WC/TA and EBIT/TA and all rows. </li>
+<li>A data frame with all rows that have the value RE/TA less than -20 and all columns.</li>
+<li>A data frame with all rows that have the value RE/TA less than -20 and bankrupt equal to 0 and all columns. </li>
+<li>A data frame with all rows that have the value RE/TA less than -20 and bankrupt equal to 0 and only the columns WC/TA and EBIT/TA. </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># integer based indexing fetches rows, in this case from 10 (inclusive) to 21 (exclusive)</span>
+<span class="n">merged_data</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">21</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WC/TA</th>
+      <th>RE/TA</th>
+      <th>EBIT/TA</th>
+      <th>S/TA</th>
+      <th>BVE/BVL</th>
+      <th>Bankrupt</th>
+      <th>WC/TA+RE/TA</th>
+      <th>EBIT/TA*S/TA</th>
+      <th>Company</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>10</th>
+      <td>24.6</td>
+      <td>-29.0</td>
+      <td>-2.0</td>
+      <td>21.3</td>
+      <td>1.968</td>
+      <td>1.0</td>
+      <td>-4.4</td>
+      <td>-42.60</td>
+      <td>Global_Telesystems</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>6.6</td>
+      <td>-50.9</td>
+      <td>-2.6</td>
+      <td>28.9</td>
+      <td>0.258</td>
+      <td>1.0</td>
+      <td>-44.3</td>
+      <td>-75.14</td>
+      <td>GST_Telecom</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>33.9</td>
+      <td>-46.5</td>
+      <td>-17.5</td>
+      <td>0.9</td>
+      <td>0.828</td>
+      <td>1.0</td>
+      <td>-12.6</td>
+      <td>-15.75</td>
+      <td>Metricom</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>19.1</td>
+      <td>-66.3</td>
+      <td>-25.5</td>
+      <td>22.3</td>
+      <td>0.460</td>
+      <td>1.0</td>
+      <td>-47.2</td>
+      <td>-568.65</td>
+      <td>Net2000_Communications</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>-21.1</td>
+      <td>-46.0</td>
+      <td>-26.8</td>
+      <td>81.4</td>
+      <td>0.698</td>
+      <td>1.0</td>
+      <td>-67.1</td>
+      <td>-2181.52</td>
+      <td>NetVoice_Technologies</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>2.5</td>
+      <td>-228.7</td>
+      <td>-6.7</td>
+      <td>38.6</td>
+      <td>0.030</td>
+      <td>1.0</td>
+      <td>-226.2</td>
+      <td>-258.62</td>
+      <td>PSINet</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>47.0</td>
+      <td>-78.2</td>
+      <td>-42.0</td>
+      <td>4.4</td>
+      <td>0.168</td>
+      <td>1.0</td>
+      <td>-31.2</td>
+      <td>-184.80</td>
+      <td>Rhythms_NetConnections</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>9.1</td>
+      <td>-40.2</td>
+      <td>-0.7</td>
+      <td>81.5</td>
+      <td>0.522</td>
+      <td>1.0</td>
+      <td>-31.1</td>
+      <td>-57.05</td>
+      <td>RSL_Communications</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+      <td>-6.2</td>
+      <td>-10479.26</td>
+      <td>SSE_Telecom</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>-34.9</td>
+      <td>-79.0</td>
+      <td>-13.5</td>
+      <td>127.8</td>
+      <td>0.197</td>
+      <td>1.0</td>
+      <td>-113.9</td>
+      <td>-1725.30</td>
+      <td>Startec_Global_Communications</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>20.6</td>
+      <td>-146.3</td>
+      <td>-36.0</td>
+      <td>12.6</td>
+      <td>0.075</td>
+      <td>1.0</td>
+      <td>-125.7</td>
+      <td>-453.60</td>
+      <td>Teligent</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># in general, we can use iloc for integer based locations</span>
+<span class="n">merged_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>RE/TA</th>
+      <th>EBIT/TA</th>
+      <th>S/TA</th>
+      <th>BVE/BVL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-7.7</td>
+      <td>1.6</td>
+      <td>9.1</td>
+      <td>3.726</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-60.1</td>
+      <td>-10.1</td>
+      <td>0.3</td>
+      <td>4.130</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-203.2</td>
+      <td>-51.0</td>
+      <td>14.7</td>
+      <td>0.111</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-433.1</td>
+      <td>-6.0</td>
+      <td>29.3</td>
+      <td>1.949</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-57.4</td>
+      <td>-23.5</td>
+      <td>54.2</td>
+      <td>0.855</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-111.8</td>
+      <td>-77.8</td>
+      <td>10.5</td>
+      <td>0.168</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-105.2</td>
+      <td>-5.8</td>
+      <td>38.9</td>
+      <td>0.028</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-92.4</td>
+      <td>-32.5</td>
+      <td>48.5</td>
+      <td>11.280</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-12.4</td>
+      <td>-2.3</td>
+      <td>21.0</td>
+      <td>2.500</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-124.5</td>
+      <td>-7.9</td>
+      <td>125.6</td>
+      <td>1.595</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>-29.0</td>
+      <td>-2.0</td>
+      <td>21.3</td>
+      <td>1.968</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>-50.9</td>
+      <td>-2.6</td>
+      <td>28.9</td>
+      <td>0.258</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>-46.5</td>
+      <td>-17.5</td>
+      <td>0.9</td>
+      <td>0.828</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>-66.3</td>
+      <td>-25.5</td>
+      <td>22.3</td>
+      <td>0.460</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>-46.0</td>
+      <td>-26.8</td>
+      <td>81.4</td>
+      <td>0.698</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>-228.7</td>
+      <td>-6.7</td>
+      <td>38.6</td>
+      <td>0.030</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>-78.2</td>
+      <td>-42.0</td>
+      <td>4.4</td>
+      <td>0.168</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>-40.2</td>
+      <td>-0.7</td>
+      <td>81.5</td>
+      <td>0.522</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>-79.0</td>
+      <td>-13.5</td>
+      <td>127.8</td>
+      <td>0.197</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>-146.3</td>
+      <td>-36.0</td>
+      <td>12.6</td>
+      <td>0.075</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>-326.1</td>
+      <td>-98.7</td>
+      <td>0.9</td>
+      <td>2.402</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>-95.2</td>
+      <td>-7.3</td>
+      <td>34.8</td>
+      <td>0.071</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>-121.3</td>
+      <td>6.4</td>
+      <td>65.7</td>
+      <td>0.248</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>-47.5</td>
+      <td>-9.7</td>
+      <td>14.5</td>
+      <td>0.456</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>-14.4</td>
+      <td>-4.9</td>
+      <td>2.2</td>
+      <td>3.482</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>-33.8</td>
+      <td>-7.1</td>
+      <td>3.2</td>
+      <td>5.965</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>-45.4</td>
+      <td>-7.1</td>
+      <td>17.1</td>
+      <td>3.450</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>31.6</td>
+      <td>22.0</td>
+      <td>58.0</td>
+      <td>2.758</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>27.6</td>
+      <td>24.4</td>
+      <td>51.4</td>
+      <td>2.266</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>-5.8</td>
+      <td>7.7</td>
+      <td>31.6</td>
+      <td>1.222</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>21.1</td>
+      <td>14.3</td>
+      <td>28.9</td>
+      <td>1.153</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>0.0</td>
+      <td>7.9</td>
+      <td>25.9</td>
+      <td>0.717</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>0.0</td>
+      <td>16.3</td>
+      <td>49.9</td>
+      <td>1.517</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>11.4</td>
+      <td>14.1</td>
+      <td>48.0</td>
+      <td>1.347</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>-37.6</td>
+      <td>-13.0</td>
+      <td>32.3</td>
+      <td>13.768</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>-15.6</td>
+      <td>0.3</td>
+      <td>87.7</td>
+      <td>5.444</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>54.6</td>
+      <td>27.9</td>
+      <td>74.6</td>
+      <td>3.720</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>-0.4</td>
+      <td>3.4</td>
+      <td>40.0</td>
+      <td>0.925</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>38.4</td>
+      <td>-9.2</td>
+      <td>65.4</td>
+      <td>0.705</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>0.6</td>
+      <td>1.8</td>
+      <td>49.2</td>
+      <td>7.497</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>-61.3</td>
+      <td>1.9</td>
+      <td>27.0</td>
+      <td>35.178</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>3.6</td>
+      <td>11.6</td>
+      <td>21.4</td>
+      <td>0.856</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>0.0</td>
+      <td>9.4</td>
+      <td>22.6</td>
+      <td>2.123</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>18.6</td>
+      <td>20.8</td>
+      <td>52.2</td>
+      <td>2.413</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>31.0</td>
+      <td>4.9</td>
+      <td>26.9</td>
+      <td>1.362</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>-10.1</td>
+      <td>9.7</td>
+      <td>36.0</td>
+      <td>7.623</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>27.9</td>
+      <td>16.1</td>
+      <td>49.5</td>
+      <td>4.357</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>8.9</td>
+      <td>15.3</td>
+      <td>39.3</td>
+      <td>1.273</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>-39.5</td>
+      <td>15.7</td>
+      <td>41.8</td>
+      <td>1.449</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># with lists of strings we get columns</span>
+<span class="n">merged_data</span><span class="p">[[</span><span class="s1">&#39;WC/TA&#39;</span><span class="p">,</span> <span class="s1">&#39;EBIT/TA&#39;</span><span class="p">]]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WC/TA</th>
+      <th>EBIT/TA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>9.3</td>
+      <td>1.6</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>42.6</td>
+      <td>-10.1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-28.8</td>
+      <td>-51.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2.5</td>
+      <td>-6.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>26.1</td>
+      <td>-23.5</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>39.2</td>
+      <td>-77.8</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-5.4</td>
+      <td>-5.8</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-35.2</td>
+      <td>-32.5</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>10.5</td>
+      <td>-2.3</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-22.4</td>
+      <td>-7.9</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>24.6</td>
+      <td>-2.0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>6.6</td>
+      <td>-2.6</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>33.9</td>
+      <td>-17.5</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>19.1</td>
+      <td>-25.5</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>-21.1</td>
+      <td>-26.8</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>2.5</td>
+      <td>-6.7</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>47.0</td>
+      <td>-42.0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>9.1</td>
+      <td>-0.7</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>43.0</td>
+      <td>-87.4</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>-34.9</td>
+      <td>-13.5</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>20.6</td>
+      <td>-36.0</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>-51.6</td>
+      <td>-98.7</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>-93.0</td>
+      <td>-7.3</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>-127.5</td>
+      <td>6.4</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>-1.2</td>
+      <td>-9.7</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>30.6</td>
+      <td>-4.9</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>9.8</td>
+      <td>-7.1</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>37.8</td>
+      <td>-7.1</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>2.2</td>
+      <td>22.0</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>-11.5</td>
+      <td>24.4</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>-4.1</td>
+      <td>7.7</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>-5.7</td>
+      <td>14.3</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>25.2</td>
+      <td>7.9</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>-5.7</td>
+      <td>16.3</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>1.7</td>
+      <td>14.1</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>13.8</td>
+      <td>-13.0</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>8.2</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>74.7</td>
+      <td>27.9</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>43.1</td>
+      <td>3.4</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>48.7</td>
+      <td>-9.2</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>40.7</td>
+      <td>1.8</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>20.3</td>
+      <td>1.9</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>16.1</td>
+      <td>11.6</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>-6.1</td>
+      <td>9.4</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>-7.2</td>
+      <td>20.8</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>-5.3</td>
+      <td>4.9</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>4.1</td>
+      <td>9.7</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>0.3</td>
+      <td>16.1</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>-7.4</td>
+      <td>15.3</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>1.1</td>
+      <td>15.7</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># we can also use boolean formulas to filter the rows of data frames</span>
+<span class="n">merged_data</span><span class="p">[</span><span class="n">merged_data</span><span class="p">[</span><span class="s1">&#39;RE/TA&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">20</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WC/TA</th>
+      <th>RE/TA</th>
+      <th>EBIT/TA</th>
+      <th>S/TA</th>
+      <th>BVE/BVL</th>
+      <th>Bankrupt</th>
+      <th>WC/TA+RE/TA</th>
+      <th>EBIT/TA*S/TA</th>
+      <th>Company</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>42.6</td>
+      <td>-60.1</td>
+      <td>-10.1</td>
+      <td>0.3</td>
+      <td>4.130</td>
+      <td>1.0</td>
+      <td>-17.5</td>
+      <td>-3.03</td>
+      <td>Advanced_Radio_Telecom</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-28.8</td>
+      <td>-203.2</td>
+      <td>-51.0</td>
+      <td>14.7</td>
+      <td>0.111</td>
+      <td>1.0</td>
+      <td>-232.0</td>
+      <td>-749.70</td>
+      <td>Ardent_Communications</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2.5</td>
+      <td>-433.1</td>
+      <td>-6.0</td>
+      <td>29.3</td>
+      <td>1.949</td>
+      <td>1.0</td>
+      <td>-430.6</td>
+      <td>-175.80</td>
+      <td>At_Home_Corp.</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>26.1</td>
+      <td>-57.4</td>
+      <td>-23.5</td>
+      <td>54.2</td>
+      <td>0.855</td>
+      <td>1.0</td>
+      <td>-31.3</td>
+      <td>-1273.70</td>
+      <td>Convergent_Communications</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>39.2</td>
+      <td>-111.8</td>
+      <td>-77.8</td>
+      <td>10.5</td>
+      <td>0.168</td>
+      <td>1.0</td>
+      <td>-72.6</td>
+      <td>-816.90</td>
+      <td>Covad_Communications</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-5.4</td>
+      <td>-105.2</td>
+      <td>-5.8</td>
+      <td>38.9</td>
+      <td>0.028</td>
+      <td>1.0</td>
+      <td>-110.6</td>
+      <td>-225.62</td>
+      <td>e.spire</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-35.2</td>
+      <td>-92.4</td>
+      <td>-32.5</td>
+      <td>48.5</td>
+      <td>11.280</td>
+      <td>1.0</td>
+      <td>-127.6</td>
+      <td>-1576.25</td>
+      <td>eGlobe</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-22.4</td>
+      <td>-124.5</td>
+      <td>-7.9</td>
+      <td>125.6</td>
+      <td>1.595</td>
+      <td>1.0</td>
+      <td>-146.9</td>
+      <td>-992.24</td>
+      <td>General_Datacomm_Industries</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>24.6</td>
+      <td>-29.0</td>
+      <td>-2.0</td>
+      <td>21.3</td>
+      <td>1.968</td>
+      <td>1.0</td>
+      <td>-4.4</td>
+      <td>-42.60</td>
+      <td>Global_Telesystems</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>6.6</td>
+      <td>-50.9</td>
+      <td>-2.6</td>
+      <td>28.9</td>
+      <td>0.258</td>
+      <td>1.0</td>
+      <td>-44.3</td>
+      <td>-75.14</td>
+      <td>GST_Telecom</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>33.9</td>
+      <td>-46.5</td>
+      <td>-17.5</td>
+      <td>0.9</td>
+      <td>0.828</td>
+      <td>1.0</td>
+      <td>-12.6</td>
+      <td>-15.75</td>
+      <td>Metricom</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>19.1</td>
+      <td>-66.3</td>
+      <td>-25.5</td>
+      <td>22.3</td>
+      <td>0.460</td>
+      <td>1.0</td>
+      <td>-47.2</td>
+      <td>-568.65</td>
+      <td>Net2000_Communications</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>-21.1</td>
+      <td>-46.0</td>
+      <td>-26.8</td>
+      <td>81.4</td>
+      <td>0.698</td>
+      <td>1.0</td>
+      <td>-67.1</td>
+      <td>-2181.52</td>
+      <td>NetVoice_Technologies</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>2.5</td>
+      <td>-228.7</td>
+      <td>-6.7</td>
+      <td>38.6</td>
+      <td>0.030</td>
+      <td>1.0</td>
+      <td>-226.2</td>
+      <td>-258.62</td>
+      <td>PSINet</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>47.0</td>
+      <td>-78.2</td>
+      <td>-42.0</td>
+      <td>4.4</td>
+      <td>0.168</td>
+      <td>1.0</td>
+      <td>-31.2</td>
+      <td>-184.80</td>
+      <td>Rhythms_NetConnections</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>9.1</td>
+      <td>-40.2</td>
+      <td>-0.7</td>
+      <td>81.5</td>
+      <td>0.522</td>
+      <td>1.0</td>
+      <td>-31.1</td>
+      <td>-57.05</td>
+      <td>RSL_Communications</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>43.0</td>
+      <td>-49.2</td>
+      <td>-87.4</td>
+      <td>119.9</td>
+      <td>2.919</td>
+      <td>1.0</td>
+      <td>-6.2</td>
+      <td>-10479.26</td>
+      <td>SSE_Telecom</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>-34.9</td>
+      <td>-79.0</td>
+      <td>-13.5</td>
+      <td>127.8</td>
+      <td>0.197</td>
+      <td>1.0</td>
+      <td>-113.9</td>
+      <td>-1725.30</td>
+      <td>Startec_Global_Communications</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>20.6</td>
+      <td>-146.3</td>
+      <td>-36.0</td>
+      <td>12.6</td>
+      <td>0.075</td>
+      <td>1.0</td>
+      <td>-125.7</td>
+      <td>-453.60</td>
+      <td>Teligent</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>-51.6</td>
+      <td>-326.1</td>
+      <td>-98.7</td>
+      <td>0.9</td>
+      <td>2.402</td>
+      <td>1.0</td>
+      <td>-377.7</td>
+      <td>-88.83</td>
+      <td>U.S._Wireless</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>-93.0</td>
+      <td>-95.2</td>
+      <td>-7.3</td>
+      <td>34.8</td>
+      <td>0.071</td>
+      <td>1.0</td>
+      <td>-188.2</td>
+      <td>-254.04</td>
+      <td>Viatel</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>-127.5</td>
+      <td>-121.3</td>
+      <td>6.4</td>
+      <td>65.7</td>
+      <td>0.248</td>
+      <td>1.0</td>
+      <td>-248.8</td>
+      <td>420.48</td>
+      <td>WebLink_Wireless</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>-1.2</td>
+      <td>-47.5</td>
+      <td>-9.7</td>
+      <td>14.5</td>
+      <td>0.456</td>
+      <td>1.0</td>
+      <td>-48.7</td>
+      <td>-140.65</td>
+      <td>Winstar</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>9.8</td>
+      <td>-33.8</td>
+      <td>-7.1</td>
+      <td>3.2</td>
+      <td>5.965</td>
+      <td>0.0</td>
+      <td>-24.0</td>
+      <td>-22.72</td>
+      <td>Akamai_Technologies</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>37.8</td>
+      <td>-45.4</td>
+      <td>-7.1</td>
+      <td>17.1</td>
+      <td>3.450</td>
+      <td>0.0</td>
+      <td>-7.6</td>
+      <td>-121.41</td>
+      <td>Allegiance_Telecom</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>13.8</td>
+      <td>-37.6</td>
+      <td>-13.0</td>
+      <td>32.3</td>
+      <td>13.768</td>
+      <td>0.0</td>
+      <td>-23.8</td>
+      <td>-419.90</td>
+      <td>Digex</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>20.3</td>
+      <td>-61.3</td>
+      <td>1.9</td>
+      <td>27.0</td>
+      <td>35.178</td>
+      <td>0.0</td>
+      <td>-41.0</td>
+      <td>51.30</td>
+      <td>Openwave_Systems</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>1.1</td>
+      <td>-39.5</td>
+      <td>15.7</td>
+      <td>41.8</td>
+      <td>1.449</td>
+      <td>0.0</td>
+      <td>-38.4</td>
+      <td>656.26</td>
+      <td>Western_Wireless</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># when we combine multiple conditions, we must use () because we have bitmasks</span>
+<span class="c1"># we also need to use the bitwise operators &amp; and | instead of the keywords &#39;and&#39; and &#39;or&#39;</span>
+<span class="n">merged_data</span><span class="p">[(</span><span class="n">merged_data</span><span class="p">[</span><span class="s1">&#39;RE/TA&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">20</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">merged_data</span><span class="p">[</span><span class="s1">&#39;Bankrupt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WC/TA</th>
+      <th>RE/TA</th>
+      <th>EBIT/TA</th>
+      <th>S/TA</th>
+      <th>BVE/BVL</th>
+      <th>Bankrupt</th>
+      <th>WC/TA+RE/TA</th>
+      <th>EBIT/TA*S/TA</th>
+      <th>Company</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>26</th>
+      <td>9.8</td>
+      <td>-33.8</td>
+      <td>-7.1</td>
+      <td>3.2</td>
+      <td>5.965</td>
+      <td>0.0</td>
+      <td>-24.0</td>
+      <td>-22.72</td>
+      <td>Akamai_Technologies</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>37.8</td>
+      <td>-45.4</td>
+      <td>-7.1</td>
+      <td>17.1</td>
+      <td>3.450</td>
+      <td>0.0</td>
+      <td>-7.6</td>
+      <td>-121.41</td>
+      <td>Allegiance_Telecom</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>13.8</td>
+      <td>-37.6</td>
+      <td>-13.0</td>
+      <td>32.3</td>
+      <td>13.768</td>
+      <td>0.0</td>
+      <td>-23.8</td>
+      <td>-419.90</td>
+      <td>Digex</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>20.3</td>
+      <td>-61.3</td>
+      <td>1.9</td>
+      <td>27.0</td>
+      <td>35.178</td>
+      <td>0.0</td>
+      <td>-41.0</td>
+      <td>51.30</td>
+      <td>Openwave_Systems</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>1.1</td>
+      <td>-39.5</td>
+      <td>15.7</td>
+      <td>41.8</td>
+      <td>1.449</td>
+      <td>0.0</td>
+      <td>-38.4</td>
+      <td>656.26</td>
+      <td>Western_Wireless</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># we can use the conditions also with loc and also select the columns we want</span>
+<span class="n">merged_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">merged_data</span><span class="p">[</span><span class="s1">&#39;RE/TA&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">20</span><span class="p">)</span> <span class="o">&amp;</span>
+                <span class="p">(</span><span class="n">merged_data</span><span class="p">[</span><span class="s1">&#39;Bankrupt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="p">[</span><span class="s1">&#39;WC/TA&#39;</span><span class="p">,</span> <span class="s1">&#39;EBIT/TA&#39;</span><span class="p">]]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WC/TA</th>
+      <th>EBIT/TA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>26</th>
+      <td>9.8</td>
+      <td>-7.1</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>37.8</td>
+      <td>-7.1</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>13.8</td>
+      <td>-13.0</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>20.3</td>
+      <td>1.9</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>1.1</td>
+      <td>15.7</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

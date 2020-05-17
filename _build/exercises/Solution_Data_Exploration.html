@@ -1,0 +1,600 @@
+---
+redirect_from:
+  - "/exercises/solution-data-exploration"
+interact_link: content/exercises/Solution_Data_Exploration.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Data Exploration with Descriptive Statistics and Visualizations
+pagenum: 16
+prev_page:
+  url: /exercises/Solution_CSV_and_DataFrames.html
+next_page:
+  url: /Appendix.html
+suffix: .ipynb
+search: data indus features mean learn distribution not boston regions zn plots between median visualizations around relatively analyze density plot correlations statistics exercise analysis things rm seems values zero rug non retail correlation dis nox descriptive also description together crim feature larger value likely indicates higher distance quartile without e histogram normal business relationships heatmap target tax exploration does task same sklearn python actual through range symmetric small region crime rate because upper given matplotlib single histograms advantages drawbacks exactly looks overall pure businesses pair wise following pairs lstat age nitrous oxide concentration pairwise sample solution only solve any programming tasks
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Data Exploration with Descriptive Statistics and Visualizations</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is a sample solution for the data exploration exercise. This does not mean that this is the only way to solve this exercise. As with any programming task - and also with most data analysis tasks - there are multiple solutions for the same problem.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Data-for-this-exercise">Data for this exercise<a class="anchor-link" href="#Data-for-this-exercise"> </a></h2><p>We use the boston house price data in this exercise. The data is available as part of <code>sklearn</code> for <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.datasets">Python</a>. The description of the data is provided together with the actual data and should be the starting point for your analysis of the data.</p>
+<h2 id="Descriptive-statistics-of-the-boston-data">Descriptive statistics of the boston data<a class="anchor-link" href="#Descriptive-statistics-of-the-boston-data"> </a></h2><p>Explore the boston data using descriptive statistics. Calculate the central tendency with the mean and median, the variability through the standard deviation and the IQR, as well as the range of the data. The real task is understanding something about the data from these results. For example, what can you learn about the CRIM feature from the mean and the median?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+
+<span class="c1"># first we load the data and print description</span>
+<span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+
+<span class="c1"># we convert the data into a data frame and use the convenient describe function from pandas</span>
+<span class="n">boston_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">boston</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
+<span class="n">boston_df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>.. _boston_dataset:
+
+Boston house prices dataset
+---------------------------
+
+**Data Set Characteristics:**  
+
+    :Number of Instances: 506 
+
+    :Number of Attributes: 13 numeric/categorical predictive. Median Value (attribute 14) is usually the target.
+
+    :Attribute Information (in order):
+        - CRIM     per capita crime rate by town
+        - ZN       proportion of residential land zoned for lots over 25,000 sq.ft.
+        - INDUS    proportion of non-retail business acres per town
+        - CHAS     Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
+        - NOX      nitric oxides concentration (parts per 10 million)
+        - RM       average number of rooms per dwelling
+        - AGE      proportion of owner-occupied units built prior to 1940
+        - DIS      weighted distances to five Boston employment centres
+        - RAD      index of accessibility to radial highways
+        - TAX      full-value property-tax rate per $10,000
+        - PTRATIO  pupil-teacher ratio by town
+        - B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
+        - LSTAT    % lower status of the population
+        - MEDV     Median value of owner-occupied homes in $1000&#39;s
+
+    :Missing Attribute Values: None
+
+    :Creator: Harrison, D. and Rubinfeld, D.L.
+
+This is a copy of UCI ML housing dataset.
+https://archive.ics.uci.edu/ml/machine-learning-databases/housing/
+
+
+This dataset was taken from the StatLib library which is maintained at Carnegie Mellon University.
+
+The Boston house-price data of Harrison, D. and Rubinfeld, D.L. &#39;Hedonic
+prices and the demand for clean air&#39;, J. Environ. Economics &amp; Management,
+vol.5, 81-102, 1978.   Used in Belsley, Kuh &amp; Welsch, &#39;Regression diagnostics
+...&#39;, Wiley, 1980.   N.B. Various transformations are used in the table on
+pages 244-261 of the latter.
+
+The Boston house-price data has been used in many machine learning papers that address regression
+problems.   
+     
+.. topic:: References
+
+   - Belsley, Kuh &amp; Welsch, &#39;Regression diagnostics: Identifying Influential Data and Sources of Collinearity&#39;, Wiley, 1980. 244-261.
+   - Quinlan,R. (1993). Combining Instance-Based and Model-Based Learning. In Proceedings on the Tenth International Conference of Machine Learning, 236-243, University of Massachusetts, Amherst. Morgan Kaufmann.
+
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CRIM</th>
+      <th>ZN</th>
+      <th>INDUS</th>
+      <th>CHAS</th>
+      <th>NOX</th>
+      <th>RM</th>
+      <th>AGE</th>
+      <th>DIS</th>
+      <th>RAD</th>
+      <th>TAX</th>
+      <th>PTRATIO</th>
+      <th>B</th>
+      <th>LSTAT</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+      <td>506.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>3.613524</td>
+      <td>11.363636</td>
+      <td>11.136779</td>
+      <td>0.069170</td>
+      <td>0.554695</td>
+      <td>6.284634</td>
+      <td>68.574901</td>
+      <td>3.795043</td>
+      <td>9.549407</td>
+      <td>408.237154</td>
+      <td>18.455534</td>
+      <td>356.674032</td>
+      <td>12.653063</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>8.601545</td>
+      <td>23.322453</td>
+      <td>6.860353</td>
+      <td>0.253994</td>
+      <td>0.115878</td>
+      <td>0.702617</td>
+      <td>28.148861</td>
+      <td>2.105710</td>
+      <td>8.707259</td>
+      <td>168.537116</td>
+      <td>2.164946</td>
+      <td>91.294864</td>
+      <td>7.141062</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.006320</td>
+      <td>0.000000</td>
+      <td>0.460000</td>
+      <td>0.000000</td>
+      <td>0.385000</td>
+      <td>3.561000</td>
+      <td>2.900000</td>
+      <td>1.129600</td>
+      <td>1.000000</td>
+      <td>187.000000</td>
+      <td>12.600000</td>
+      <td>0.320000</td>
+      <td>1.730000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>0.082045</td>
+      <td>0.000000</td>
+      <td>5.190000</td>
+      <td>0.000000</td>
+      <td>0.449000</td>
+      <td>5.885500</td>
+      <td>45.025000</td>
+      <td>2.100175</td>
+      <td>4.000000</td>
+      <td>279.000000</td>
+      <td>17.400000</td>
+      <td>375.377500</td>
+      <td>6.950000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>0.256510</td>
+      <td>0.000000</td>
+      <td>9.690000</td>
+      <td>0.000000</td>
+      <td>0.538000</td>
+      <td>6.208500</td>
+      <td>77.500000</td>
+      <td>3.207450</td>
+      <td>5.000000</td>
+      <td>330.000000</td>
+      <td>19.050000</td>
+      <td>391.440000</td>
+      <td>11.360000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>3.677083</td>
+      <td>12.500000</td>
+      <td>18.100000</td>
+      <td>0.000000</td>
+      <td>0.624000</td>
+      <td>6.623500</td>
+      <td>94.075000</td>
+      <td>5.188425</td>
+      <td>24.000000</td>
+      <td>666.000000</td>
+      <td>20.200000</td>
+      <td>396.225000</td>
+      <td>16.955000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>88.976200</td>
+      <td>100.000000</td>
+      <td>27.740000</td>
+      <td>1.000000</td>
+      <td>0.871000</td>
+      <td>8.780000</td>
+      <td>100.000000</td>
+      <td>12.126500</td>
+      <td>24.000000</td>
+      <td>711.000000</td>
+      <td>22.000000</td>
+      <td>396.900000</td>
+      <td>37.970000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Some things we can learn from the summary statistics:</p>
+<ul>
+<li>The mean of CRIM is much larger than the median (50%). The together with the very large max value this is a strong indicator that the distribution is not symmetric around the mean and likely as a long right-tail. Since the median is close the the minimal value, this also indicates that a lot of data is located in a small region on the left side of the distribution. Together with the description of the data, this means that there are many regions with a low crime rate and a relatively small portion of regions has a higher crime rate. </li>
+<li>The data indicates that RM is likely symmetric around the mean. This is indicated because the mean and the median are roughly equal, and the distance from the lower quartile (25%) is similar to the distance of the upper quartile (75%) from the median. Whether RM follows a gaussian distribution cannot be evaluated without statistical tests or at least a visualization. Given that this feature models the number of rooms, it also makes sense that the data is not dominated by outliers.</li>
+<li>CHAS seems to have a strange distribution, because the min and the upper quartile of the same value of 0. This fits the description that this is just a dummy variable used as control. </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Visualizations">Visualizations<a class="anchor-link" href="#Visualizations"> </a></h2><p>The Python library <code>matplotlib</code> is great for creating all kinds of visualizations. There are even libraries on top of <code>matplotlib</code> that facilitate relatively complex visualizations in a single line of code like <code>seaborn</code>.</p>
+<h3 id="Analyze-single-features-of-the-boston-data">Analyze single features of the boston data<a class="anchor-link" href="#Analyze-single-features-of-the-boston-data"> </a></h3><p>Visually analyze features <code>zn</code> and <code>indus</code> of the boston data. Use the techniques described in Chapter 3, i.e., histograms and density plots (with/without rugs). What can you learn about these features from these plots? What are the advantages and drawbacks of the different plots for this data?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">boston_df</span><span class="p">[</span><span class="s1">&#39;ZN&#39;</span><span class="p">],</span> <span class="n">rug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;ZN&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">boston_df</span><span class="p">[</span><span class="s1">&#39;ZN&#39;</span><span class="p">]),</span> <span class="n">rug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;ZN&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Data_Exploration_5_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Data_Exploration_5_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Some things we can learn about ZN:</p>
+<ul>
+<li>Most values of ZN are zero. While the histogram does not indicate this for certain, the rug shows that the data is at exactly zero.</li>
+<li>The remainder of the values is spread out over the rest of the range of the data and relatively sparse.</li>
+<li>When we apply the logarithm, it looks like the data that is not zero may follow a lognormal distribution. </li>
+<li>Overall, we know from this feature that there are many pure industrial regions in the data (ZN=0), but there are almost no pure residential areas (ZN=100). </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">boston_df</span><span class="p">[</span><span class="s1">&#39;INDUS&#39;</span><span class="p">],</span> <span class="n">rug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;INDUS&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Data_Exploration_7_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Some things we can learn about INDUS:</p>
+<ul>
+<li>The plot indicates that INDUS is likely a bimodal (a mixture of two distributions): there seems to be one kind of region with a normal distribution with a mean around 5 and another, possibly exponential distribution for values larger than 15. </li>
+<li>Given the definition of INDUS, we learn that there are regions with relatively few non-retail business (i.e., regions in which most businesses are shops) and regions in which there is a larger percentage of non-retail businesses. Non-retail business may be offices or factories.</li>
+</ul>
+<p>Regarding the advantages and drawbacks of the visualizations:</p>
+<ul>
+<li>Without the rug, we could not see if the values are really exactly zero for ZN, this information is hidden with histograms and density plots. </li>
+<li>The density plot for INDUS looks like there would be a second normal distribution for INDUS with a mean around 18, but this is not supported by the rug or histogram. </li>
+<li>The density plot helps to see the normal distribution around 5 for INDUS. </li>
+<li>Overall, the combination of histogram, density plot, and rug cancels out the weaknesses of the individual plots. </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Analyze-the-pair-wise-relationships-between-the-features-of-the-boston-data">Analyze the pair-wise relationships between the features of the boston data<a class="anchor-link" href="#Analyze-the-pair-wise-relationships-between-the-features-of-the-boston-data"> </a></h3><p>Next, analyze the pair-wise relationships between all fourteen features of the boston data. First, analyze their relationship through scatter plots. Then, create a heatmap of the correlations between the features. What did you learn about the data?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># we need to add the target as the fourtenths feature to the data frame</span>
+<span class="n">boston_df</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span>
+<span class="c1"># the rest is automatically done by seaborns powerful pairplot function</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">boston_df</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Data_Exploration_10_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here are some things you can learn from the pairplot:</p>
+<ul>
+<li>There seems to be a negative correlation between the following pairs of features: CRIM and TARGET; DIS and INDUS; DIS and NOX; LSTAT and RM; LSTAT and TARGET; DIS and AGE. </li>
+<li>There seems to be a positive correlation between the following pairs of features: DIS and ZN; NOX and INDUS; TAX and INDUS; PTRATIO and INDUS; AGE and NOX; TAX and NOX; RM and TARGET.</li>
+<li>There may be some more correlations, but they seem to be fairly week. Many relationships between features look rather random.</li>
+<li>It may be possible to draw some cautious conlusions about the data from the correlations, e.g., that regions where the property tax is higher tend to have more non-retail business and a higher nitrous oxide concentration and that the nitrous oxide concentration decreases with distance from employment centers. But these conclusions would be relatively weak and require further analysis of the interactions between the features. </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cmap</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">diverging_palette</span><span class="p">(</span><span class="mi">220</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">as_cmap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">boston_df</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> 
+            <span class="n">vmin</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Data_Exploration_12_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The correlation heatmap confirms the analysis of the correlations from the pairwise plots. The advantage of the correlation heatmap is that the correlations are displayed more densly and easier to interpret. However, the pairwise plot allows insights into the actual locations of the data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
