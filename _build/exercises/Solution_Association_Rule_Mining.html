@@ -1,0 +1,1687 @@
+---
+redirect_from:
+  - "/exercises/solution-association-rule-mining"
+interact_link: content/exercises/Solution_Association_Rule_Mining.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Association Rule Mining
+pagenum: 17
+prev_page:
+  url: /exercises/Solution_Data_Exploration.html
+next_page:
+  url: /Appendix.html
+suffix: .ipynb
+search: rules data association rule mining mineral good not both exercise part records frequent itemsets threshold spaghetti often pasta also random does sets seem splits code list items apriori algorithm suitable support such determine lift sense only because three indicate e buy while likely same within get deeper understanding learn identify sample set libraries python mlxtend library store baskets user informatik uni goettingen de sherbold storedata csv following load creates where record transaction finding once transactional try minimal state clear reason why picked results confidence metrics evaluations helpful limited different consequent person buys product used sauce g ground beef vegetables olive
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Association Rule Mining</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Within this exercise, you can get a deeper understanding of association rule mining and learn how to identify good rules for a sample data set.</p>
+<h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>The first part of the exercise is about association rule mining. In Python, you can use the <code>mlxtend</code> library for the mining of association rules.</p>
+<p>We use data about <a href="https://user.informatik.uni-goettingen.de/~sherbold/store_data.csv">store baskets</a> in this exercise. You can use the following code to load the data. The code creates a list of records, where each record is a list of the items that are part of the transaction.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">urllib.request</span>
+
+<span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># directly load from the url instead of using the file</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s2">&quot;https://user.informatik.uni-goettingen.de/~sherbold/store_data.csv&quot;</span><span class="p">):</span>
+    <span class="c1"># this also means we need to decode the binary string into ascii</span>
+    <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Finding-frequent-itemsets">Finding frequent itemsets<a class="anchor-link" href="#Finding-frequent-itemsets"> </a></h2><p>Once you have the transactional records, use the apriori algorithm to find frequent itemsets with a suitable threshold for support for this data. Try to find a suitable threshold for the minimal support such that you can state a clear reason why you picked this threshold.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">mlxtend.frequent_patterns</span> <span class="k">import</span> <span class="n">apriori</span>
+<span class="kn">from</span> <span class="nn">mlxtend.preprocessing</span> <span class="k">import</span> <span class="n">TransactionEncoder</span>
+
+<span class="c1"># we first need to create a one-hot encoding of our transactions</span>
+<span class="n">te</span> <span class="o">=</span> <span class="n">TransactionEncoder</span><span class="p">()</span>
+<span class="n">te_ary</span> <span class="o">=</span> <span class="n">te</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+<span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">te_ary</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">te</span><span class="o">.</span><span class="n">columns_</span><span class="p">)</span>
+
+<span class="c1"># use support of 0.005 - low threshold may include to many candidates</span>
+<span class="c1"># careful selection of rules based on other metrics required</span>
+<span class="c1"># this means that we use a higher confidence</span>
+<span class="n">frequent_itemsets</span> <span class="o">=</span> <span class="n">apriori</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">data_df</span><span class="p">),</span> <span class="n">min_support</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">use_colnames</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">frequent_itemsets</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>support</th>
+      <th>itemsets</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.020397</td>
+      <td>(almonds)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.008932</td>
+      <td>(antioxydant juice)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.033329</td>
+      <td>(avocado)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.008666</td>
+      <td>(bacon)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.010799</td>
+      <td>(barbecue sauce)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.014265</td>
+      <td>(black tea)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.009199</td>
+      <td>(blueberries)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.011465</td>
+      <td>(body spray)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.033729</td>
+      <td>(brownies)</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.008666</td>
+      <td>(bug spray)</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.005866</td>
+      <td>(burger sauce)</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>0.087188</td>
+      <td>(burgers)</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>0.030129</td>
+      <td>(butter)</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>0.081056</td>
+      <td>(cake)</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>0.009732</td>
+      <td>(candy bars)</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>0.015331</td>
+      <td>(carrots)</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.025730</td>
+      <td>(cereals)</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>0.046794</td>
+      <td>(champagne)</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>0.059992</td>
+      <td>(chicken)</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>0.006133</td>
+      <td>(chili)</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>0.163845</td>
+      <td>(chocolate)</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>0.010532</td>
+      <td>(cider)</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>0.008399</td>
+      <td>(clothes accessories)</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>0.080389</td>
+      <td>(cookies)</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>0.051060</td>
+      <td>(cooking oil)</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>0.031862</td>
+      <td>(cottage cheese)</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>0.013198</td>
+      <td>(eggplant)</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>0.179709</td>
+      <td>(eggs)</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>0.027063</td>
+      <td>(energy bar)</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>0.026663</td>
+      <td>(energy drink)</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>695</th>
+      <td>0.005066</td>
+      <td>(ground beef, shrimp, mineral water)</td>
+    </tr>
+    <tr>
+      <th>696</th>
+      <td>0.005066</td>
+      <td>(ground beef, mineral water, soup)</td>
+    </tr>
+    <tr>
+      <th>697</th>
+      <td>0.017064</td>
+      <td>(spaghetti, mineral water, ground beef)</td>
+    </tr>
+    <tr>
+      <th>698</th>
+      <td>0.005466</td>
+      <td>(ground beef, tomatoes, mineral water)</td>
+    </tr>
+    <tr>
+      <th>699</th>
+      <td>0.006133</td>
+      <td>(ground beef, spaghetti, olive oil)</td>
+    </tr>
+    <tr>
+      <th>700</th>
+      <td>0.006399</td>
+      <td>(ground beef, pancakes, spaghetti)</td>
+    </tr>
+    <tr>
+      <th>701</th>
+      <td>0.005999</td>
+      <td>(ground beef, shrimp, spaghetti)</td>
+    </tr>
+    <tr>
+      <th>702</th>
+      <td>0.005599</td>
+      <td>(ground beef, tomatoes, spaghetti)</td>
+    </tr>
+    <tr>
+      <th>703</th>
+      <td>0.005999</td>
+      <td>(herb &amp; pepper, mineral water, spaghetti)</td>
+    </tr>
+    <tr>
+      <th>704</th>
+      <td>0.005599</td>
+      <td>(spaghetti, mineral water, low fat yogurt)</td>
+    </tr>
+    <tr>
+      <th>705</th>
+      <td>0.008532</td>
+      <td>(mineral water, milk, olive oil)</td>
+    </tr>
+    <tr>
+      <th>706</th>
+      <td>0.007866</td>
+      <td>(pancakes, mineral water, milk)</td>
+    </tr>
+    <tr>
+      <th>707</th>
+      <td>0.007866</td>
+      <td>(shrimp, mineral water, milk)</td>
+    </tr>
+    <tr>
+      <th>708</th>
+      <td>0.008532</td>
+      <td>(mineral water, milk, soup)</td>
+    </tr>
+    <tr>
+      <th>709</th>
+      <td>0.015731</td>
+      <td>(spaghetti, mineral water, milk)</td>
+    </tr>
+    <tr>
+      <th>710</th>
+      <td>0.006532</td>
+      <td>(tomatoes, mineral water, milk)</td>
+    </tr>
+    <tr>
+      <th>711</th>
+      <td>0.006133</td>
+      <td>(turkey, mineral water, milk)</td>
+    </tr>
+    <tr>
+      <th>712</th>
+      <td>0.005066</td>
+      <td>(whole wheat rice, mineral water, milk)</td>
+    </tr>
+    <tr>
+      <th>713</th>
+      <td>0.007199</td>
+      <td>(spaghetti, milk, olive oil)</td>
+    </tr>
+    <tr>
+      <th>714</th>
+      <td>0.005866</td>
+      <td>(tomatoes, spaghetti, milk)</td>
+    </tr>
+    <tr>
+      <th>715</th>
+      <td>0.005199</td>
+      <td>(mineral water, soup, olive oil)</td>
+    </tr>
+    <tr>
+      <th>716</th>
+      <td>0.010265</td>
+      <td>(spaghetti, mineral water, olive oil)</td>
+    </tr>
+    <tr>
+      <th>717</th>
+      <td>0.011465</td>
+      <td>(spaghetti, pancakes, mineral water)</td>
+    </tr>
+    <tr>
+      <th>718</th>
+      <td>0.006799</td>
+      <td>(spaghetti, mineral water, salmon)</td>
+    </tr>
+    <tr>
+      <th>719</th>
+      <td>0.008532</td>
+      <td>(spaghetti, shrimp, mineral water)</td>
+    </tr>
+    <tr>
+      <th>720</th>
+      <td>0.007466</td>
+      <td>(spaghetti, mineral water, soup)</td>
+    </tr>
+    <tr>
+      <th>721</th>
+      <td>0.009332</td>
+      <td>(spaghetti, tomatoes, mineral water)</td>
+    </tr>
+    <tr>
+      <th>722</th>
+      <td>0.006399</td>
+      <td>(spaghetti, turkey, mineral water)</td>
+    </tr>
+    <tr>
+      <th>723</th>
+      <td>0.006266</td>
+      <td>(spaghetti, whole wheat rice, mineral water)</td>
+    </tr>
+    <tr>
+      <th>724</th>
+      <td>0.005066</td>
+      <td>(pancakes, spaghetti, olive oil)</td>
+    </tr>
+  </tbody>
+</table>
+<p>725 rows × 2 columns</p>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Mining-rules-from-the-frequent-itemsets">Mining rules from the frequent itemsets<a class="anchor-link" href="#Mining-rules-from-the-frequent-itemsets"> </a></h2><p>Determine good rules from the results for this data. Use lift and confidence as metrics for your evaluations.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">mlxtend.frequent_patterns</span> <span class="k">import</span> <span class="n">association_rules</span>
+
+<span class="c1"># use a high confidence to counterbalance the low support threshold</span>
+<span class="c1"># order by lift to have the &quot;best&quot; rules at the top</span>
+<span class="n">association_rules</span><span class="p">(</span><span class="n">frequent_itemsets</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;confidence&quot;</span><span class="p">,</span>
+                  <span class="n">min_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;lift&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>antecedents</th>
+      <th>consequents</th>
+      <th>antecedent support</th>
+      <th>consequent support</th>
+      <th>support</th>
+      <th>confidence</th>
+      <th>lift</th>
+      <th>leverage</th>
+      <th>conviction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>13</th>
+      <td>(ground beef, shrimp)</td>
+      <td>(spaghetti)</td>
+      <td>0.011465</td>
+      <td>0.174110</td>
+      <td>0.005999</td>
+      <td>0.523256</td>
+      <td>3.005315</td>
+      <td>0.004003</td>
+      <td>1.732354</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>(frozen vegetables, ground beef)</td>
+      <td>(spaghetti)</td>
+      <td>0.016931</td>
+      <td>0.174110</td>
+      <td>0.008666</td>
+      <td>0.511811</td>
+      <td>2.939582</td>
+      <td>0.005718</td>
+      <td>1.691742</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>(frozen vegetables, olive oil)</td>
+      <td>(spaghetti)</td>
+      <td>0.011332</td>
+      <td>0.174110</td>
+      <td>0.005733</td>
+      <td>0.505882</td>
+      <td>2.905531</td>
+      <td>0.003760</td>
+      <td>1.671444</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>(frozen vegetables, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.007999</td>
+      <td>0.238368</td>
+      <td>0.005066</td>
+      <td>0.633333</td>
+      <td>2.656954</td>
+      <td>0.003159</td>
+      <td>2.077178</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>(olive oil, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.008932</td>
+      <td>0.238368</td>
+      <td>0.005199</td>
+      <td>0.582090</td>
+      <td>2.441976</td>
+      <td>0.003070</td>
+      <td>1.822476</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>(frozen vegetables, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.011332</td>
+      <td>0.238368</td>
+      <td>0.006532</td>
+      <td>0.576471</td>
+      <td>2.418404</td>
+      <td>0.003831</td>
+      <td>1.798297</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>(milk, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.015198</td>
+      <td>0.238368</td>
+      <td>0.008532</td>
+      <td>0.561404</td>
+      <td>2.355194</td>
+      <td>0.004909</td>
+      <td>1.736520</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(chocolate, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.010132</td>
+      <td>0.238368</td>
+      <td>0.005599</td>
+      <td>0.552632</td>
+      <td>2.318395</td>
+      <td>0.003184</td>
+      <td>1.702471</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(eggs, cooking oil)</td>
+      <td>(mineral water)</td>
+      <td>0.011732</td>
+      <td>0.238368</td>
+      <td>0.006399</td>
+      <td>0.545455</td>
+      <td>2.288286</td>
+      <td>0.003603</td>
+      <td>1.675590</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>(frozen vegetables, ground beef)</td>
+      <td>(mineral water)</td>
+      <td>0.016931</td>
+      <td>0.238368</td>
+      <td>0.009199</td>
+      <td>0.543307</td>
+      <td>2.279277</td>
+      <td>0.005163</td>
+      <td>1.667711</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>(turkey, milk)</td>
+      <td>(mineral water)</td>
+      <td>0.011332</td>
+      <td>0.238368</td>
+      <td>0.006133</td>
+      <td>0.541176</td>
+      <td>2.270338</td>
+      <td>0.003431</td>
+      <td>1.659967</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>(spaghetti, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.014265</td>
+      <td>0.238368</td>
+      <td>0.007466</td>
+      <td>0.523364</td>
+      <td>2.195614</td>
+      <td>0.004065</td>
+      <td>1.597933</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>(ground beef, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.009732</td>
+      <td>0.238368</td>
+      <td>0.005066</td>
+      <td>0.520548</td>
+      <td>2.183798</td>
+      <td>0.002746</td>
+      <td>1.588546</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>(chocolate, chicken)</td>
+      <td>(mineral water)</td>
+      <td>0.014665</td>
+      <td>0.238368</td>
+      <td>0.007599</td>
+      <td>0.518182</td>
+      <td>2.173871</td>
+      <td>0.004103</td>
+      <td>1.580745</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>(ground beef, pancakes)</td>
+      <td>(mineral water)</td>
+      <td>0.014531</td>
+      <td>0.238368</td>
+      <td>0.007466</td>
+      <td>0.513761</td>
+      <td>2.155327</td>
+      <td>0.004002</td>
+      <td>1.566375</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(ground beef, eggs)</td>
+      <td>(mineral water)</td>
+      <td>0.019997</td>
+      <td>0.238368</td>
+      <td>0.010132</td>
+      <td>0.506667</td>
+      <td>2.125563</td>
+      <td>0.005365</td>
+      <td>1.543848</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>(spaghetti, salmon)</td>
+      <td>(mineral water)</td>
+      <td>0.013465</td>
+      <td>0.238368</td>
+      <td>0.006799</td>
+      <td>0.504950</td>
+      <td>2.118363</td>
+      <td>0.003589</td>
+      <td>1.538496</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(chocolate, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.016398</td>
+      <td>0.238368</td>
+      <td>0.008266</td>
+      <td>0.504065</td>
+      <td>2.114649</td>
+      <td>0.004357</td>
+      <td>1.535749</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>(ground beef, milk)</td>
+      <td>(mineral water)</td>
+      <td>0.021997</td>
+      <td>0.238368</td>
+      <td>0.011065</td>
+      <td>0.503030</td>
+      <td>2.110308</td>
+      <td>0.005822</td>
+      <td>1.532552</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>(milk, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.017064</td>
+      <td>0.238368</td>
+      <td>0.008532</td>
+      <td>0.500000</td>
+      <td>2.097595</td>
+      <td>0.004465</td>
+      <td>1.523264</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The rules make sense, but are only helpful in a limited way, because we only have two different items as consequent: spaghetti and mineral water. The first three rules indicate that if a person buys a product that is often used to make pasta sauce (e.g., ground beef, vegetables, olive oil), they also often buy pasta. While this makes sense, this rule may also be there, because people tend to buy pasta a lot. However, the lift of about 3 indicates that these rules are three times as likely as a random effect. The shrimp does not really match this pattern.</p>
+<p>The other rules are likely effective, but an random artifact: the problem is that mineral water is part of many transactions:</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># the mean of a one hot encoded column is the percentage that this value occurs</span>
+<span class="n">data_df</span><span class="p">[</span><span class="s1">&#39;mineral water&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.23836821757099053</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Thus, the rule to predict mineral water is almost universally good.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Validation-of-the-rules">Validation of the rules<a class="anchor-link" href="#Validation-of-the-rules"> </a></h2><p>Randomly split your records into two sets with roughly 50% of data each. Now use the Apriori algorithm to determine rules on both of these sets. Do you find similar rules on both sets? What does the similarity/the differences indicate?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+
+<span class="c1"># split the data into two sets with 50% of the data</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">data_df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># create frequent itemsets</span>
+<span class="n">frequent_itemsets_train</span> <span class="o">=</span> <span class="n">apriori</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">X_train</span><span class="p">),</span> <span class="n">min_support</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">use_colnames</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">frequent_itemsets_test</span> <span class="o">=</span> <span class="n">apriori</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">X_test</span><span class="p">),</span> <span class="n">min_support</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">use_colnames</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># rules for first set</span>
+<span class="n">association_rules</span><span class="p">(</span><span class="n">frequent_itemsets_train</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;confidence&quot;</span><span class="p">,</span>
+                  <span class="n">min_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;lift&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>antecedents</th>
+      <th>consequents</th>
+      <th>antecedent support</th>
+      <th>consequent support</th>
+      <th>support</th>
+      <th>confidence</th>
+      <th>lift</th>
+      <th>leverage</th>
+      <th>conviction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>27</th>
+      <td>(spaghetti, whole wheat pasta)</td>
+      <td>(milk)</td>
+      <td>0.010133</td>
+      <td>0.135733</td>
+      <td>0.005067</td>
+      <td>0.500000</td>
+      <td>3.683694</td>
+      <td>0.003691</td>
+      <td>1.728533</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>(grated cheese, eggs)</td>
+      <td>(spaghetti)</td>
+      <td>0.009600</td>
+      <td>0.181333</td>
+      <td>0.005867</td>
+      <td>0.611111</td>
+      <td>3.370098</td>
+      <td>0.004126</td>
+      <td>2.105143</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>(frozen vegetables, soup)</td>
+      <td>(spaghetti)</td>
+      <td>0.008533</td>
+      <td>0.181333</td>
+      <td>0.005067</td>
+      <td>0.593750</td>
+      <td>3.274357</td>
+      <td>0.003519</td>
+      <td>2.015179</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>(frozen vegetables, ground beef)</td>
+      <td>(spaghetti)</td>
+      <td>0.016800</td>
+      <td>0.181333</td>
+      <td>0.009600</td>
+      <td>0.571429</td>
+      <td>3.151261</td>
+      <td>0.006554</td>
+      <td>1.910222</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>(ground beef, shrimp)</td>
+      <td>(spaghetti)</td>
+      <td>0.012267</td>
+      <td>0.181333</td>
+      <td>0.006933</td>
+      <td>0.565217</td>
+      <td>3.117008</td>
+      <td>0.004709</td>
+      <td>1.882933</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>(frozen vegetables, mineral water, milk)</td>
+      <td>(spaghetti)</td>
+      <td>0.011200</td>
+      <td>0.181333</td>
+      <td>0.006133</td>
+      <td>0.547619</td>
+      <td>3.019958</td>
+      <td>0.004102</td>
+      <td>1.809684</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>(frozen vegetables, olive oil)</td>
+      <td>(spaghetti)</td>
+      <td>0.011200</td>
+      <td>0.181333</td>
+      <td>0.005867</td>
+      <td>0.523810</td>
+      <td>2.888655</td>
+      <td>0.003836</td>
+      <td>1.719200</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>(cake, chocolate)</td>
+      <td>(spaghetti)</td>
+      <td>0.013333</td>
+      <td>0.181333</td>
+      <td>0.006933</td>
+      <td>0.520000</td>
+      <td>2.867647</td>
+      <td>0.004516</td>
+      <td>1.705556</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>(herb &amp; pepper, eggs)</td>
+      <td>(spaghetti)</td>
+      <td>0.012800</td>
+      <td>0.181333</td>
+      <td>0.006400</td>
+      <td>0.500000</td>
+      <td>2.757353</td>
+      <td>0.004079</td>
+      <td>1.637333</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>(spaghetti, milk, eggs)</td>
+      <td>(mineral water)</td>
+      <td>0.009067</td>
+      <td>0.249600</td>
+      <td>0.006133</td>
+      <td>0.676471</td>
+      <td>2.710219</td>
+      <td>0.003870</td>
+      <td>2.319418</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>(frozen vegetables, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.008533</td>
+      <td>0.249600</td>
+      <td>0.005600</td>
+      <td>0.656250</td>
+      <td>2.629207</td>
+      <td>0.003470</td>
+      <td>2.182982</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(pancakes, cooking oil)</td>
+      <td>(mineral water)</td>
+      <td>0.008267</td>
+      <td>0.249600</td>
+      <td>0.005333</td>
+      <td>0.645161</td>
+      <td>2.584781</td>
+      <td>0.003270</td>
+      <td>2.114764</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>(pancakes, low fat yogurt)</td>
+      <td>(mineral water)</td>
+      <td>0.010133</td>
+      <td>0.249600</td>
+      <td>0.006133</td>
+      <td>0.605263</td>
+      <td>2.424933</td>
+      <td>0.003604</td>
+      <td>1.901013</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>(frozen vegetables, spaghetti, milk)</td>
+      <td>(mineral water)</td>
+      <td>0.010133</td>
+      <td>0.249600</td>
+      <td>0.006133</td>
+      <td>0.605263</td>
+      <td>2.424933</td>
+      <td>0.003604</td>
+      <td>1.901013</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>(grated cheese, ground beef)</td>
+      <td>(mineral water)</td>
+      <td>0.011467</td>
+      <td>0.249600</td>
+      <td>0.006667</td>
+      <td>0.581395</td>
+      <td>2.329308</td>
+      <td>0.003805</td>
+      <td>1.792622</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>(frozen vegetables, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.011200</td>
+      <td>0.249600</td>
+      <td>0.006400</td>
+      <td>0.571429</td>
+      <td>2.289377</td>
+      <td>0.003604</td>
+      <td>1.750933</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>(ground beef, pancakes)</td>
+      <td>(mineral water)</td>
+      <td>0.014667</td>
+      <td>0.249600</td>
+      <td>0.008267</td>
+      <td>0.563636</td>
+      <td>2.258159</td>
+      <td>0.004606</td>
+      <td>1.719667</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(spaghetti, cooking oil)</td>
+      <td>(mineral water)</td>
+      <td>0.016267</td>
+      <td>0.249600</td>
+      <td>0.009067</td>
+      <td>0.557377</td>
+      <td>2.233081</td>
+      <td>0.005007</td>
+      <td>1.695348</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>(frozen vegetables, ground beef)</td>
+      <td>(mineral water)</td>
+      <td>0.016800</td>
+      <td>0.249600</td>
+      <td>0.009333</td>
+      <td>0.555556</td>
+      <td>2.225783</td>
+      <td>0.005140</td>
+      <td>1.688400</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>(olive oil, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.009333</td>
+      <td>0.249600</td>
+      <td>0.005067</td>
+      <td>0.542857</td>
+      <td>2.174908</td>
+      <td>0.002737</td>
+      <td>1.641500</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>(milk, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.016267</td>
+      <td>0.249600</td>
+      <td>0.008800</td>
+      <td>0.540984</td>
+      <td>2.167402</td>
+      <td>0.004740</td>
+      <td>1.634800</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>(ground beef, low fat yogurt)</td>
+      <td>(mineral water)</td>
+      <td>0.009867</td>
+      <td>0.249600</td>
+      <td>0.005333</td>
+      <td>0.540541</td>
+      <td>2.165627</td>
+      <td>0.002871</td>
+      <td>1.633224</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>(ground beef, milk)</td>
+      <td>(mineral water)</td>
+      <td>0.020267</td>
+      <td>0.249600</td>
+      <td>0.010933</td>
+      <td>0.539474</td>
+      <td>2.161353</td>
+      <td>0.005875</td>
+      <td>1.629440</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(eggs, cooking oil)</td>
+      <td>(mineral water)</td>
+      <td>0.012533</td>
+      <td>0.249600</td>
+      <td>0.006667</td>
+      <td>0.531915</td>
+      <td>2.131069</td>
+      <td>0.003538</td>
+      <td>1.603127</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>(pancakes, milk)</td>
+      <td>(mineral water)</td>
+      <td>0.018667</td>
+      <td>0.249600</td>
+      <td>0.009867</td>
+      <td>0.528571</td>
+      <td>2.117674</td>
+      <td>0.005207</td>
+      <td>1.591758</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(grated cheese, eggs)</td>
+      <td>(mineral water)</td>
+      <td>0.009600</td>
+      <td>0.249600</td>
+      <td>0.005067</td>
+      <td>0.527778</td>
+      <td>2.114494</td>
+      <td>0.002671</td>
+      <td>1.589082</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>(ground beef, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.010133</td>
+      <td>0.249600</td>
+      <td>0.005333</td>
+      <td>0.526316</td>
+      <td>2.108637</td>
+      <td>0.002804</td>
+      <td>1.584178</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>(spaghetti, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.015467</td>
+      <td>0.249600</td>
+      <td>0.008000</td>
+      <td>0.517241</td>
+      <td>2.072281</td>
+      <td>0.004140</td>
+      <td>1.554400</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>(milk, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.018667</td>
+      <td>0.249600</td>
+      <td>0.009600</td>
+      <td>0.514286</td>
+      <td>2.060440</td>
+      <td>0.004941</td>
+      <td>1.544941</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>(ground beef, spaghetti, chocolate)</td>
+      <td>(mineral water)</td>
+      <td>0.009867</td>
+      <td>0.249600</td>
+      <td>0.005067</td>
+      <td>0.513514</td>
+      <td>2.057346</td>
+      <td>0.002604</td>
+      <td>1.542489</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>(eggs, red wine)</td>
+      <td>(mineral water)</td>
+      <td>0.009867</td>
+      <td>0.249600</td>
+      <td>0.005067</td>
+      <td>0.513514</td>
+      <td>2.057346</td>
+      <td>0.002604</td>
+      <td>1.542489</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>(herb &amp; pepper, milk)</td>
+      <td>(mineral water)</td>
+      <td>0.010400</td>
+      <td>0.249600</td>
+      <td>0.005333</td>
+      <td>0.512821</td>
+      <td>2.054569</td>
+      <td>0.002737</td>
+      <td>1.540295</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>(frozen vegetables, whole wheat rice)</td>
+      <td>(mineral water)</td>
+      <td>0.010933</td>
+      <td>0.249600</td>
+      <td>0.005600</td>
+      <td>0.512195</td>
+      <td>2.052064</td>
+      <td>0.002871</td>
+      <td>1.538320</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>(spaghetti, salmon)</td>
+      <td>(mineral water)</td>
+      <td>0.015733</td>
+      <td>0.249600</td>
+      <td>0.008000</td>
+      <td>0.508475</td>
+      <td>2.037158</td>
+      <td>0.004073</td>
+      <td>1.526676</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>(eggs, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.013333</td>
+      <td>0.249600</td>
+      <td>0.006667</td>
+      <td>0.500000</td>
+      <td>2.003205</td>
+      <td>0.003339</td>
+      <td>1.500800</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># rules for second set</span>
+<span class="n">association_rules</span><span class="p">(</span><span class="n">frequent_itemsets_test</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;confidence&quot;</span><span class="p">,</span>
+                  <span class="n">min_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;lift&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>antecedents</th>
+      <th>consequents</th>
+      <th>antecedent support</th>
+      <th>consequent support</th>
+      <th>support</th>
+      <th>confidence</th>
+      <th>lift</th>
+      <th>leverage</th>
+      <th>conviction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>20</th>
+      <td>(pancakes, olive oil)</td>
+      <td>(spaghetti)</td>
+      <td>0.010930</td>
+      <td>0.166889</td>
+      <td>0.005599</td>
+      <td>0.512195</td>
+      <td>3.069080</td>
+      <td>0.003774</td>
+      <td>1.707878</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>(tomatoes, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.007465</td>
+      <td>0.227139</td>
+      <td>0.005065</td>
+      <td>0.678571</td>
+      <td>2.987466</td>
+      <td>0.003370</td>
+      <td>2.404455</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(chocolate, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.008798</td>
+      <td>0.227139</td>
+      <td>0.005865</td>
+      <td>0.666667</td>
+      <td>2.935055</td>
+      <td>0.003867</td>
+      <td>2.318582</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>(olive oil, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.008531</td>
+      <td>0.227139</td>
+      <td>0.005332</td>
+      <td>0.625000</td>
+      <td>2.751614</td>
+      <td>0.003394</td>
+      <td>2.060962</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>(turkey, milk)</td>
+      <td>(mineral water)</td>
+      <td>0.011464</td>
+      <td>0.227139</td>
+      <td>0.006931</td>
+      <td>0.604651</td>
+      <td>2.662026</td>
+      <td>0.004328</td>
+      <td>1.954883</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>(shrimp, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.009064</td>
+      <td>0.227139</td>
+      <td>0.005332</td>
+      <td>0.588235</td>
+      <td>2.589754</td>
+      <td>0.003273</td>
+      <td>1.876947</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>(milk, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.014130</td>
+      <td>0.227139</td>
+      <td>0.008264</td>
+      <td>0.584906</td>
+      <td>2.575095</td>
+      <td>0.005055</td>
+      <td>1.861891</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>(frozen vegetables, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.011464</td>
+      <td>0.227139</td>
+      <td>0.006665</td>
+      <td>0.581395</td>
+      <td>2.559641</td>
+      <td>0.004061</td>
+      <td>1.846278</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(chocolate, chicken)</td>
+      <td>(mineral water)</td>
+      <td>0.012797</td>
+      <td>0.227139</td>
+      <td>0.007198</td>
+      <td>0.562500</td>
+      <td>2.476452</td>
+      <td>0.004291</td>
+      <td>1.766538</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>(eggs, cooking oil)</td>
+      <td>(mineral water)</td>
+      <td>0.010930</td>
+      <td>0.227139</td>
+      <td>0.006132</td>
+      <td>0.560976</td>
+      <td>2.469741</td>
+      <td>0.003649</td>
+      <td>1.760405</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>(eggs, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.009064</td>
+      <td>0.227139</td>
+      <td>0.005065</td>
+      <td>0.558824</td>
+      <td>2.460267</td>
+      <td>0.003006</td>
+      <td>1.751817</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(pancakes, chicken)</td>
+      <td>(mineral water)</td>
+      <td>0.009064</td>
+      <td>0.227139</td>
+      <td>0.005065</td>
+      <td>0.558824</td>
+      <td>2.460267</td>
+      <td>0.003006</td>
+      <td>1.751817</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(chocolate, olive oil)</td>
+      <td>(mineral water)</td>
+      <td>0.014396</td>
+      <td>0.227139</td>
+      <td>0.007998</td>
+      <td>0.555556</td>
+      <td>2.445879</td>
+      <td>0.004728</td>
+      <td>1.738936</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>(frozen vegetables, ground beef)</td>
+      <td>(mineral water)</td>
+      <td>0.017062</td>
+      <td>0.227139</td>
+      <td>0.009064</td>
+      <td>0.531250</td>
+      <td>2.338872</td>
+      <td>0.005189</td>
+      <td>1.648769</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>(spaghetti, soup)</td>
+      <td>(mineral water)</td>
+      <td>0.013063</td>
+      <td>0.227139</td>
+      <td>0.006931</td>
+      <td>0.530612</td>
+      <td>2.336064</td>
+      <td>0.003964</td>
+      <td>1.646529</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>(ground beef, eggs)</td>
+      <td>(mineral water)</td>
+      <td>0.018662</td>
+      <td>0.227139</td>
+      <td>0.009864</td>
+      <td>0.528571</td>
+      <td>2.327079</td>
+      <td>0.005625</td>
+      <td>1.639401</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>(ground beef, turkey)</td>
+      <td>(mineral water)</td>
+      <td>0.010397</td>
+      <td>0.227139</td>
+      <td>0.005332</td>
+      <td>0.512821</td>
+      <td>2.257734</td>
+      <td>0.002970</td>
+      <td>1.586398</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>(whole wheat rice, spaghetti)</td>
+      <td>(mineral water)</td>
+      <td>0.013863</td>
+      <td>0.227139</td>
+      <td>0.006931</td>
+      <td>0.500000</td>
+      <td>2.201291</td>
+      <td>0.003783</td>
+      <td>1.545721</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>(light cream)</td>
+      <td>(mineral water)</td>
+      <td>0.012263</td>
+      <td>0.227139</td>
+      <td>0.006132</td>
+      <td>0.500000</td>
+      <td>2.201291</td>
+      <td>0.003346</td>
+      <td>1.545721</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>(spaghetti, salmon)</td>
+      <td>(mineral water)</td>
+      <td>0.011197</td>
+      <td>0.227139</td>
+      <td>0.005599</td>
+      <td>0.500000</td>
+      <td>2.201291</td>
+      <td>0.003055</td>
+      <td>1.545721</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>(ground beef, tomatoes)</td>
+      <td>(mineral water)</td>
+      <td>0.012263</td>
+      <td>0.227139</td>
+      <td>0.006132</td>
+      <td>0.500000</td>
+      <td>2.201291</td>
+      <td>0.003346</td>
+      <td>1.545721</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The "mineral water" rules seem to be fairly stable and are present in both splits. The "spaghetti" rules seem to be more random. While there are such rules in both splits, they are not the same in the splits. In general, it seems like spaghetti may also be just something that is bought very often, same as mineral water, and that the rules may be good suggestions for cross-sell, but that there is probably not a strong association between the antecedents and the consequents for all rules, i.e., there does not seem to be causality.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

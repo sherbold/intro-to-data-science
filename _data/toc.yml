@@ -72,6 +72,7 @@
   sections:
   - url: /exercises/Solution_CSV_and_DataFrames
   - url: /exercises/Solution_Data_Exploration
+  - url: /exercises/Solution_Association_Rule_Mining
 
 - url: /Appendix
   not_numbered: true
