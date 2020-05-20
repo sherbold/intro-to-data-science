@@ -1,0 +1,1626 @@
+---
+redirect_from:
+  - "/exercises/solution-clustering"
+interact_link: content/exercises/Solution_Clustering.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Cluster Analysis
+pagenum: 18
+prev_page:
+  url: /exercises/Solution_Association_Rule_Mining.html
+next_page:
+  url: /Appendix.html
+suffix: .ipynb
+search: clusters data clustering between results city cluster dbscan not means minpts also k different separation regions similar values green only sklearn algorithms features pca plots good three because very difference exercise within large centers suburbs em analysis using should suitable determine scatterplot blue center small boundary mean boston both version scatterplots thus already scaled plot clear e pairwise indus nox orange rural areas algorithm differences seven value epsilon dendrogram slink least get based well scale effects seems due density degree single even consider bic here region split into hierarchical does any same problem part python learn stable fourteen problems regarding
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Cluster Analysis</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is a sample solution for the association rule mining exercise. This does not mean that this is the only way to solve this exercise. As with any programming task - and also with most data analysis tasks - there are multiple solutions for the same problem.</p>
+<h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>We use the boston house price data in this exercise. The data is available as part of <code>sklearn</code> for <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.datasets">Python</a>.</p>
+<p>Last week we explored the boston data, this week we use it for clustering. You will apply both $k$-means clustering and DB clustering to the boston data using all fourteen columns. Functions for all clustering algorithms are available in <code>sklearn</code> for Python. If you experience problems, ensure that your <code>sklearn</code> version is at least 0.22, your <code>matplotlib</code> version is at least 3.0.1, and your <code>seaborn</code> version is at least 0.9.0.</p>
+<p>There are a couple of problems with clustering data like the boston data, that you will have to solve during this exercise.</p>
+<ul>
+<li>The different features of the data are on different scales, which influences the results. </li>
+<li>The data has fourteen dimensions. This makes visualizing the clusters difficult. You can try a dimension reduction technique like Principle Component Analysis (PCA) to get only two dimensions or use pair-wise plots. Both have advantages and drawbacks, which you should explore as part of this exercise. </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">decomposition</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
+
+
+
+<span class="c1"># first we load the data and print description</span>
+<span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
+<span class="n">boston_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">boston</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
+<span class="n">boston_df</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span>
+
+<span class="c1"># we rescale the data by substracting the mean value and dividing by the standard deviation</span>
+<span class="c1"># this is known as z-score standardization</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">boston_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">boston_df</span><span class="p">)</span>
+
+<span class="c1"># principle component analysis computes a linear transformation such that the</span>
+<span class="c1"># few dimensions of the data explain the majority of the variance</span>
+<span class="c1"># this can be used to visualize data in 2d, even though there are more dimensions</span>
+<span class="c1"># the problem is: we do not know what the dimensions mean, because they are not our features</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">decomposition</span><span class="o">.</span><span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">boston_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variance explained by the principle components:&quot;</span><span class="p">,</span> <span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ratio of variance explained: &quot;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;First two Principle Components of Scaled Data&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Variance explained by the principle components: [0.46757068 0.11782371]
+Ratio of variance explained:  0.5853943917417506
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_1_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The PCA gives us no indication regarding the number of clusters. More data exploration of the boston data is done in the data exploration exercise. From that exercise, we know that the scatterplots also do not give a good indication regarding the number of clusters. Thus, we need to explore this based on actual clustering results.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="$k$-Means-Clustering">$k$-Means Clustering<a class="anchor-link" href="#$k$-Means-Clustering"> </a></h2><p>Use $k$-Means to cluster the data and find a suitable number of clusters for $k$. Use a combination of knowledge you already have about the data, visualizations, as well as the within-sum-of-squares to determine a suitable number of clusters.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We use the scaled data for $k$-Means clustering to account for scale effects. We use the WSS to determine candidates for the number of clusters.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">KMeans</span>
+
+<span class="n">inertia</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">k</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="nb">iter</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="nb">iter</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+    <span class="n">y_kmeans</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+    <span class="n">inertia</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmeans</span><span class="o">.</span><span class="n">inertia_</span> <span class="p">)</span> <span class="c1"># we already store this for later, inertia=WSS</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Evolution of WSS&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">inertia</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;WSS&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$k$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_5_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Based on the plot, three or four clusters seem reasonable. We now look at these clusters using the PCA.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_kmeans</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_kmeans</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$k$-Means with 3 clusters (PCA)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_kmeans</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">centers</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_kmeans</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$k$-Means with 4 clusters (PCA)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_7_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_7_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The plot of the clusters in the first two principle components indicates that three clusters is the better choice. With three clusters we see a relatively clear separation of the clusters in the plots. With four clusters, there seems to be a relatively random cluster (yellow), that is overlapping with all three other clusters. This may be due to artificially splitting the clusters more than they should be.</p>
+<p>From the PCA, we cannot infer if the three clusters have any meaning, i.e., what they represent in the data. To infer this, we now look at a pairwise scatterplot of the clusters with all features.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_kmeans</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+
+<span class="n">boston_df_kmeans</span> <span class="o">=</span> <span class="n">boston_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">boston_df_kmeans</span><span class="p">[</span><span class="s1">&#39;CLUST&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_kmeans</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">boston_df_kmeans</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;CLUST&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kde.py:487: RuntimeWarning: invalid value encountered in true_divide
+  binned = fast_linbin(X, a, b, gridsize) / (delta * nobs)
+/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kdetools.py:34: RuntimeWarning: invalid value encountered in double_scalars
+  FAC1 = 2*(np.pi*bw/RANGE)**2
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;seaborn.axisgrid.PairGrid at 0x7fad15a120b8&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_9_2.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The pairwise plots of the fourteen features provide a large amount of information. The main problem with such a plot is knowing where to start learning about the clusters. My suggestion is to first see if there are clear separations between the clusters in the density plots on the diagonal, because this can tell us a lot about the distribution of the data within the clusters. For example, we can learn the following:</p>
+<ul>
+<li>The blue cluster has the lowest values for INDUS, NOX, AGE and LSTAT and the largest values for ZN and DIS. Thus, the regions in this cluster have only little industry and office space, a low pollution, new houses, a lower degree of education, and a large distance to employment centers and large proportion of houses for residents. </li>
+<li>The green cluster is more or less the opposite of the blue cluster. The regions have largest proportion of industry and office space, the most pollution, the oldest houses, the highest degree of eduction and are closest to the employment centers. </li>
+<li>The orange cluster is somewhere between blue and green in all these features. </li>
+</ul>
+<p>Thus, we already get a fairly good description of the clusters just by analyzing the diagonal: blue seems to be suburbs and rural areas, green is the city center and industrial areas, and orange are the suburbs very close to the city and the outer regions of the city.</p>
+<p>We can further comfirm this by looking at the scatterplots. While the density plots indicate how well the clusters can be separated from each other if a single feature is considered, the scatterplots show the separation of the clusters with two features at once. Based on the analysis from above, we should see a clear separation between blue and green in the scatterplot of INDUS and NOX, whereas orange should be in the middle of both with possible overlaps with both clusters. We can see that the separation is very clear, even between green and orange. This further confirms the hypothesis about the clusters. This kind of visual analysis can be done with any clustering algorithm.</p>
+<p>A different way to look at the results of the clustering is to consider the values of the centers.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">boston_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CRIM</th>
+      <th>ZN</th>
+      <th>INDUS</th>
+      <th>CHAS</th>
+      <th>NOX</th>
+      <th>RM</th>
+      <th>AGE</th>
+      <th>DIS</th>
+      <th>RAD</th>
+      <th>TAX</th>
+      <th>PTRATIO</th>
+      <th>B</th>
+      <th>LSTAT</th>
+      <th>TARGET</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-0.407993</td>
+      <td>1.516136</td>
+      <td>-1.069871</td>
+      <td>-0.049523</td>
+      <td>-0.997236</td>
+      <td>0.924923</td>
+      <td>-1.168782</td>
+      <td>1.196052</td>
+      <td>-0.598919</td>
+      <td>-0.662294</td>
+      <td>-0.744519</td>
+      <td>0.354232</td>
+      <td>-0.949036</td>
+      <td>0.979868</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.376463</td>
+      <td>-0.342050</td>
+      <td>-0.297142</td>
+      <td>0.011287</td>
+      <td>-0.334920</td>
+      <td>-0.092372</td>
+      <td>-0.029696</td>
+      <td>0.057015</td>
+      <td>-0.580969</td>
+      <td>-0.603617</td>
+      <td>-0.086998</td>
+      <td>0.286587</td>
+      <td>-0.180297</td>
+      <td>0.035814</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.805442</td>
+      <td>-0.487722</td>
+      <td>1.119096</td>
+      <td>0.015767</td>
+      <td>1.126513</td>
+      <td>-0.464891</td>
+      <td>0.798165</td>
+      <td>-0.855104</td>
+      <td>1.223134</td>
+      <td>1.296687</td>
+      <td>0.606407</td>
+      <td>-0.641361</td>
+      <td>0.872853</td>
+      <td>-0.684867</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The problem with the values of the centers is that these are for the scaled data. This hinders the interpretation of the values. Thus, we should undo the scaling, before we interpret these values.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="n">boston_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CRIM</th>
+      <th>ZN</th>
+      <th>INDUS</th>
+      <th>CHAS</th>
+      <th>NOX</th>
+      <th>RM</th>
+      <th>AGE</th>
+      <th>DIS</th>
+      <th>RAD</th>
+      <th>TAX</th>
+      <th>PTRATIO</th>
+      <th>B</th>
+      <th>LSTAT</th>
+      <th>TARGET</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.107626</td>
+      <td>4.668868e+01</td>
+      <td>3.804340</td>
+      <td>0.056604</td>
+      <td>0.439252</td>
+      <td>6.933858</td>
+      <td>35.707547</td>
+      <td>6.311092</td>
+      <td>4.339623</td>
+      <td>296.726415</td>
+      <td>16.845283</td>
+      <td>388.981604</td>
+      <td>5.882642</td>
+      <td>31.535849</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.378562</td>
+      <td>3.394068e+00</td>
+      <td>9.100297</td>
+      <td>0.072034</td>
+      <td>0.515924</td>
+      <td>6.219797</td>
+      <td>67.739831</td>
+      <td>3.914981</td>
+      <td>4.495763</td>
+      <td>306.605932</td>
+      <td>18.267373</td>
+      <td>382.812119</td>
+      <td>11.366822</td>
+      <td>22.861864</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>10.534719</td>
+      <td>-1.776357e-15</td>
+      <td>18.806585</td>
+      <td>0.073171</td>
+      <td>0.685104</td>
+      <td>5.958317</td>
+      <td>91.020122</td>
+      <td>1.996222</td>
+      <td>20.189024</td>
+      <td>626.560976</td>
+      <td>19.767073</td>
+      <td>298.178963</td>
+      <td>18.880000</td>
+      <td>16.240244</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see the clear separation of the centers in the variables we expect, but also in some others, e.g., RAD, even though this is not clearly visible and in the scatterplots. Such difference should be considered carefully and not overstated. If the differences cannot be seen in the data, this could also mean that there is no real difference between the cluster for that feature and that the actual location of the centers is random for the feature.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="EM-Clustering">EM Clustering<a class="anchor-link" href="#EM-Clustering"> </a></h2><p>(Note: EM clustering is also known as Gaussian Mixture Models and can be found in the mixture package of <code>sklearn</code>.)</p>
+<p>Use the EM algorithm to determine multivariate clusters in the data. Determine a suitable number of clusters using the Bayesian Information Criterion (BIC).</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>While EM clustering can deal to some degree with scale effects due to the covariances, we still use the scaled data for better comparability with the results of the other clustering algorithms. We start by looking for suitable number of clusters using the BIC.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="k">import</span> <span class="n">GaussianMixture</span>
+
+<span class="n">ks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">bic</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ks</span><span class="p">:</span>
+    <span class="n">em</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">k</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">em</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+    <span class="n">bic</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">bic</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Evolution of BIC&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ks</span><span class="p">,</span> <span class="n">bic</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;BIC&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$k$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_17_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The BIC clearly indicates that seven would be the optimal number of clusters. We start by analyzing the clustering results with the PCA.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">em</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_em</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_em</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;EM Clustering with 7 clusters (PCA)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_19_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There seems to a fairly good separation between most clusters. Some clusters (toirtoise on the bottom left, green between the two purple clusters) are not well separated from others, but it looks like these are clusters in the border regions of other clusters. We now look at the scatterplots in order to determine if the seven clusters are a good choice and what the meaning of the clusters is.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">boston_df_em</span> <span class="o">=</span> <span class="n">boston_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">boston_df_em</span><span class="p">[</span><span class="s1">&#39;CLUST&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_em</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">boston_df_em</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;CLUST&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kde.py:487: RuntimeWarning: invalid value encountered in true_divide
+  binned = fast_linbin(X, a, b, gridsize) / (delta * nobs)
+/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kdetools.py:34: RuntimeWarning: invalid value encountered in double_scalars
+  FAC1 = 2*(np.pi*bw/RANGE)**2
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;seaborn.axisgrid.PairGrid at 0x7fad054366d8&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_21_2.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This scatterplot is even harder to read, because we now have seven clusters instead of three. The density plots indicate that often, many clusters have similar distributions in the features. For example, for AGE, five of the clusters have their peak at almost the same value, the other two clusters also have their peak at almost the same value. Only their variance is a bit different, but also similar. There are only two features, where we can see a good separation between almost all clusters in the density plots: INDUS and NOX. Fortunately, we already have our analysis for the three clusters of $k$-Means, because this helps to understand what happened here.</p>
+<p>With the seven clusters, we still have the differentiation between the city center, the outer region of the city and suburbs and rural areas. However, this separation is more finegrained, because there are some suburbs with more industry and traffic and some with less. Just think about a village in which a large factory is located. This shifts INDUS and NOX in comparison to similar villages in which there is no factory. Thus, the EM result is more finegrained and accurate when it comes to differentiating between different kinds of suburbs and regions closer to the city center. Whether this is required depends on the use case.</p>
+<p>We can also look at the mean values of the normal distributions that were fit to the data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">means_</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="n">boston_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CRIM</th>
+      <th>ZN</th>
+      <th>INDUS</th>
+      <th>CHAS</th>
+      <th>NOX</th>
+      <th>RM</th>
+      <th>AGE</th>
+      <th>DIS</th>
+      <th>RAD</th>
+      <th>TAX</th>
+      <th>PTRATIO</th>
+      <th>B</th>
+      <th>LSTAT</th>
+      <th>TARGET</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>13.209833</td>
+      <td>2.131628e-14</td>
+      <td>18.100000</td>
+      <td>-8.326673e-17</td>
+      <td>0.669605</td>
+      <td>5.984137</td>
+      <td>89.731452</td>
+      <td>2.074494</td>
+      <td>24.000000</td>
+      <td>666.000000</td>
+      <td>20.200000</td>
+      <td>282.584032</td>
+      <td>19.172823</td>
+      <td>15.438710</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.442719</td>
+      <td>1.050973e+00</td>
+      <td>8.954199</td>
+      <td>-1.387779e-17</td>
+      <td>0.537326</td>
+      <td>6.043697</td>
+      <td>75.021775</td>
+      <td>3.647576</td>
+      <td>4.519359</td>
+      <td>333.645158</td>
+      <td>19.417505</td>
+      <td>379.175081</td>
+      <td>13.683432</td>
+      <td>19.535313</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.084548</td>
+      <td>2.765630e+01</td>
+      <td>5.641546</td>
+      <td>-4.163336e-17</td>
+      <td>0.443721</td>
+      <td>6.416816</td>
+      <td>39.083782</td>
+      <td>5.993622</td>
+      <td>4.296153</td>
+      <td>296.376755</td>
+      <td>17.698690</td>
+      <td>390.455896</td>
+      <td>7.922226</td>
+      <td>25.100947</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.059578</td>
+      <td>7.975000e+01</td>
+      <td>2.480000</td>
+      <td>8.333334e-02</td>
+      <td>0.409600</td>
+      <td>7.079167</td>
+      <td>29.808333</td>
+      <td>7.835667</td>
+      <td>3.500000</td>
+      <td>280.750001</td>
+      <td>17.108333</td>
+      <td>382.702500</td>
+      <td>6.160833</td>
+      <td>35.291666</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.175292</td>
+      <td>-1.776357e-15</td>
+      <td>22.089362</td>
+      <td>-4.163336e-17</td>
+      <td>0.675830</td>
+      <td>5.845809</td>
+      <td>95.140426</td>
+      <td>1.907649</td>
+      <td>4.127660</td>
+      <td>414.595745</td>
+      <td>18.004255</td>
+      <td>348.715106</td>
+      <td>17.784255</td>
+      <td>17.793617</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>1.905690</td>
+      <td>5.294118e+00</td>
+      <td>13.057647</td>
+      <td>1.000000e+00</td>
+      <td>0.599085</td>
+      <td>6.478324</td>
+      <td>79.050000</td>
+      <td>2.945729</td>
+      <td>9.558824</td>
+      <td>391.794118</td>
+      <td>17.605882</td>
+      <td>372.335000</td>
+      <td>11.479412</td>
+      <td>27.805882</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.388249</td>
+      <td>4.722476e+00</td>
+      <td>5.106270</td>
+      <td>-1.387779e-17</td>
+      <td>0.533668</td>
+      <td>7.097995</td>
+      <td>73.895243</td>
+      <td>2.890533</td>
+      <td>4.981623</td>
+      <td>277.753620</td>
+      <td>16.235409</td>
+      <td>388.336113</td>
+      <td>7.055379</td>
+      <td>34.762562</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The means support our finding that the differences between INDUS and NOX are between all clusters, whereas most other features are similar for multiple clusters. We do not analyze the covariance matrices, because this would mean that we have to consider seven 14x14 matrices.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="DBSCAN-Clustering">DBSCAN Clustering<a class="anchor-link" href="#DBSCAN-Clustering"> </a></h2><p>Use DBSCAN to cluster the data and find suitable values for $epsilon$ and $minPts$.  Use a combination of knowledge you already have about the data and visualizations.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We use the scaled data for DBSCAN clustering to account for scale effects. We first plot how the number of core points for different combinations of $epsilon$ and $minPts$.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">NearestNeighbors</span>
+
+<span class="c1"># we use sklearn to find the nearest neighbors</span>
+<span class="n">neigh</span> <span class="o">=</span> <span class="n">NearestNeighbors</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">nbrs</span> <span class="o">=</span> <span class="n">neigh</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">distances</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">nbrs</span><span class="o">.</span><span class="n">kneighbors</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">distances_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">distances</span><span class="p">[:,</span><span class="n">k</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">distances_k</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;minPts=</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;epsilon&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of core points&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mf">1.6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mf">2.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_27_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The horizontal lines mark $epsilon=1.6$ and $epsilon=2.8$, which look like good value for $minPts=2$, respectively $minPts=10$. We now look at the results of DBSCAN for these two combinations in the PCA.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">DBSCAN</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_dbscan</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">y_dbscan</span><span class="o">&lt;</span><span class="mi">0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_dbscan</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_dbscan</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;DBSCAN with eps=1.6, minPts=2 (PCA)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_dbscan</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">y_dbscan</span><span class="o">&lt;</span><span class="mi">0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_dbscan</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_dbscan</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;DBSCAN with eps=2.8, minPts=10 (PCA)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_29_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_29_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The results looks roughly similar. The most notable differences are that there are some very small clusters with $minPts=2$ and that the yellow cluster with $minPts=10$ is split into two clusters with $minPts=2$. These small clusters are likely not real cluster but artifacts due to the small value of $minPts$. Therefore, we continue to analyze the results for $epsilon=2.8, minPts=10$ in greater detail with a pairwise scatterplot.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_dbscan</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">y_dbscan</span><span class="o">&lt;</span><span class="mi">0</span>
+
+<span class="n">boston_df_dbscan</span> <span class="o">=</span> <span class="n">boston_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">boston_df_dbscan</span><span class="p">[</span><span class="s1">&#39;CLUST&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_dbscan</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">boston_df_dbscan</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;CLUST&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kde.py:487: RuntimeWarning: invalid value encountered in true_divide
+  binned = fast_linbin(X, a, b, gridsize) / (delta * nobs)
+/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kdetools.py:34: RuntimeWarning: invalid value encountered in double_scalars
+  FAC1 = 2*(np.pi*bw/RANGE)**2
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;seaborn.axisgrid.PairGrid at 0x7facfac85080&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_31_2.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We see that there are three clusters in our results. Two of these clusters (blue and orange) look very similar, i.e., are very close to each other. These two clusters contain the data for the city centers and regions very close to the city. The green clusters are the suburbs and rural areas. However, there is a difference between this result and the $k$-Means result. While the $k$-Means results strongly separates the city center from the city boundary, this is not the case here. This is due to the way DBSCAN works: since the difference from the city center to the boundary are gradual, there is no real gap between these regions. This means that DBSCAN does not split this into two clusters. Only the outliers in the city boundary, that have a stronger difference can be part of a new cluster. Based on the plot above, these are likely the regions in the city boundary with only few business and a large amount of residents.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hierarchical-Clustering">Hierarchical Clustering<a class="anchor-link" href="#Hierarchical-Clustering"> </a></h2><p>(Note: Hierarchical clustering is also known as agglomerative clustering and can be found under that name in <code>sklearn</code>. This task requires at least <code>sklearn</code> version 0.22, which is still under development (October 2019). You can find guidance on how to install packages in Jupyter notebook <a href="https://jakevdp.github.io/blog/2017/12/05/installing-python-packages-from-jupyter/">here</a> and regarding the development version of <code>sklearn</code> <a href="https://scikit-learn.org/stable/developers/advanced_installation.html">here</a>.)</p>
+<p>Use hierarchical clustering with single linkage to determine clusters within the housing data. Find a suitable cut-off for the clusters using a dendrogram.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We use the scaled data for Single Linkage (SLINK) clustering to account for scale effects. As a starting point, we use the distance we used for DBSCAN as cutoff, i.e., 2.8 and look at the resulting dendrogram.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="k">import</span> <span class="n">dendrogram</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">AgglomerativeClustering</span>
+
+<span class="n">sl</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">linkage</span><span class="o">=</span><span class="s1">&#39;single&#39;</span><span class="p">,</span> <span class="n">compute_full_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">plot_dendrogram</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># Create linkage matrix and then plot the dendrogram</span>
+
+    <span class="c1"># create the counts of samples under each node</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">children_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">merge</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">children_</span><span class="p">):</span>
+        <span class="n">current_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">child_idx</span> <span class="ow">in</span> <span class="n">merge</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">child_idx</span> <span class="o">&lt;</span> <span class="n">n_samples</span><span class="p">:</span>
+                <span class="n">current_count</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># leaf node</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current_count</span> <span class="o">+=</span> <span class="n">counts</span><span class="p">[</span><span class="n">child_idx</span> <span class="o">-</span> <span class="n">n_samples</span><span class="p">]</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_count</span>
+
+    <span class="n">linkage_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">model</span><span class="o">.</span><span class="n">children_</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">distances_</span><span class="p">,</span>
+                                      <span class="n">counts</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># Plot the corresponding dendrogram</span>
+    <span class="n">dendrogram</span><span class="p">(</span><span class="n">linkage_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Dendrogram of Single Linkage Clustering&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Level&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Objects&quot;</span><span class="p">)</span>
+<span class="n">plot_dendrogram</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span> <span class="n">no_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">above_threshold_color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Truncated Dendrogram with only the highest 15 levels&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Level&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Objects&quot;</span><span class="p">)</span>
+<span class="n">plot_dendrogram</span><span class="p">(</span><span class="n">sl</span><span class="p">,</span> <span class="n">no_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">above_threshold_color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">truncate_mode</span><span class="o">=</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_35_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The dendrogram shows that this threshold is reasonable. We could even decrease the threshold to 2.6, without changing anything. In the dendrogram without cutoff, we see that most data is within a two clusters (green, tortoise). The dendrogram on the right is misleading with respect to the size of the clusters, because there are many more instance on the lower levels in the green and the tortoise cluster, than in the other clusters. We now look at the results in the PCA to see how well the clusters are separated.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">DBSCAN</span>
+
+<span class="n">sl</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">linkage</span><span class="o">=</span><span class="s1">&#39;single&#39;</span><span class="p">,</span> <span class="n">compute_full_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_sl</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">labels_</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_sl</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;SLINK Clustering with threshold 2.8&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_37_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The PCA indicates a good separation, there seems to be a good separation between two big clusters and some very small clusters. This is one major cluster less than we had with DBSCAN. We look at these results in more detail with a pairwise scatterplot.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">boston_df_sl</span> <span class="o">=</span> <span class="n">boston_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">boston_df_sl</span><span class="p">[</span><span class="s1">&#39;CLUST&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_sl</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">boston_df_sl</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;CLUST&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/lib/python3.6/dist-packages/numpy/core/_methods.py:140: RuntimeWarning: Degrees of freedom &lt;= 0 for slice
+  keepdims=keepdims)
+/usr/local/lib/python3.6/dist-packages/numpy/core/_methods.py:132: RuntimeWarning: invalid value encountered in double_scalars
+  ret = ret.dtype.type(ret / rcount)
+/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kde.py:487: RuntimeWarning: invalid value encountered in true_divide
+  binned = fast_linbin(X, a, b, gridsize) / (delta * nobs)
+/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kdetools.py:34: RuntimeWarning: invalid value encountered in double_scalars
+  FAC1 = 2*(np.pi*bw/RANGE)**2
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;seaborn.axisgrid.PairGrid at 0x7f98646d5d30&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_39_2.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The scatterplot confirms that the results of SLINK are roughly similar to those of DBSCAN, which is not surprising because both algorithms consider pairwise distances between instances. However, there is one notable difference and that is that there are only two large clusters left: the city and the boundary of the city is now merged into a single cluster, and the suburbs and rural areas are in the other large cluster. This merge happend because SLINK basically uses $minPts=1$, which means that one similar neighbor is sufficient to not split two regions into distinct clusters. With DBSCAN, we could counter this to some degree with a larger value of $minPts=10$, which led to some split between the city center and the boundary. Another difference between DBSCAN and SLINK are the many very small clusters, which would be noise with DBSCAN. Since SLINK does not use the concept of noise for instances without a dense neighborhood, these are in a small clusters instead.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Compare-the-Clustering-Results">Compare the Clustering Results<a class="anchor-link" href="#Compare-the-Clustering-Results"> </a></h2><p>How are the clustering results different between the algorithms? Consider, e.g., the number of clusters, the shape of clusters, general problems with using the algorithms, and the insights you get from each algorithm.</p>
+<p>You may also use this to better understand the differences between the algorithms. For example, how are the results from EM clustering different/similar to the results of the $k$-Means clustering? Is there a relationship between the WSS and the BIC? How are the mean values of EM related to the centroids of $k$-Means? What is the relationship between the parameters for DBSCAN and the cut-off for the hierarchical clustering?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following plots summarize the differences between the clustering results.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_kmeans</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+
+<span class="n">em</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">em</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_em</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+
+<span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">dbscan</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_dbscan</span> <span class="o">=</span> <span class="n">dbscan</span><span class="o">.</span><span class="n">labels_</span>
+<span class="n">noise_mask</span> <span class="o">=</span> <span class="n">y_dbscan</span><span class="o">&lt;</span><span class="mi">0</span>
+
+<span class="n">sl</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distance_threshold</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">linkage</span><span class="o">=</span><span class="s1">&#39;single&#39;</span><span class="p">,</span> <span class="n">compute_full_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
+<span class="n">y_sl</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">labels_</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_kmeans</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;$k$-Means with 3 clusters (PCA)&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_em</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;EM Clustering with 7 clusters (PCA)&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_dbscan</span><span class="p">[</span><span class="o">~</span><span class="n">noise_mask</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_dbscan</span><span class="p">[</span><span class="n">noise_mask</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;DBSCAN with eps=2.8, minPts=10 (PCA)&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">boston_pca</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">y_sl</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;SLINK Clustering with threshold 2.8&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Clustering_43_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We see that we get four different results, but all of them are somewhat similar. The one aspect that is stable for all results is that there is a city region and a suburb/rural region. The difference between the algorithms is how they differentiate within the city region. Except DBSCAN, all algorithm differentiate between different regions within the city. How the differentiate depends on the algorithms. How this compares exactly is already describes within the discussion for each algorithm.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
