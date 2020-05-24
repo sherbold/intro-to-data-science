@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: class metrics classes positive hypothesis classification negative b not performance confusion example matrix whale data c predicted tdtd tpr e instances values spam td tr case false because only curve h decision prediction frac average fpr roc thus x binary different predictions used scores value emails mean correctly between table instance mcc objects concept threshold result percentage macro based well f same four positives consider single often sum where means above true should micro k categories images our such score trtd tp metric auc surface shows get also o usually evaluate thresholds while t good incorrectly actual correct fn negatives
+search: class metrics classes positive classification hypothesis negative b not performance confusion example matrix whale data c predicted tdtd tpr e instances values spam td tr case false because only curve h decision prediction frac average fpr roc thus x binary different predictions used scores value emails mean correctly between table instance mcc objects concept threshold result percentage macro based well f means same four positives consider single often sum where above true should micro k categories images our also such score trtd tp metric auc surface following shows get o usually evaluate thresholds while t good incorrectly actual correct fn
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -743,10 +743,71 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We can see that there is no clear structure in the decision surface of the $k$-Nearest Neighbor classifier. The decisions boundaries have many sharp edges and do not look regular, e.g., like they are the result of a differentiable curve. This is because $k$-Nearest neighbor does not calculate a hypothesis that is some mathematical generalization of the data. Instance, we have an <em>instance-based</em> algorithm, where that defines the decision boundaries by direct comparisons between instances. When we compare how the result evolves with larger values of $k$ we see that single points have a smaller influence. For example, with $k=1$, there is a single yellow instance on the left side of the plot, which looks like an outlier. This outlier leads to a relatively large area that is yellow, where this region should clearly be rather purple or teal. With the larger neighborhood sizes, this effect vanishes. ON the other hand, large neighborhood sizes mean that instances that are further away can participate in the voting. With $k=20$ this leads to a relatively sharp boundary between teal and yellow, because not the points close to the boundary have the largest influence, but rather the points behind them. As soon as there are more yellow than teal points, the decision surface stay yellow. In comparison, with the smaller neighborhood size there are "islands" of teal within the yellow area.</p>
+<p>We can see that there is no clear structure in the decision surface of the $k$-Nearest Neighbor classifier. The decisions boundaries have many sharp edges and do not look regular, e.g., like they are the result of a differentiable curve. This is because $k$-Nearest neighbor does not calculate a hypothesis that is some mathematical generalization of the data. Instance, we have an <em>instance-based</em> algorithm, where that defines the decision boundaries by direct comparisons between instances. When we compare how the result evolves with larger values of $k$ we see that single points have a smaller influence. For example, with $k=1$, there is a single yellow instance on the left side of the plot, which looks like an outlier. This outlier leads to a relatively large area that is yellow, where this region should clearly be rather purple or teal. With the larger neighborhood sizes, this effect vanishes. on the other hand, large neighborhood sizes mean that instances that are further away can participate in the voting. With $k=20$ this leads to a relatively sharp boundary between teal and yellow, because not the points close to the boundary have the largest influence, but rather the points behind them. As soon as there are more yellow than teal points, the decision surface stay yellow. In comparison, with the smaller neighborhood size there are "islands" of teal within the yellow area. The following plots show how the neighborhood of the point (6,3.5) changes, which also means that the classification changes.</p>
 
 </div>
 </div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">NearestNeighbors</span>
+
+<span class="k">def</span> <span class="nf">plot_neighborhood</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">pnt</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">nbrs</span> <span class="o">=</span> <span class="n">NearestNeighbors</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;ball_tree&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">pnt_neighbors</span> <span class="o">=</span> <span class="n">nbrs</span><span class="o">.</span><span class="n">kneighbors</span><span class="p">(</span><span class="n">pnt</span><span class="p">)</span>
+    <span class="n">Y_pred</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">pnt</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">sc</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
+        <span class="n">pnt2</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">pnt_neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">pnt</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">pnt2</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="n">pnt</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">pnt2</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="n">sc</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">pnt_neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]]))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">pnt</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">pnt</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">sc</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">Y_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%i</span><span class="s1"> Neighbors&#39;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
+    
+<span class="n">pnt</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">]]</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">plot_neighborhood</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pnt</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_neighborhood</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">pnt</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plot_neighborhood</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">pnt</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_neighborhood</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">pnt</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">top</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/07_Classification_21_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -789,7 +850,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_22_0.png"
+<img src="images/07_Classification_23_0.png"
 >
 </div>
 
@@ -825,7 +886,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_23_0.png"
+<img src="images/07_Classification_24_0.png"
 >
 </div>
 
@@ -885,7 +946,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_25_0.png"
+<img src="images/07_Classification_26_0.png"
 >
 </div>
 
@@ -927,7 +988,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_26_0.png"
+<img src="images/07_Classification_27_0.png"
 >
 </div>
 
@@ -963,7 +1024,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_27_0.png"
+<img src="images/07_Classification_28_0.png"
 >
 </div>
 
@@ -999,7 +1060,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_28_0.png"
+<img src="images/07_Classification_29_0.png"
 >
 </div>
 
@@ -1046,7 +1107,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_30_0.png"
+<img src="images/07_Classification_31_0.png"
 >
 </div>
 
@@ -1096,7 +1157,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_32_0.png"
+<img src="images/07_Classification_33_0.png"
 >
 </div>
 
@@ -1194,7 +1255,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_34_0.png"
+<img src="images/07_Classification_35_0.png"
 >
 </div>
 
@@ -1266,7 +1327,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_35_0.png"
+<img src="images/07_Classification_36_0.png"
 >
 </div>
 
@@ -1308,7 +1369,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_36_0.png"
+<img src="images/07_Classification_37_0.png"
 >
 </div>
 
@@ -1365,7 +1426,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_38_0.png"
+<img src="images/07_Classification_39_0.png"
 >
 </div>
 
