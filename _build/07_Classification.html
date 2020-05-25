@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: class metrics classes positive classification hypothesis negative b not performance confusion example matrix whale data c predicted tdtd tpr e instances values spam td tr case false because only curve h decision prediction frac average fpr roc thus x binary different predictions used scores value emails mean correctly between table instance mcc objects concept threshold result percentage macro based well f means same four positives consider single often sum where above true should micro k categories images our also such score trtd tp metric auc surface following shows get o usually evaluate thresholds while t good incorrectly actual correct fn
+search: class metrics data c classification classes decision positive not hypothesis negative b example instances e performance confusion x matrix whale predicted tdtd tpr h only values because case thus spam td tr false curve based feature value prediction frac average concept used different instance fpr roc tree entropy binary threshold between predictions surface features scores sum emails mean correctly result table mcc objects also single where means same above percentage macro consider get well f four information positives area decisions following our such often true should micro small sepal yellow k categories images shows defined usually want just score while
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -815,7 +815,8 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Decision-Trees">Decision Trees<a class="anchor-link" href="#Decision-Trees"> </a></h2>
+<h2 id="Decision-Trees">Decision Trees<a class="anchor-link" href="#Decision-Trees"> </a></h2><p>Imagine trying to explain why you want to buy a certain car. You are likely describing features of the car that were your criteria for the decision: a car with at least five doors, a certain amount of horse power, etc. Some of these criteria are more important than others, i.e., you apply them first for selecting your car. This is the intuition behind a decision tree: logical rules are applied to features to make decisions about the class of instances. These decisions are structured in a tree as follows.</p>
+
 </div>
 </div>
 </div>
@@ -830,10 +831,10 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="k">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
 
-<span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">()</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;entropy&#39;</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">plot_tree</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">class_names</span><span class="o">=</span><span class="n">class_names</span><span class="p">)</span>
+<span class="n">plot_tree</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">class_names</span><span class="o">=</span><span class="n">class_names</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
@@ -862,6 +863,18 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 </div>
 </div>
 
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the example, the first decision is made about the sepal length. If it is less than or equal to 5.45, we go to the left side of the tree, if if is greater than 5.55, we go the the right side of the tree. We also see more information in the nodes of the tree. We ignore the entropy for now. Samples are the number of instance in the training to, based on which this decision was learned. Value are the number of instances of each class within the samples. In the first node (which is also called the root node), we have 150 samples, 50 of each class. The decision tree then just decides on the first class observed in the data, which is setosa in this case. The data is then partitioned based on the logical rule. 59 instances, 47 of which are Setosa have a sepal length less than or greater to 5.55, 91 instances have a sepal length greater than 5.55, 39 of which are Versicolor, 49 are Virginica. This shows the value of the decision trees: not only do we understand how decisions are made about the features, we also see the effect of the decisions on the data. The nodes on the lowest layer of the tree are called leaf nodes.</p>
+<p>The decision surface of the above tree looks as follows.</p>
+
+</div>
+</div>
+</div>
+</div>
+
 <div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
@@ -869,7 +882,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">DecisionTreeClassifier</span><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces of a Decision Tree&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surface of the Decision Tree above&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
@@ -886,7 +899,115 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_24_0.png"
+<img src="images/07_Classification_25_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that the decision boundaries that separate the decision surface between the classes are parallel to the axes. This is a general property of decision trees: because we have logical decision, usually of the form $leq$ or $geq$, the resulting partitions of the data are always cutting the current partitions in half in orthogonal to the axis of the feature and parallel to all other axes.</p>
+<p>The general idea how decisions trees are learned is based on a relatively simple recursive algorithm:</p>
+<ol>
+<li>Stop if the data is "pure", the amount of data is "too small", or the maximum depth is reached.</li>
+<li>Determine "most informative feature" $X'$</li>
+<li>Partition training data using $X'$</li>
+<li>Recursively create subtree for each partition starting with step 1.</li>
+</ol>
+<p>Thus, the general idea is to find the "most informative feature", partition the data using this feature, and repeat this until the data is "pure" or there is not amount of data left in the partition and the data is "too small". The concept of "too small" is always the same: if the number of instances is below a certain threshold, the recursion stops. A similar criterion is the maximum depth. This can be used to define a hard limit on the complexity of the tree. The depth of the tree is defined as the maximum number of decisions that are made, before the class is determined. For the purity and the most informative features, there are different concepts. Which concept is used and how exactly the partitions are determined depends on the variant of the decision tree, e.g., CART, ID3, or C4.5.</p>
+<p>Here, we want to briefly present how these concepts can be implemented based on <em>information theory</em>. The idea is to describe purity as the uncertainty in the data and the most informative feature based on the <em>information gain</em> if this feature is known. Information theory deals with the uncertainty of random variables. Therefore, we consider everything as random variable: the classification of instances is a discrete random variable C, our features are random variables $X_1, ..., X_m$. The core concept of information theory is the entropy of random variables. The higher the entropy, the more random a decision. For example, the entropy of flipping a fair coin that has a fifty percent probability for both heads and tails is 1. The entropy for an unfair coin that always lands on heads is 0. Thus, if we want to make informed decision with a high certainty, we want to find partitions of the data which minimize the entropy of the classification $C$. The definition of this entropy is</p>
+$$H(C) = -\sum_{c \in C} p(c) \log p(c)$$<p>where $p(c)$ is the probability of observing the class $c$ in the partition. If this entropy is below a defined threshold, the data is "pure".</p>
+<p>The <em>conditional entropy</em> tells us the uncertainty of the classification, if we know have perfect information about a feature and is defined as</p>
+$$H(C|X') = -\sum_{x \in X'} \sum_{c \in C} p(c|x) \log(p|x)$$<p>where $p(c|x)$ is the probability of observing the class $c$ given the value $x$ of the feature $X' \in \{X_1, ..., X_m\}$. Thus, the conditional entropy is a measure for how much information about the classification if contained in the feature $X'$. The lower the conditional entropy, the small the uncertainty about the classification if the feature is known. Thus, features are more <em>informative</em>, if the conditional entropy is smaller. When we combine the entropy of the classification and the conditional entropy of the classification if a feature is known, we get the <em>information gain</em> as the reduction in uncertainty, i.e.,</p>
+$$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature that maximizes the information gain. Once the feature is determined, the algorithms decide on a logical rule to create the partitions.</p>
+<p>The example of the decision surface above was for a very low depth, i.e., we only allowed two decisions. While this is useful to display the structure of the decision tree and explain how the decision surface looks like, most problems require decision trees with greater depth. If we do not limit the depth and define what "too small" means, we get a decision tree with the following decision surface.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">DecisionTreeClassifier</span><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surface of the Decision Tree without Restrictions&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/07_Classification_27_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that there are many more decisions. More importantly, we can see that <em>overfitting</em> occured. For example, there is a small teal area at the sepal length 7, that cuts right through the yellow area, just because there is a single teal instance. Similarly, there is are several very small yellow rectangles in the center of the plot that cut single points out of the teal area. These are all typical examples of overfitting. Decision trees tend to overfit data, if the number of decisions (i.e., the depth) and/or the minimal number of samples required in a partition is not limited. If we limit the tree such that we allow only leaf nodes that have at least 5 instances, we get the following result.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">min_samples_leaf</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surface of the Decision Tree with</span><span class="se">\n</span><span class="s2">at least 5 Instance in Leafnodes&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/07_Classification_29_0.png"
 >
 </div>
 
@@ -946,7 +1067,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_26_0.png"
+<img src="images/07_Classification_31_0.png"
 >
 </div>
 
@@ -988,7 +1109,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_27_0.png"
+<img src="images/07_Classification_32_0.png"
 >
 </div>
 
@@ -1024,7 +1145,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_28_0.png"
+<img src="images/07_Classification_33_0.png"
 >
 </div>
 
@@ -1060,7 +1181,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_29_0.png"
+<img src="images/07_Classification_34_0.png"
 >
 </div>
 
@@ -1107,7 +1228,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_31_0.png"
+<img src="images/07_Classification_36_0.png"
 >
 </div>
 
@@ -1157,7 +1278,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_33_0.png"
+<img src="images/07_Classification_38_0.png"
 >
 </div>
 
@@ -1255,7 +1376,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_35_0.png"
+<img src="images/07_Classification_40_0.png"
 >
 </div>
 
@@ -1327,7 +1448,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_36_0.png"
+<img src="images/07_Classification_41_0.png"
 >
 </div>
 
@@ -1369,7 +1490,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_37_0.png"
+<img src="images/07_Classification_42_0.png"
 >
 </div>
 
@@ -1426,7 +1547,7 @@ $$TPR_{whale} = \frac{TP_{whale}}{TP_{whale}+FN_{whale}}.$$</p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_39_0.png"
+<img src="images/07_Classification_44_0.png"
 >
 </div>
 
