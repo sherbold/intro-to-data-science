@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: class metrics data c classification classes decision positive not hypothesis negative b example instances e performance confusion x matrix whale predicted tdtd tpr h only values because case thus spam td tr false curve based feature value prediction frac average concept used different instance fpr roc tree entropy binary threshold between predictions surface features scores sum emails mean correctly result table mcc objects also single where means same above percentage macro consider get well f four information positives area decisions following our such often true should micro small sepal yellow k categories images shows defined usually want just score while
+search: class decision data metrics classification c classes not positive instances example e hypothesis negative b features performance confusion only x matrix whale predicted tdtd tpr trees because tree thus h same four values random case spam different td tr average used prediction false based feature curve concept value instance frac get means result fpr roc entropy our binary threshold between predictions classifier surface also scores single sum emails mean correctly above table mcc training objects often where percentage macro small decisions weak consider following well f true information positives however very area yellow general usually such similar want should informative
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -1023,7 +1023,8 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Random-Forests">Random Forests<a class="anchor-link" href="#Random-Forests"> </a></h2>
+<h2 id="Random-Forests">Random Forests<a class="anchor-link" href="#Random-Forests"> </a></h2><p>The general idea behind random forests is to combine multiple decision trees into a single classifier. This is known as <em>ensemble</em> learning, i.e., a random forest is an ensemble of decision trees. Below, you see how a random forest may be created from four decision trees.</p>
+
 </div>
 </div>
 </div>
@@ -1079,6 +1080,17 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 </div>
 </div>
 
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Each of these decision trees on its own is bad. This is further highlighted when we look at the decision surfaces of the four trees.</p>
+
+</div>
+</div>
+</div>
+</div>
+
 <div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
@@ -1109,7 +1121,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_32_0.png"
+<img src="images/07_Classification_33_0.png"
 >
 </div>
 
@@ -1118,6 +1130,17 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For example, the first and fourth decision tree both never classify anything as Virginica (teal). Thus, individually, we have four <em>weak classifier</em>. However, if we combine the results of the four classifiers and output the average prediction of each tree, we get the following.</p>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -1145,7 +1168,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_33_0.png"
+<img src="images/07_Classification_35_0.png"
 >
 </div>
 
@@ -1157,6 +1180,17 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 </div>
 </div>
 
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is a much better result, even though this is only based on four weak classifiers. This concept, to build a <em>strong classifier</em> by averaging over many weak classifier is comparable to the audience joker of Who Wants to be a Millionaire. Individually, the audience is a weak help. However, because the questions are in a way that often most people guess the correct answer, the average prediction of the group is reliable. The same is true in this example. Individually, the four decision trees are bad. However, some are good at identifying purple, others at yellow. Taken together, the individual strengths add up and cancel out the weaknesses. Usually, this is not done with four trees, but with hundreds, or even thousands of trees. Below, you can find the result with 1000 trees.</p>
+
+</div>
+</div>
+</div>
+</div>
+
 <div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
@@ -1164,7 +1198,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces a Random Forest with 100 Trees&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces a Random Forest with 100 Trees&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
@@ -1181,7 +1215,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_34_0.png"
+<img src="images/07_Classification_37_0.png"
 >
 </div>
 
@@ -1190,6 +1224,68 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The explanation of random forest so far is only for the <em>ensemble</em> nature of the approach, i.e., how a strong classifier is created from many weak classifier. The open question is, how does the random forest determine different decision trees from the same data, that are used as weak classifier? In general, the algorithms for the training of decision tree are deterministic, i.e., if you run the algorithm twice on the same data, you get twice the same decision tree. Therefore, we must explore how the training of decision trees is randomized by random forests.</p>
+<p>We get our first indicator for this, when we look at the individual weak learners. Here is the first of the four decision trees from above.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plot_tree</span><span class="p">(</span><span class="n">randomforest</span><span class="o">.</span><span class="n">estimators_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">class_names</span><span class="o">=</span><span class="n">class_names</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/07_Classification_39_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We observe that the number of samples in the first node is 101 and we have 51 Setosa, 52 Versicolor, and 47 Virginica. This means that this is not our original Iris data. What we observe is the first randomization of the training of the decision trees in random forests: the training data is a so called <em>bootstrap sample</em> of the original data. This means that if we have 150 instance in our training data, we randomly draw with replacement 150 instances from our training data. Because we draw with replacement, we will have some instances multiple times, and other instances will not be part of the bootstrap sample. On average, we expect that we draw about 63.2% unique instances from the original data, the remaining data will be duplicates. Thus, all decision trees in a random forest get different instances for the training. Drawing bootstrap samples to train multiple classifiers as an ensemble is also called <em>bagging</em>, which is short for <em>boostrap aggregating</em>.</p>
+<p>The second randomization of random forest is a randomization of the features. Not every decision tree gets all features for the training. Instead, a random subset of the features is used. Commonly, the square root of the number of features is used, e.g, if we have four features, each tree may only use $\sqrt{4}=2$ features. The rational for the subsets of features is that otherwise there is a large risk that all trees would use the same small subset of most informative features and other, less informative features, would not play a role for the classification. This would go against the idea of the ensemble, which is to use many different weak learners with different strengths. If all weak learners would reason over the same (or very similar) features, there would be a high risk that the weak learners would all have the same strength and weaknesses.</p>
+<p>The risk of always using the same small subset of features is amplified by another aspect of random forests: often, the individual decision trees have a very low depth. This makes sense, because we want weak learners. However, this means that every tree uses only few features, which increases the risk that we would always have a similar set of features over which the decisions are made. The randomization of the available features counters this problem effectively and gives every feature a chance.</p>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -1228,7 +1324,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_36_0.png"
+<img src="images/07_Classification_42_0.png"
 >
 </div>
 
@@ -1278,7 +1374,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_38_0.png"
+<img src="images/07_Classification_44_0.png"
 >
 </div>
 
@@ -1376,7 +1472,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_40_0.png"
+<img src="images/07_Classification_46_0.png"
 >
 </div>
 
@@ -1448,7 +1544,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_41_0.png"
+<img src="images/07_Classification_47_0.png"
 >
 </div>
 
@@ -1490,7 +1586,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_42_0.png"
+<img src="images/07_Classification_48_0.png"
 >
 </div>
 
@@ -1547,7 +1643,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_44_0.png"
+<img src="images/07_Classification_50_0.png"
 >
 </div>
 
