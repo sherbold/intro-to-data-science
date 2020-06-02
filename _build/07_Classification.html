@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: class decision data metrics classification c classes not positive instances example e hypothesis negative b features performance confusion only x matrix whale predicted tdtd tpr trees because tree thus h same four values random case spam different td tr average used prediction false based feature curve concept value instance frac get means result fpr roc entropy our binary threshold between predictions classifier surface also scores single sum emails mean correctly above table mcc training objects often where percentage macro small decisions weak consider following well f true information positives however very area yellow general usually such similar want should informative
+search: class c decision data classification metrics classes not positive instances b e example odds hypothesis features negative because performance confusion feature only x matrix whale thus predicted tdtd tpr random trees means frac tree case four values y p h same different spam instance td tr average used prediction false our concept based value curve sepal also get result fpr roc entropy binary threshold between predictions classifier surface scores single sum emails mean correctly above table mcc very training length decisions objects f often where percentage macro small weak consider following general well defined true information positives should however area
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -1293,7 +1293,14 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Logistic-Regression">Logistic Regression<a class="anchor-link" href="#Logistic-Regression"> </a></h2>
+<h2 id="Logistic-Regression">Logistic Regression<a class="anchor-link" href="#Logistic-Regression"> </a></h2><p>Logistic regression tries to estimate the <em>odds</em> that an instance belongs to a class. To understand what this means, we briefly revisit the concept of odds from statistics. Let $P(Y=c)$ be the probability that a random variable $Y$ equals $c$. The odds of $Y$ being $c$ are defined as</p>
+$$odds(c) = \frac{P(Y=c)}{1-P(Y=c)}.$$<p>What this means gets clear with an example. Assume the random variable $Y$ models the probability of passing an exam and $c=pass$ with $P(Y=pass)=0.75$. This means that the odds of passing the exam are</p>
+$$odds(pass) = \frac{0.75}{1-0.75} = 3.$$<p>In other words, the odds are of passing the exam is three to one.</p>
+<p>The odds are closely related to the logistic or <em>logit</em> function, which is defined as</p>
+$$logit(P(Y=c)) = \ln \frac{P(Y=c)}{1-P(Y=c)},$$<p>i.e., as the natural logarithm of the odds of $c$. This function is the namesake of logistic regression. When we say that the random variable $Y$ models that probability that an instance belongs to a class, and $c \in C$ are our classes, then $logit(P(Y=c))$ is nothing else but the logarithm of the odds that the instance is of that class.</p>
+<p>The regression is nothing more than a linear regression (details in Chapter 8) of the form</p>
+$$logit(P(Y=c)) = \ln \frac{P(Y=c)}{1-P(Y=c)} = b_0 + b_1x_1 + ... + b_mx_m$$<p>for with features $\mathcal{F} = \mathbb{R}^m$. In two dimensions, the forumula of linear regression describes a line, in three dimensions a plane, etc. This is also how our decision boundaries look like.</p>
+
 </div>
 </div>
 </div>
@@ -1340,6 +1347,120 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>The decisions are made along lines that separate the feature space into different regions. A strength of logistic regression is that we can understand how each feature affects the classification. This is because we have a regression model of the logit function. We can reformulate this using the exponential function as follows:</p>
+$$
+\begin{split}
+&amp;\ln \frac{P(Y=c)}{1-P(Y=c)} &amp;= b_0 + b_1x_1 + ... + b_mx_m \\
+\Rightarrow\quad &amp;\frac{P(Y=c)}{1-P(Y=c)} &amp;= \exp( b_0 + b_1x_1 + ... + b_mx_m ) \\
+\Rightarrow\quad &amp;odds(c) &amp;= \exp( b_0 ) \cdot \Pi_{i=1}^m \exp(b_ix_i) \\
+\end{split}
+$$<p>Thus, the odds of the class are the product of these exponentials. The impact of feature $i, i=1, ..., m$ on the odds is $\exp(b_ix_i)$. From this follows that $exp(b_j)$ is the <em>odds ratio</em> of feature $i$. The odds ratio defines by how much the odds change due to this feature. For example, an odds ratio of 2 means that the odds would double if the value of the feature would be increased by one. In general, an odds ratio greater than one means that the odds increase if $x_i$ increases, an odds ratio of less than 1 means that the odds decrease if $x_i$ increases. Because the exponent of the coefficients is the odds ratio, the coefficient are also called the <em>log odds ratios</em>.</p>
+<p>We can also determine the odds ratios for our logistic regression model of the Iris.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">odds_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">lr</span><span class="o">.</span><span class="n">coef_</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">class_names</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">odds_df</span><span class="p">[</span><span class="s1">&#39;intercept&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">lr</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+<span class="n">odds_df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sepal length (cm)</th>
+      <th>sepal width (cm)</th>
+      <th>intercept</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>setosa</th>
+      <td>0.066610</td>
+      <td>10.216701</td>
+      <td>2733.180675</td>
+    </tr>
+    <tr>
+      <th>versicolor</th>
+      <td>1.845467</td>
+      <td>0.207923</td>
+      <td>6.328398</td>
+    </tr>
+    <tr>
+      <th>virginica</th>
+      <td>8.134952</td>
+      <td>0.470746</td>
+      <td>0.000058</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that the odds of Setosa increases strongly with the sepal width and decreases with the sepal length. Similarly, we can see that the odds of Versicolor and Virginica both increase with the sepal length and decrease with the sepal width. The intercept are the odds in case all features are exactly 0, i.e., $b_0$. Thus, all changes due to increasing feature values are with respect to the intercept. Because the intercept of Versicolor is larger than that of Virginica, there is a region in which the odds for Versicolor are larger, even though the increase in odds due to the sepal length is weaker and the decrease in odds is stronger than for Virginica.</p>
+<blockquote><p>Note:</p>
+<p>In this case the intercept is misleading. While the intercept for Setosa is very high, the coefficient for sepal length is very low. Given that the instances all have sepal lengths greater than four, this means that the impact of the large intercept vanishes because of this. For an in-depth analysis, the data should always be centered, e.g., with Z-score standardization.</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Naive-Bayes">Naive Bayes<a class="anchor-link" href="#Naive-Bayes"> </a></h2>
 </div>
 </div>
@@ -1374,7 +1495,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_44_0.png"
+<img src="images/07_Classification_47_0.png"
 >
 </div>
 
@@ -1472,7 +1593,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_46_0.png"
+<img src="images/07_Classification_49_0.png"
 >
 </div>
 
@@ -1544,7 +1665,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_47_0.png"
+<img src="images/07_Classification_50_0.png"
 >
 </div>
 
@@ -1586,7 +1707,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_48_0.png"
+<img src="images/07_Classification_51_0.png"
 >
 </div>
 
@@ -1643,7 +1764,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_50_0.png"
+<img src="images/07_Classification_53_0.png"
 >
 </div>
 

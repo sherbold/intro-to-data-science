@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /07_Classification.html
 suffix: .ipynb
-search: clusters k cluster clustering x not means points data also instances algorithm e between because core c distance values em example dbscan same similar based different results middle slink features only however bic used thus mean bottom left good minpts objects algorithms such green wss value instance right neighbors epsilon into result d determine purple general large center covariance houses top must yellow very cities our still small parameters level above distances any concept ci point normal covariances likelihood o update iteration problems within f defined y cannot instead should belongs town describe assigned dense already distributions g bit just
+search: clusters k cluster clustering x not means points data also instances algorithm e between because core c distance values em example dbscan same similar based different results middle slink features only however bic used thus mean bottom left good minpts objects algorithms such green wss value right neighbors epsilon into result d determine purple general large center instance covariance houses top must yellow very cities our still small parameters level above distances any concept ci point normal covariances likelihood o update iteration problems within f defined cannot instead should belongs town describe assigned dense already distributions g bit just problem
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -1560,14 +1560,14 @@ $$d(C, C') = \min_{x\in C, x' \in X'} dist(x, x').$$<p>Each cluster that is dete
 <p>The second row shows the results for the half-moons. We see what we already discussed above: $k$-Means can only find more or less circular clusters and EM ellipsoid clusters. Thus, both fail on that data and the clusters do not make sense. DBSCAN and SLINK work well, because they build their clusters on pair-wise neighborship of instances, which works with any shape of clusters, as long there is a gap between the clusters. This can be broken by a "bridge" between the two moons is demonstrated in the third row.</p>
 <p>The fourth row demonstrates that while $k$-Means and EM clustering work in general for round shapes, it is also important that these round shapes are not within each other. If we have a circle within a circle, this is also not correctly identified by the clustering.</p>
 <h3 id="Number-of-Clusters">Number of Clusters<a class="anchor-link" href="#Number-of-Clusters"> </a></h3><p>Another strength of DBSCAN and SLINK clustering is that they can determine the number of clusters automatically, just by knowing the definition of core points, respectively the maximum level. EM clustering also provides good support to determine the number of clusters with the BIC, which has a minimal value that is optimal. The WSS may be used for $k$-Means, but looking for elbows in a plot is very fuzzy and requires a high expertise by the data scientists.</p>
-<h3 id="Execution-Time">Execution Time<a class="anchor-link" href="#Execution-Time"> </a></h3><p>While the cluster results are certainly important, the execution time can also be a factor. Below are the results of the execution time of clustering data with 20 features for 10,000, 100,000, 1,000,000, 10,000,000, and 100,000,000 instances, i.e. up to about 15 Gigabytes of data. Please note that we omit SLINK from this comparison, because it already crashes with 100,000 instances. The measurements are done with a normal laptop (Intel Core i7-8850 @ 2.60GHz, 32 GB RAM) with scikit-learn 0.22.</p>
+<h3 id="Execution-Time">Execution Time<a class="anchor-link" href="#Execution-Time"> </a></h3><p>While the cluster results are certainly important, the execution time can also be a factor. Below are the results of the execution time of clustering data with 20 features for 10,000, 100,000, 1,000,000, 10,000,000, and 100,000,000 instances, i.e. up to about 15 Gigabytes of data. Please note that we omit SLINK from this comparison, because it already crashes with 100,000 instances. The measurements are done with a normal laptop (Intel Core i7-8850 @ 2.60GHz, 32 GB RAM) with scikit-learn 0.23.1.</p>
 
 </div>
 </div>
 </div>
 </div>
 
-<div class="jb_cell tag_hide_input">
+<div class="jb_cell">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -1591,7 +1591,6 @@ $$d(C, C') = \min_{x\in C, x' \in X'} dist(x, x').$$<p>Each cluster that is dete
     <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
     <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">4</span><span class="p">)]</span>
 
-
 <span class="n">instances</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e3</span><span class="p">,</span><span class="mf">1e4</span><span class="p">,</span><span class="mf">1e5</span><span class="p">,</span><span class="mf">1e6</span><span class="p">,</span><span class="mf">1e7</span><span class="p">,</span><span class="mf">1e8</span><span class="p">]</span>
 <span class="n">runtime</span> <span class="o">=</span> <span class="p">[[],[],[]]</span>
 <span class="k">for</span> <span class="n">num_instances</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
@@ -1601,7 +1600,6 @@ $$d(C, C') = \min_{x\in C, x' \in X'} dist(x, x').$$<p>Each cluster that is dete
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span>
         <span class="n">cl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="n">elapsed</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
-        <span class="n">times_fit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elapsed</span><span class="p">)</span>
         <span class="n">runtime</span><span class="p">[</span><span class="n">cl_cnt</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elapsed</span><span class="p">)</span>
         
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
