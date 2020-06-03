@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: class c data decision p not classification classes metrics features x positive e instances b example because odds hypothesis negative feature performance instance confusion only thus frac random case matrix whale means predicted tdtd tpr y trees values tree same four our h different bayes based value probability spam td tr average sepal used prediction false naive concept get curve also between often result fpr very classifier roc entropy well scores binary threshold mean predictions surface length f function single score sum emails correctly above table mcc however training decisions objects consider defined such where percentage should macro small yellow
+search: data class c decision not p classification instances classes e metrics features x positive example feature b because odds hypothesis only negative thus performance instance confusion same frac random case means matrix whale predicted tdtd tpr y trees our values tree used four based h different between bayes value probability spam td tr average sepal concept prediction false naive get also function curve yellow result very training often line fpr classifier roc surface entropy well scores single binary threshold mean above predictions however length decisions following shows general f such score sum where emails correctly table should mcc svms objects
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -1532,7 +1532,8 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Support-Vector-Machines">Support Vector Machines<a class="anchor-link" href="#Support-Vector-Machines"> </a></h2>
+<h2 id="Support-Vector-Machines-(SVMs)">Support Vector Machines (SVMs)<a class="anchor-link" href="#Support-Vector-Machines-(SVMs)"> </a></h2><p>Support Vector Machines (SVMs) are an approach based on the optimization of the decision boundary. We only discuss the general concepts of SVMs, the complete mathematical description of how and why SVMs work is beyond our scope. The following visualization will help us to understand how SVMs determine the decision boundary.</p>
+
 </div>
 </div>
 </div>
@@ -1597,7 +1598,6 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x_1$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$x_2$&#39;</span><span class="p">)</span>
 
-
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
@@ -1623,6 +1623,27 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The plot shows two groups: the dots in the yellow and purple areas. The data can easily be separated with a single line. Three such lines are shown in the plot. The solid line is as far away from the data as possible, the two dashed lines are so close to the data, the they actually intersect with data points. For the data depicted in the plot, the classification with all three lines as decision boundary would be the same. The difference between the three lines is the <em>margin</em>, i.e., the minimal distance from the line to any instance of each color. The dashed lines <em>minimize</em> the margin, i.e., there is no gap between the decision boundary and the observed data. The solid line <em>maximizes</em> the margin, i.e., this is the line that has the largest possible distance to yellow and the purple instances. Moreover, the distance to the closest yellow instances and the closest purple instances from the solid line is the same.</p>
+<p>The maximization of this distance is the optimization target of SVMs: try to find a line (or rather a hyperplane) that is as far away as possible from the actual data. The rational for this is roughly this:</p>
+<ul>
+<li>Our training data is only a sample. </li>
+<li>It stands to reason that there are more data points, especially also more extreme data points, that are not part of the sample. </li>
+<li>This means that these data points could fall into the region between the dashed lines, though it is likely that they are close to the dashed lines. </li>
+<li>If we were to use one of the dashed lines as decision boundary, we would misclassify these extreme data points. </li>
+<li>By maximizing the margin and using the solid line, we minimize the likelihood of misclassification due to extreme data points. </li>
+</ul>
+<p>The SVM gets their name from the <em>support vectors</em>. These are the circled instances on the dashed lines. These instances all have the the same distance to the decision boundary and are responsible for the margin. Training with only the support vectors would lead to the same result as training with all data, because there would still not be a better line to separate the data.</p>
+<p>However, SVMs would not be as popular as they are, if they could only learn the linear decision boundaries. The SVMs use the <em>feature expansion</em> to learn non-linear decision boundaries. The idea is to calculate new features and then find a linear decision boundary in this transformed feature space with a higher dimension. The linear decisions look non-linear in the lower dimensional space. The following figure visualizes this concept.</p>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -1686,7 +1707,7 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_51_0.png"
+<img src="images/07_Classification_52_0.png"
 >
 </div>
 
@@ -1695,6 +1716,19 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>On the left side, we see two circles as sample data. It is obvious that there is no line that can separate the purple instances from the yellow instances. Thus, a linear separation with an SVM is not possible. The right side shows the expansion of the data with a new feature ($x_1^2+x_2^2). When we look at the data in three dimensions, we see that the yellow data is at the bottom and the purple data is at the top. We can just cut this data with a plane to separate the data linearly, which was not possible with the original dimensions.</p>
+<p>The feature expansion is done using <em>kernel functions</em>. The kernel function defines how new features are calculated. The above example used a <em>polynomial</em> kernel, where the feature space is expanded using a quadratic function. This transformation can still be visualized. Other kernel transformations are more complex, e.g., the <em>Radial Basis Function</em> (RBF). Here, the radial distances between the instances are the foundation of the kernel and the resulting feature space has infinite dimensions. This can neither be visualized, nor easily used for calculations. Thus, it is - in general - not possible to visualize how the expanded feature look like. Internally, SVMs avoid to actually expand the features using the <em>kernel trick</em>, which we do not discuss in greater detail.</p>
+<p>The shape of the decision surface depends on the kernel that is used for the feature expansion. The visualization below shows how the decision boundaries for the Iris data look like for a linear SVM (i.e., no kernel), a polynomial SVM, and a SVM with an RBF kernel.</p>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -1728,7 +1762,7 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_52_0.png"
+<img src="images/07_Classification_54_0.png"
 >
 </div>
 
@@ -1737,6 +1771,19 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote><p>Note:</p>
+<p>Kernel functions and SVMs have additional parameters. When you want to use SVMs in practice, you should learn more about these parameters, as they can make a big difference in the classification performance. SVMs can be very powerful, but this depends a lot on the selection of a good kernel function with appropriate parameters.</p>
+</blockquote>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -1785,7 +1832,7 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_54_0.png"
+<img src="images/07_Classification_57_0.png"
 >
 </div>
 
