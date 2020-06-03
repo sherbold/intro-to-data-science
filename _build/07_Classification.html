@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: class c decision data classification metrics classes not positive instances b e example odds hypothesis features negative because performance confusion feature only x matrix whale thus predicted tdtd tpr random trees means frac tree case four values y p h same different spam instance td tr average used prediction false our concept based value curve sepal also get result fpr roc entropy binary threshold between predictions classifier surface scores single sum emails mean correctly above table mcc very training length decisions objects f often where percentage macro small weak consider following general well defined true information positives should however area
+search: class c data decision p not classification classes metrics features x positive e instances b example because odds hypothesis negative feature performance instance confusion only thus frac random case matrix whale means predicted tdtd tpr y trees values tree same four our h different bayes based value probability spam td tr average sepal used prediction false naive concept get curve also between often result fpr very classifier roc entropy well scores binary threshold mean predictions surface length f function single score sum emails correctly above table mcc however training decisions objects consider defined such where percentage should macro small yellow
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -1449,7 +1449,7 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We can see that the odds of Setosa increases strongly with the sepal width and decreases with the sepal length. Similarly, we can see that the odds of Versicolor and Virginica both increase with the sepal length and decrease with the sepal width. The intercept are the odds in case all features are exactly 0, i.e., $b_0$. Thus, all changes due to increasing feature values are with respect to the intercept. Because the intercept of Versicolor is larger than that of Virginica, there is a region in which the odds for Versicolor are larger, even though the increase in odds due to the sepal length is weaker and the decrease in odds is stronger than for Virginica.</p>
 <blockquote><p>Note:</p>
-<p>In this case the intercept is misleading. While the intercept for Setosa is very high, the coefficient for sepal length is very low. Given that the instances all have sepal lengths greater than four, this means that the impact of the large intercept vanishes because of this. For an in-depth analysis, the data should always be centered, e.g., with Z-score standardization.</p>
+<p>In this case the intercept is misleading. While the intercept for Setosa is very high, the coefficient for sepal length is very low. Given that the instances all have sepal lengths greater than four, this means that the impact of the large intercept vanishes because of this. For an in-depth analysis, the data should always be centered, e.g., with Z-score standardization. Moreover, in case the interpretation of the coefficients is the primary goal, you should consider to use a package like statsmodels instead of scikit-learn, because the regression analysis is more detailed, especially with respect to the statistical significance of the results.</p>
 </blockquote>
 
 </div>
@@ -1461,7 +1461,17 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Naive-Bayes">Naive Bayes<a class="anchor-link" href="#Naive-Bayes"> </a></h2>
+<h2 id="Naive-Bayes">Naive Bayes<a class="anchor-link" href="#Naive-Bayes"> </a></h2><p>Bayes Law is one of the fundamental theorems of stochastics and defined as</p>
+$$P(Y|X) = \frac{P(X|Y)P(Y)}{P(X)}.$$<p>If the random variable $X$ are our features, and the random variable $Y$ are our classes, $P(Y|X)$ is the probability of a class given the features. A perfect estimation of this would be an ideal scoring function for a score based classifier. In our case, we have</p>
+$$P(c|x_1, ..., x_m) = \frac{P(x_1, ..., x_m|c)P(c)}{P(x_1, ..., x_m)}$$<p>for a class $c \in C$ and an instance $(x_1, ..., x_m) \in \mathcal{F}$. Thus the probability of the class $c$ given the instance $(x_1, ..., x_m)$ is the probability of this instance given the class multiplied with the probability of observing this class and divided by the probability of observing the instance. The problem with Bayes Law is that it is usually very hard to accurately calculate $P(x_1, ..., x_m|c)$ and $P(x_1, ..., x_m)$, because this would require either the exact knowledge of the underlying joint probability distribution of all features, or an enormous amount of data, such that there are multiple observations for each possible instance.</p>
+<p>Instead, we go from Bayes Law to Naive Bayes. The core of Naive Bayes is the "naive assumption" that the features are conditionally independent given the class. For example, for the Iris data this would mean that the sepal length of Setosa is independent of the sepal width of Setosa. The data clearly shows that this is not the case. Hence, this assumption is almost never fulfilled and, therefore, naive.</p>
+<p>However, from a mathematical point of view, conditional independence given the class means that</p>
+$$P(x_1, ..., x_m | c) = \Pi_{i=1}^m P(x_i|c),$$<p>i.e., we do not need the joint distribution of all features anymore, but can work with the distribution of the individual features instead, which is much less complex. When we substitute this into Bayes Law, we get</p>
+$$P(c|x_1, ..., x_m) = \frac{\Pi_{i=1}^m P(x_i|c)P(c)}{P(x_1, ..., x_m)}.$$<p>We still have the joint probability $P(x_1, ..., x_m)$ in the denominator. However, this probability is independent of the class $c$. Since we are not really interested in the exact probability, but only in a scoring function that we can use for classification, we can just leave out the denominator, because it does not affect which class scores highest for an instance. Thus, we get</p>
+$$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this scoring function and assign the class with the highest score. The open question is how $P(x_i|c)$ and $P(c)$ are calculated. For $P(c)$ this is straightforward, as this can be estimated by counting how often each class is observed in the data.</p>
+<p>The two most popular approach for the estimation of $P(x_i|c)$ are <em>Multinomial Naive Bayes</em> and <em>Gaussian Naive Bayes</em>. Multinomial Naive Bayes calculates $P(x_i|c)$ by counting how often the value $x_i$ is observed for the class $c$. This approach works well with categorical data and counts. Multinomial Naive Bayes does not work well with continuous numeric data, because the counts are very often exactly 1, because it is unlikely to observe the exact same value multiple times with continuous data. Gaussian Naive Bayes is better suited for such data. Gaussian Naive Bayes assumes that each feature follows a normal distribution and estimates the probability $P(x_i|c)$ through the density function of a normal distribution that is fitted based on all instance values for a feature.</p>
+<p>Below, we can see the difference between Multinomial Naive Bayes and Gaussian Naive Bayes for the Iris data.</p>
+
 </div>
 </div>
 </div>
@@ -1477,8 +1487,8 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="k">import</span> <span class="n">GaussianNB</span><span class="p">,</span> <span class="n">MultinomialNB</span>
 
 <span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">GaussianNB</span><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces of Gaussian Naive Bayes&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">MultinomialNB</span><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces of Multinomial Naive Bayes&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">MultinomialNB</span><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces of Multinomial Naive Bayes&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">GaussianNB</span><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces of Gaussian Naive Bayes&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
@@ -1504,6 +1514,17 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The decision boundaries of Multinomial Naive Bayes are linear, whereas the decision surfaces of Gaussian Naive Bayes are quadratic. We can see that Multinomial Naive Bayes does not work well, especially the separation between green and yellow does not seem reasonable. This is expected, because the data is numeric. Gaussian Naive Bayes yields better results.</p>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -1593,7 +1614,7 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_49_0.png"
+<img src="images/07_Classification_50_0.png"
 >
 </div>
 
@@ -1665,7 +1686,7 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_50_0.png"
+<img src="images/07_Classification_51_0.png"
 >
 </div>
 
@@ -1707,7 +1728,7 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_51_0.png"
+<img src="images/07_Classification_52_0.png"
 >
 </div>
 
@@ -1764,7 +1785,7 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_53_0.png"
+<img src="images/07_Classification_54_0.png"
 >
 </div>
 
