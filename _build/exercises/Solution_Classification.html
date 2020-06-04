@@ -1,0 +1,983 @@
+---
+redirect_from:
+  - "/exercises/solution-classification"
+interact_link: content/exercises/Solution_Classification.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Classification
+pagenum: 20
+prev_page:
+  url: /exercises/Solution_Clustering.html
+next_page:
+  url: /Appendix.html
+suffix: .ipynb
+search: data random training test forest performance best depth k nearest exercise different classifiers parameters results trees not classifier neighbor try algorithms tree also because classes performs classification set please good depths need sklearn class same train precision improve decision logistic regression tanh larger scores better max further due both micro macro learn compare note hyper e g activation functions task libraries evaluate algorithm forests datasets fetchcovtype start require check represented available amount works means prediction acceptable minutes mcc recall f maximal gaussian naive bayes relu combinations perform mlp clearly inferior lower values second tuning observe overall does confusion matrix metrics
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Classification</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With this exercise, you can learn more about classification. You can try out the algorithms on a data set and compare the performance of the different classifiers with different performance metrics.</p>
+<p>Please note that the biggest challenge of this exercise is to select good <em>hyper parameters</em> of the algorithms, e.g., tree depths, activation functions, etc. The performance of the algorithms depends on this. In the bonus task, you can see that this can quickly consume huge amounts of computational capacity.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>Your task in this exercise is pretty straight forward: apply different classification algorithms to a data set, evaluate the results, and determine the best algorithm. You can find everything you need in <code>sklearn</code>. We use <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_covtype.html#sklearn.datasets.fetch_covtype">data about dominant types of trees in forests</a> in this exercise.</p>
+<p>We start by loading the data an importing the libraries we require. We also print the description of the data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">fetch_covtype</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">precision_recall_fscore_support</span><span class="p">,</span><span class="n">matthews_corrcoef</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="k">import</span> <span class="n">MLPClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">SVC</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="k">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="k">import</span> <span class="n">GaussianNB</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">forests</span> <span class="o">=</span> <span class="n">fetch_covtype</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">forests</span><span class="o">.</span><span class="n">data</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">forests</span><span class="o">.</span><span class="n">target</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">forests</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>.. _covtype_dataset:
+
+Forest covertypes
+-----------------
+
+The samples in this dataset correspond to 30×30m patches of forest in the US,
+collected for the task of predicting each patch&#39;s cover type,
+i.e. the dominant species of tree.
+There are seven covertypes, making this a multiclass classification problem.
+Each sample has 54 features, described on the
+`dataset&#39;s homepage &lt;https://archive.ics.uci.edu/ml/datasets/Covertype&gt;`__.
+Some of the features are boolean indicators,
+while others are discrete or continuous measurements.
+
+**Data Set Characteristics:**
+
+    =================   ============
+    Classes                        7
+    Samples total             581012
+    Dimensionality                54
+    Features                     int
+    =================   ============
+
+:func:`sklearn.datasets.fetch_covtype` will load the covertype dataset;
+it returns a dictionary-like object
+with the feature matrix in the ``data`` member
+and the target values in ``target``.
+The dataset will be downloaded from the web if necessary.
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now take a rudimentary look at the data. Most importantly, we check if there is class level imbalance or if each class is represented the same in the available data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;#instances&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Classification_4_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Training-and-test-data">Training and test data<a class="anchor-link" href="#Training-and-test-data"> </a></h2><p>Before you can start building classifiers, you need to separate the data into training and test data. Because the data is quite large, please use 5% of the data for training, and 95% of the data for testing. Because you are selecting such a small subset, it could easily happen that not all classes are represented the same way in the training and in the test data. Use <em>stratified sampling</em> to avoid this.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">Y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We check the distribution of the class labels in the training data to ensure that the stratification had the desired effect.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">Y_train</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;#instances&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Classification_8_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Train,-Test,-Evaluate">Train, Test, Evaluate<a class="anchor-link" href="#Train,-Test,-Evaluate"> </a></h2><p>Now that training and test data are available, you can try out the classifiers from Chapter 7. You will notice that some classifiers may require a long amount of time for training and may, therefore, not be suitable for the analysis of this data set.</p>
+<p>Try to find a classifier that works well with the data. On this data, this means two things:</p>
+<ul>
+<li>Training and prediction in an acceptable amount of time. Use "less than 10 minutes" as definition for acceptable on this exercise sheet.</li>
+<li>Good prediction performance as measured with MCC, recall, precision, and F-Measure. </li>
+</ul>
+<p>The different classifiers have different parameters, also known as <em>hyper parameters</em>, e.g., the depth of a tree, or the number of trees used by a random forest. Try to find good parameters to improve the results.</p>
+<p>We train a $k$-Nearest Neighbors Classifier with $k=3, 5, 10$, Decision Trees with maximal depths 5, 10, and 20, Random Forests with 1000 trees in the ensemble that have maximal depth of 3 and 5, a Logistic Regression classifier, a Gaussian Naive Bayes, and MLPs with three hidden layers with 100 neurons with RelU and tanh as activation functions. Thus, we test some parameter combinations that affect the complexity of the resulting models. We do not train any SVM, because the training time is larger than 10 minutes.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">classifiers</span> <span class="o">=</span> <span class="p">[</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+               <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+               <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+               <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+               <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+               <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+               <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+               <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+               <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">100000</span><span class="p">),</span>
+               <span class="n">GaussianNB</span><span class="p">(),</span>
+               <span class="n">MLPClassifier</span><span class="p">(</span><span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                             <span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+               <span class="n">MLPClassifier</span><span class="p">(</span><span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                             <span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;tanh&#39;</span><span class="p">)]</span>
+
+<span class="n">clf_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Nearest Neighbors (k=3)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Nearest Neighbors (k=5)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Nearest Neighbors (k=10)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Decision Tree (Max Depth=5)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Decision Tree (Max Depth=10)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Decision Tree (Max Depth=20)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Random Forest (Max Depth=3)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Random Forest (Max Depth=5)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Logistic Regression&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Gaussian Naive Bayes&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;MLP (RelU)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;MLP (tanh)&quot;</span><span class="p">]</span>
+
+<span class="n">scores_micro</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">scores_macro</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">scores_mcc</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">clf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">clf_names</span><span class="p">,</span> <span class="n">classifiers</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fitting classifier&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;predicting labels for classifier&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">Y_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+    <span class="n">scores_micro</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">precision_recall_fscore_support</span><span class="p">(</span>
+        <span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;micro&quot;</span><span class="p">)</span>
+    <span class="n">scores_macro</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">precision_recall_fscore_support</span><span class="p">(</span>
+        <span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">)</span>
+    <span class="n">scores_mcc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">)</span>
+
+<span class="n">scores_micro_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">scores_micro</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span>
+                               <span class="s1">&#39;precision (micro)&#39;</span><span class="p">,</span> <span class="s1">&#39;recall (micro)&#39;</span><span class="p">,</span> <span class="s1">&#39;fscore (micro)&#39;</span><span class="p">,</span> <span class="s1">&#39;support&#39;</span><span class="p">])</span>
+<span class="n">scores_micro_df</span> <span class="o">=</span> <span class="n">scores_micro_df</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># drop support</span>
+<span class="n">scores_macro_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">scores_macro</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span>
+                               <span class="s1">&#39;precision (macro)&#39;</span><span class="p">,</span> <span class="s1">&#39;recall (macro)&#39;</span><span class="p">,</span> <span class="s1">&#39;fscore (macro)&#39;</span><span class="p">,</span> <span class="s1">&#39;support&#39;</span><span class="p">])</span>
+<span class="n">scores_macro_df</span> <span class="o">=</span> <span class="n">scores_macro_df</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">scores_df</span> <span class="o">=</span> <span class="n">scores_macro_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scores_micro_df</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">scores_mcc</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;MCC&#39;</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>fitting classifier Nearest Neighbors (k=3)
+predicting labels for classifier Nearest Neighbors (k=3)
+fitting classifier Nearest Neighbors (k=5)
+predicting labels for classifier Nearest Neighbors (k=5)
+fitting classifier Nearest Neighbors (k=10)
+predicting labels for classifier Nearest Neighbors (k=10)
+fitting classifier Decision Tree (Max Depth=5)
+predicting labels for classifier Decision Tree (Max Depth=5)
+fitting classifier Decision Tree (Max Depth=10)
+predicting labels for classifier Decision Tree (Max Depth=10)
+fitting classifier Decision Tree (Max Depth=20)
+predicting labels for classifier Decision Tree (Max Depth=20)
+fitting classifier Random Forest (Max Depth=3)
+predicting labels for classifier Random Forest (Max Depth=3)
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/lib/python3.6/dist-packages/sklearn/metrics/_classification.py:1221: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>fitting classifier Random Forest (Max Depth=5)
+predicting labels for classifier Random Forest (Max Depth=5)
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/lib/python3.6/dist-packages/sklearn/metrics/_classification.py:1221: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>fitting classifier Logistic Regression
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/lib/python3.6/dist-packages/sklearn/linear_model/_logistic.py:764: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of f AND g EVALUATIONS EXCEEDS LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  extra_warning_msg=_LOGISTIC_SOLVER_CONVERGENCE_MSG)
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>predicting labels for classifier Logistic Regression
+fitting classifier Gaussian Naive Bayes
+predicting labels for classifier Gaussian Naive Bayes
+fitting classifier MLP (RelU)
+predicting labels for classifier MLP (RelU)
+fitting classifier MLP (tanh)
+predicting labels for classifier MLP (tanh)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now look at the scores.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scores_df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Nearest Neighbors (k=3)</th>
+      <th>Nearest Neighbors (k=5)</th>
+      <th>Nearest Neighbors (k=10)</th>
+      <th>Decision Tree (Max Depth=5)</th>
+      <th>Decision Tree (Max Depth=10)</th>
+      <th>Decision Tree (Max Depth=20)</th>
+      <th>Random Forest (Max Depth=3)</th>
+      <th>Random Forest (Max Depth=5)</th>
+      <th>Logistic Regression</th>
+      <th>Gaussian Naive Bayes</th>
+      <th>MLP (RelU)</th>
+      <th>MLP (tanh)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>precision (macro)</th>
+      <td>0.791443</td>
+      <td>0.783250</td>
+      <td>0.771295</td>
+      <td>0.639873</td>
+      <td>0.716850</td>
+      <td>0.723114</td>
+      <td>0.279480</td>
+      <td>0.279673</td>
+      <td>0.532170</td>
+      <td>0.382979</td>
+      <td>0.769944</td>
+      <td>0.576269</td>
+    </tr>
+    <tr>
+      <th>recall (macro)</th>
+      <td>0.717409</td>
+      <td>0.680059</td>
+      <td>0.593828</td>
+      <td>0.461665</td>
+      <td>0.606345</td>
+      <td>0.693489</td>
+      <td>0.274127</td>
+      <td>0.301216</td>
+      <td>0.426783</td>
+      <td>0.582227</td>
+      <td>0.663174</td>
+      <td>0.374119</td>
+    </tr>
+    <tr>
+      <th>fscore (macro)</th>
+      <td>0.749952</td>
+      <td>0.722707</td>
+      <td>0.653111</td>
+      <td>0.472032</td>
+      <td>0.639261</td>
+      <td>0.706874</td>
+      <td>0.273517</td>
+      <td>0.289963</td>
+      <td>0.455168</td>
+      <td>0.348337</td>
+      <td>0.697845</td>
+      <td>0.397133</td>
+    </tr>
+    <tr>
+      <th>precision (micro)</th>
+      <td>0.845881</td>
+      <td>0.831650</td>
+      <td>0.803552</td>
+      <td>0.704661</td>
+      <td>0.755717</td>
+      <td>0.796053</td>
+      <td>0.664439</td>
+      <td>0.679398</td>
+      <td>0.708431</td>
+      <td>0.447357</td>
+      <td>0.805179</td>
+      <td>0.696369</td>
+    </tr>
+    <tr>
+      <th>recall (micro)</th>
+      <td>0.845881</td>
+      <td>0.831650</td>
+      <td>0.803552</td>
+      <td>0.704661</td>
+      <td>0.755717</td>
+      <td>0.796053</td>
+      <td>0.664439</td>
+      <td>0.679398</td>
+      <td>0.708431</td>
+      <td>0.447357</td>
+      <td>0.805179</td>
+      <td>0.696369</td>
+    </tr>
+    <tr>
+      <th>fscore (micro)</th>
+      <td>0.845881</td>
+      <td>0.831650</td>
+      <td>0.803552</td>
+      <td>0.704661</td>
+      <td>0.755717</td>
+      <td>0.796053</td>
+      <td>0.664439</td>
+      <td>0.679398</td>
+      <td>0.708431</td>
+      <td>0.447357</td>
+      <td>0.805179</td>
+      <td>0.696369</td>
+    </tr>
+    <tr>
+      <th>MCC</th>
+      <td>0.750438</td>
+      <td>0.726275</td>
+      <td>0.678803</td>
+      <td>0.513247</td>
+      <td>0.600747</td>
+      <td>0.670790</td>
+      <td>0.425586</td>
+      <td>0.458928</td>
+      <td>0.517158</td>
+      <td>0.293639</td>
+      <td>0.680702</td>
+      <td>0.493616</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see that $k$-Nearest Neighbor yields the best results with $k=3$ and the Decision Tree and Random Forest perform better with larger depths. Morepver RelU works better than the tanh for the MLP. Logistic Regression and Gaussian Naive Bayes are clearly inferior to the best performing approaches. We now re-run the experiement. We drop the Logistic Regression, the inferior combinations of $k$ and Max Depth, and the MLP with tanh. Moreover, we consider lower values for $k$ and larger for the Max Depth, because the results may further improve. Please note that due to this second round of tuning, our <em>test data</em> is now <em>validation data</em> instead. If you perform additional tuning due to results on the test data even once, this means that you would actually need new test data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">classifiers</span> <span class="o">=</span> <span class="p">[</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+               <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+               <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+               <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+               <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">40</span><span class="p">),</span>
+               <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+               <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+               <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+               <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+               <span class="n">MLPClassifier</span><span class="p">(</span><span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                             <span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)]</span>
+
+<span class="n">clf_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Nearest Neighbors (k=1)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Nearest Neighbors (k=2)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Nearest Neighbors (k=3)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Decision Tree (Max Depth=20)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Decision Tree (Max Depth=40)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Decision Tree (Max Depth=60)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Random Forest (Max Depth=5)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Random Forest (Max Depth=10)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Random Forest (Max Depth=20)&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;MLP (RelU)&quot;</span><span class="p">]</span>
+
+<span class="n">scores_micro</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">scores_macro</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">scores_mcc</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">clf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">clf_names</span><span class="p">,</span> <span class="n">classifiers</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fitting classifier&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;predicting labels for classifier&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">Y_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+    <span class="n">scores_micro</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">precision_recall_fscore_support</span><span class="p">(</span>
+        <span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;micro&quot;</span><span class="p">)</span>
+    <span class="n">scores_macro</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">precision_recall_fscore_support</span><span class="p">(</span>
+        <span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">)</span>
+    <span class="n">scores_mcc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">)</span>
+
+<span class="n">scores_micro_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">scores_micro</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span>
+                               <span class="s1">&#39;precision (micro)&#39;</span><span class="p">,</span> <span class="s1">&#39;recall (micro)&#39;</span><span class="p">,</span> <span class="s1">&#39;fscore (micro)&#39;</span><span class="p">,</span> <span class="s1">&#39;support&#39;</span><span class="p">])</span>
+<span class="n">scores_micro_df</span> <span class="o">=</span> <span class="n">scores_micro_df</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># drop support</span>
+<span class="n">scores_macro_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">scores_macro</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span>
+                               <span class="s1">&#39;precision (macro)&#39;</span><span class="p">,</span> <span class="s1">&#39;recall (macro)&#39;</span><span class="p">,</span> <span class="s1">&#39;fscore (macro)&#39;</span><span class="p">,</span> <span class="s1">&#39;support&#39;</span><span class="p">])</span>
+<span class="n">scores_macro_df</span> <span class="o">=</span> <span class="n">scores_macro_df</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">scores_df</span> <span class="o">=</span> <span class="n">scores_macro_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scores_micro_df</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">scores_mcc</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;MCC&#39;</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>fitting classifier Nearest Neighbors (k=1)
+predicting labels for classifier Nearest Neighbors (k=1)
+fitting classifier Nearest Neighbors (k=2)
+predicting labels for classifier Nearest Neighbors (k=2)
+fitting classifier Nearest Neighbors (k=3)
+predicting labels for classifier Nearest Neighbors (k=3)
+fitting classifier Decision Tree (Max Depth=20)
+predicting labels for classifier Decision Tree (Max Depth=20)
+fitting classifier Decision Tree (Max Depth=40)
+predicting labels for classifier Decision Tree (Max Depth=40)
+fitting classifier Decision Tree (Max Depth=60)
+predicting labels for classifier Decision Tree (Max Depth=60)
+fitting classifier Random Forest (Max Depth=5)
+predicting labels for classifier Random Forest (Max Depth=5)
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/lib/python3.6/dist-packages/sklearn/metrics/_classification.py:1221: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>fitting classifier Random Forest (Max Depth=10)
+predicting labels for classifier Random Forest (Max Depth=10)
+fitting classifier Random Forest (Max Depth=20)
+predicting labels for classifier Random Forest (Max Depth=20)
+fitting classifier MLP (RelU)
+predicting labels for classifier MLP (RelU)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now look at the scores to see if the other parameters further improved the scores to see which classifier performs best.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scores_df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Nearest Neighbors (k=1)</th>
+      <th>Nearest Neighbors (k=2)</th>
+      <th>Nearest Neighbors (k=3)</th>
+      <th>Decision Tree (Max Depth=20)</th>
+      <th>Decision Tree (Max Depth=40)</th>
+      <th>Decision Tree (Max Depth=60)</th>
+      <th>Random Forest (Max Depth=5)</th>
+      <th>Random Forest (Max Depth=10)</th>
+      <th>Random Forest (Max Depth=20)</th>
+      <th>MLP (RelU)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>precision (macro)</th>
+      <td>0.794655</td>
+      <td>0.820940</td>
+      <td>0.791443</td>
+      <td>0.727700</td>
+      <td>0.711408</td>
+      <td>0.714764</td>
+      <td>0.281145</td>
+      <td>0.840286</td>
+      <td>0.858069</td>
+      <td>0.750735</td>
+    </tr>
+    <tr>
+      <th>recall (macro)</th>
+      <td>0.786020</td>
+      <td>0.675316</td>
+      <td>0.717409</td>
+      <td>0.694281</td>
+      <td>0.714149</td>
+      <td>0.716788</td>
+      <td>0.302748</td>
+      <td>0.472277</td>
+      <td>0.675403</td>
+      <td>0.690844</td>
+    </tr>
+    <tr>
+      <th>fscore (macro)</th>
+      <td>0.790195</td>
+      <td>0.729277</td>
+      <td>0.749952</td>
+      <td>0.709070</td>
+      <td>0.712714</td>
+      <td>0.715711</td>
+      <td>0.291475</td>
+      <td>0.514868</td>
+      <td>0.728476</td>
+      <td>0.713081</td>
+    </tr>
+    <tr>
+      <th>precision (micro)</th>
+      <td>0.869547</td>
+      <td>0.838342</td>
+      <td>0.845881</td>
+      <td>0.795682</td>
+      <td>0.797939</td>
+      <td>0.800321</td>
+      <td>0.683174</td>
+      <td>0.745785</td>
+      <td>0.835998</td>
+      <td>0.806367</td>
+    </tr>
+    <tr>
+      <th>recall (micro)</th>
+      <td>0.869547</td>
+      <td>0.838342</td>
+      <td>0.845881</td>
+      <td>0.795682</td>
+      <td>0.797939</td>
+      <td>0.800321</td>
+      <td>0.683174</td>
+      <td>0.745785</td>
+      <td>0.835998</td>
+      <td>0.806367</td>
+    </tr>
+    <tr>
+      <th>fscore (micro)</th>
+      <td>0.869547</td>
+      <td>0.838342</td>
+      <td>0.845881</td>
+      <td>0.795682</td>
+      <td>0.797939</td>
+      <td>0.800321</td>
+      <td>0.683174</td>
+      <td>0.745785</td>
+      <td>0.835998</td>
+      <td>0.806367</td>
+    </tr>
+    <tr>
+      <th>MCC</th>
+      <td>0.790433</td>
+      <td>0.743187</td>
+      <td>0.750438</td>
+      <td>0.670192</td>
+      <td>0.675715</td>
+      <td>0.679393</td>
+      <td>0.464566</td>
+      <td>0.578605</td>
+      <td>0.732535</td>
+      <td>0.686682</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We observe that 1-Nearest Neighbor clearly performs best overall, with the best values for MCC, F-Score (both micro and macro), recall (both micro and macro), and precision (micro). Only for precision (macro) is slightly lower than for the $2$-Nearest Neighbor model and the Random Forest with Max Depth 10. We also observe that the Decision Tree does not further improve with deeper trees than 20. The Random Forest also performs best with depth 20. The Random Forest performs second best overall.</p>
+<p>We now compare the confusion matrix of the 1-Nearest Neighbor classifier with the confusion matrix of the Random Forest, with the hope that we may see an indication why the Random Forest does not achieve the same performance as the nearest neighbor algorithm.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">plot_confusion_matrix</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">classifiers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">classifiers</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">clf_names</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">clf_names</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Classification_18_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This detailed view of the performance shows us that the performance difference is mainly due to the classes 5 and 6. For both classes, the random forest is much better than the random forest. For all other classes, the performance is comparable.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
