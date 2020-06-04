@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: data class c decision not p classification instances classes e metrics features x positive example feature b because odds hypothesis only negative thus performance instance confusion same frac random case means matrix whale predicted tdtd tpr y trees our values tree used four based h different between bayes value probability spam td tr average sepal concept prediction false naive get also function curve yellow result very training often line fpr classifier roc surface entropy well scores single binary threshold mean above predictions however length decisions following shows general f such score sum where emails correctly table should mcc svms objects
+search: data class c decision not e p classification instances classes features metrics x example feature positive because only b negative odds hypothesis thus function different performance instance confusion case same between values frac random our used means predicted matrix whale tdtd tpr y trees based value four tree probability also h bayes spam td tr training average sepal concept prediction false curve yellow naive neural neurons get f often networks activation general where result very surface layer input shows three well single sum line above fpr should however classifier roc small decisions entropy g such scores binary using threshold mean
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -1791,7 +1791,454 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Neural-Networks">Neural Networks<a class="anchor-link" href="#Neural-Networks"> </a></h2>
+<h2 id="Neural-Networks">Neural Networks<a class="anchor-link" href="#Neural-Networks"> </a></h2><p>Neural networks are based on the idea to mimic the communication between neurons in the human brain to make decisions. The general idea is relatively simple. Neurons are <em>activated</em> and <em>propagate</em> the values of their activation to other neurons. These neurons than determine their activation based on the propagated input from other neurons.</p>
+<p>A simple neural network may look like this.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">graphviz</span> <span class="k">import</span> <span class="n">Digraph</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Digraph</span><span class="p">()</span>
+<span class="n">network</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="n">splines</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="n">rankdir</span><span class="o">=</span><span class="s1">&#39;LR&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add three input neurons</span>
+<span class="k">with</span> <span class="n">network</span><span class="o">.</span><span class="n">subgraph</span><span class="p">()</span> <span class="k">as</span> <span class="n">layer</span><span class="p">:</span>
+    <span class="n">layer</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="s1">&#39;x_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;filled&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+    
+<span class="c1"># Add two hidden layers with 4 neurons</span>
+<span class="k">with</span> <span class="n">network</span><span class="o">.</span><span class="n">subgraph</span><span class="p">()</span> <span class="k">as</span> <span class="n">layer</span><span class="p">:</span>
+    <span class="n">layer</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="s1">&#39;f1_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;filled&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">network</span><span class="o">.</span><span class="n">subgraph</span><span class="p">()</span> <span class="k">as</span> <span class="n">layer</span><span class="p">:</span>
+    <span class="n">layer</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="s1">&#39;f2_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;filled&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add one output neuron</span>
+<span class="k">with</span> <span class="n">network</span><span class="o">.</span><span class="n">subgraph</span><span class="p">()</span> <span class="k">as</span> <span class="n">layer</span><span class="p">:</span>
+    <span class="n">layer</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+    <span class="n">layer</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;filled&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">)</span>
+    
+<span class="c1"># Fully connected network between layers</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="s1">&#39;x_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;f1_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">j</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="s1">&#39;f1_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;f2_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">j</span><span class="p">)</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="s1">&#39;f2_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">)</span>
+    
+<span class="c1"># Ensure correct order of nodes through invisible edges</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="s1">&#39;x_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;x_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;invis&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="s1">&#39;f1_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;f1_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;invis&#39;</span><span class="p">)</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="s1">&#39;f2_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;f2_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;invis&#39;</span><span class="p">)</span>
+    
+<span class="c1"># Visualize the graph</span>
+<span class="n">display</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_svg output_subarea ">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %3 Pages: 1 -->
+<svg width="332pt" height="206pt"
+ viewBox="0.00 0.00 332.00 206.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 202)">
+<title>%3</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-202 328,-202 328,4 -4,4"/>
+<!-- x_1 -->
+<g id="node1" class="node">
+<title>x_1</title>
+<ellipse fill="#ffa500" stroke="#ffa500" cx="27" cy="-153" rx="27" ry="18"/>
+<text text-anchor="middle" x="27" y="-149.3" font-family="Times,serif" font-size="14.00" fill="#000000">x_1</text>
+</g>
+<!-- x_2 -->
+<g id="node2" class="node">
+<title>x_2</title>
+<ellipse fill="#ffa500" stroke="#ffa500" cx="27" cy="-99" rx="27" ry="18"/>
+<text text-anchor="middle" x="27" y="-95.3" font-family="Times,serif" font-size="14.00" fill="#000000">x_2</text>
+</g>
+<!-- x_1&#45;&gt;x_2 -->
+<!-- f1_1 -->
+<g id="node4" class="node">
+<title>f1_1</title>
+<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="117" cy="-180" rx="27" ry="18"/>
+<text text-anchor="middle" x="117" y="-176.3" font-family="Times,serif" font-size="14.00" fill="#000000">f1_1</text>
+</g>
+<!-- x_1&#45;&gt;f1_1 -->
+<g id="edge1" class="edge">
+<title>x_1&#45;&gt;f1_1</title>
+<path fill="none" stroke="#000000" d="M52.07,-160.521C61.5102,-163.3531 72.4169,-166.6251 82.564,-169.6692"/>
+<polygon fill="#000000" stroke="#000000" points="81.7915,-173.0915 92.3755,-172.6126 83.803,-166.3867 81.7915,-173.0915"/>
+</g>
+<!-- f1_2 -->
+<g id="node5" class="node">
+<title>f1_2</title>
+<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="117" cy="-126" rx="27" ry="18"/>
+<text text-anchor="middle" x="117" y="-122.3" font-family="Times,serif" font-size="14.00" fill="#000000">f1_2</text>
+</g>
+<!-- x_1&#45;&gt;f1_2 -->
+<g id="edge2" class="edge">
+<title>x_1&#45;&gt;f1_2</title>
+<path fill="none" stroke="#000000" d="M52.07,-145.479C61.5102,-142.6469 72.4169,-139.3749 82.564,-136.3308"/>
+<polygon fill="#000000" stroke="#000000" points="83.803,-139.6133 92.3755,-133.3874 81.7915,-132.9085 83.803,-139.6133"/>
+</g>
+<!-- f1_3 -->
+<g id="node6" class="node">
+<title>f1_3</title>
+<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="117" cy="-72" rx="27" ry="18"/>
+<text text-anchor="middle" x="117" y="-68.3" font-family="Times,serif" font-size="14.00" fill="#000000">f1_3</text>
+</g>
+<!-- x_1&#45;&gt;f1_3 -->
+<g id="edge3" class="edge">
+<title>x_1&#45;&gt;f1_3</title>
+<path fill="none" stroke="#000000" d="M43.0902,-138.5188C56.9542,-126.0413 77.1669,-107.8498 92.9519,-93.6433"/>
+<polygon fill="#000000" stroke="#000000" points="95.6541,-95.9201 100.7457,-86.6289 90.9713,-90.717 95.6541,-95.9201"/>
+</g>
+<!-- f1_4 -->
+<g id="node7" class="node">
+<title>f1_4</title>
+<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="117" cy="-18" rx="27" ry="18"/>
+<text text-anchor="middle" x="117" y="-14.3" font-family="Times,serif" font-size="14.00" fill="#000000">f1_4</text>
+</g>
+<!-- x_1&#45;&gt;f1_4 -->
+<g id="edge4" class="edge">
+<title>x_1&#45;&gt;f1_4</title>
+<path fill="none" stroke="#000000" d="M38.0358,-136.4464C53.5549,-113.1677 81.9587,-70.5619 100.1352,-43.2972"/>
+<polygon fill="#000000" stroke="#000000" points="103.2391,-44.951 105.874,-34.6891 97.4147,-41.0681 103.2391,-44.951"/>
+</g>
+<!-- x_3 -->
+<g id="node3" class="node">
+<title>x_3</title>
+<ellipse fill="#ffa500" stroke="#ffa500" cx="27" cy="-45" rx="27" ry="18"/>
+<text text-anchor="middle" x="27" y="-41.3" font-family="Times,serif" font-size="14.00" fill="#000000">x_3</text>
+</g>
+<!-- x_2&#45;&gt;x_3 -->
+<!-- x_2&#45;&gt;f1_1 -->
+<g id="edge5" class="edge">
+<title>x_2&#45;&gt;f1_1</title>
+<path fill="none" stroke="#000000" d="M43.0902,-113.4812C56.9542,-125.9587 77.1669,-144.1502 92.9519,-158.3567"/>
+<polygon fill="#000000" stroke="#000000" points="90.9713,-161.283 100.7457,-165.3711 95.6541,-156.0799 90.9713,-161.283"/>
+</g>
+<!-- x_2&#45;&gt;f1_2 -->
+<g id="edge6" class="edge">
+<title>x_2&#45;&gt;f1_2</title>
+<path fill="none" stroke="#000000" d="M52.07,-106.521C61.5102,-109.3531 72.4169,-112.6251 82.564,-115.6692"/>
+<polygon fill="#000000" stroke="#000000" points="81.7915,-119.0915 92.3755,-118.6126 83.803,-112.3867 81.7915,-119.0915"/>
+</g>
+<!-- x_2&#45;&gt;f1_3 -->
+<g id="edge7" class="edge">
+<title>x_2&#45;&gt;f1_3</title>
+<path fill="none" stroke="#000000" d="M52.07,-91.479C61.5102,-88.6469 72.4169,-85.3749 82.564,-82.3308"/>
+<polygon fill="#000000" stroke="#000000" points="83.803,-85.6133 92.3755,-79.3874 81.7915,-78.9085 83.803,-85.6133"/>
+</g>
+<!-- x_2&#45;&gt;f1_4 -->
+<g id="edge8" class="edge">
+<title>x_2&#45;&gt;f1_4</title>
+<path fill="none" stroke="#000000" d="M43.0902,-84.5188C56.9542,-72.0413 77.1669,-53.8498 92.9519,-39.6433"/>
+<polygon fill="#000000" stroke="#000000" points="95.6541,-41.9201 100.7457,-32.6289 90.9713,-36.717 95.6541,-41.9201"/>
+</g>
+<!-- x_3&#45;&gt;f1_1 -->
+<g id="edge9" class="edge">
+<title>x_3&#45;&gt;f1_1</title>
+<path fill="none" stroke="#000000" d="M38.0358,-61.5536C53.5549,-84.8323 81.9587,-127.4381 100.1352,-154.7028"/>
+<polygon fill="#000000" stroke="#000000" points="97.4147,-156.9319 105.874,-163.3109 103.2391,-153.049 97.4147,-156.9319"/>
+</g>
+<!-- x_3&#45;&gt;f1_2 -->
+<g id="edge10" class="edge">
+<title>x_3&#45;&gt;f1_2</title>
+<path fill="none" stroke="#000000" d="M43.0902,-59.4812C56.9542,-71.9587 77.1669,-90.1502 92.9519,-104.3567"/>
+<polygon fill="#000000" stroke="#000000" points="90.9713,-107.283 100.7457,-111.3711 95.6541,-102.0799 90.9713,-107.283"/>
+</g>
+<!-- x_3&#45;&gt;f1_3 -->
+<g id="edge11" class="edge">
+<title>x_3&#45;&gt;f1_3</title>
+<path fill="none" stroke="#000000" d="M52.07,-52.521C61.5102,-55.3531 72.4169,-58.6251 82.564,-61.6692"/>
+<polygon fill="#000000" stroke="#000000" points="81.7915,-65.0915 92.3755,-64.6126 83.803,-58.3867 81.7915,-65.0915"/>
+</g>
+<!-- x_3&#45;&gt;f1_4 -->
+<g id="edge12" class="edge">
+<title>x_3&#45;&gt;f1_4</title>
+<path fill="none" stroke="#000000" d="M52.07,-37.479C61.5102,-34.6469 72.4169,-31.3749 82.564,-28.3308"/>
+<polygon fill="#000000" stroke="#000000" points="83.803,-31.6133 92.3755,-25.3874 81.7915,-24.9085 83.803,-31.6133"/>
+</g>
+<!-- f1_1&#45;&gt;f1_2 -->
+<!-- f2_1 -->
+<g id="node8" class="node">
+<title>f2_1</title>
+<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="207" cy="-180" rx="27" ry="18"/>
+<text text-anchor="middle" x="207" y="-176.3" font-family="Times,serif" font-size="14.00" fill="#000000">f2_1</text>
+</g>
+<!-- f1_1&#45;&gt;f2_1 -->
+<g id="edge13" class="edge">
+<title>f1_1&#45;&gt;f2_1</title>
+<path fill="none" stroke="#000000" d="M144.003,-180C152.0277,-180 160.9665,-180 169.5309,-180"/>
+<polygon fill="#000000" stroke="#000000" points="169.7051,-183.5001 179.705,-180 169.705,-176.5001 169.7051,-183.5001"/>
+</g>
+<!-- f2_2 -->
+<g id="node9" class="node">
+<title>f2_2</title>
+<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="207" cy="-126" rx="27" ry="18"/>
+<text text-anchor="middle" x="207" y="-122.3" font-family="Times,serif" font-size="14.00" fill="#000000">f2_2</text>
+</g>
+<!-- f1_1&#45;&gt;f2_2 -->
+<g id="edge14" class="edge">
+<title>f1_1&#45;&gt;f2_2</title>
+<path fill="none" stroke="#000000" d="M137.4224,-167.7466C149.3897,-160.5662 164.7024,-151.3785 177.9143,-143.4514"/>
+<polygon fill="#000000" stroke="#000000" points="179.8842,-146.3512 186.6584,-138.2049 176.2827,-140.3487 179.8842,-146.3512"/>
+</g>
+<!-- f2_3 -->
+<g id="node10" class="node">
+<title>f2_3</title>
+<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="207" cy="-72" rx="27" ry="18"/>
+<text text-anchor="middle" x="207" y="-68.3" font-family="Times,serif" font-size="14.00" fill="#000000">f2_3</text>
+</g>
+<!-- f1_1&#45;&gt;f2_3 -->
+<g id="edge15" class="edge">
+<title>f1_1&#45;&gt;f2_3</title>
+<path fill="none" stroke="#000000" d="M130.2798,-164.0642C145.3017,-146.0379 169.9189,-116.4973 187.2077,-95.7507"/>
+<polygon fill="#000000" stroke="#000000" points="189.9526,-97.924 193.6657,-88.0012 184.575,-93.4427 189.9526,-97.924"/>
+</g>
+<!-- f2_4 -->
+<g id="node11" class="node">
+<title>f2_4</title>
+<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="207" cy="-18" rx="27" ry="18"/>
+<text text-anchor="middle" x="207" y="-14.3" font-family="Times,serif" font-size="14.00" fill="#000000">f2_4</text>
+</g>
+<!-- f1_1&#45;&gt;f2_4 -->
+<g id="edge16" class="edge">
+<title>f1_1&#45;&gt;f2_4</title>
+<path fill="none" stroke="#000000" d="M126.4615,-162.9694C142.22,-134.604 173.9424,-77.5036 192.5256,-44.0539"/>
+<polygon fill="#000000" stroke="#000000" points="195.5975,-45.7314 197.3944,-35.29 189.4784,-42.3319 195.5975,-45.7314"/>
+</g>
+<!-- f1_2&#45;&gt;f1_3 -->
+<!-- f1_2&#45;&gt;f2_1 -->
+<g id="edge18" class="edge">
+<title>f1_2&#45;&gt;f2_1</title>
+<path fill="none" stroke="#000000" d="M137.4224,-138.2534C149.3897,-145.4338 164.7024,-154.6215 177.9143,-162.5486"/>
+<polygon fill="#000000" stroke="#000000" points="176.2827,-165.6513 186.6584,-167.7951 179.8842,-159.6488 176.2827,-165.6513"/>
+</g>
+<!-- f1_2&#45;&gt;f2_2 -->
+<g id="edge19" class="edge">
+<title>f1_2&#45;&gt;f2_2</title>
+<path fill="none" stroke="#000000" d="M144.003,-126C152.0277,-126 160.9665,-126 169.5309,-126"/>
+<polygon fill="#000000" stroke="#000000" points="169.7051,-129.5001 179.705,-126 169.705,-122.5001 169.7051,-129.5001"/>
+</g>
+<!-- f1_2&#45;&gt;f2_3 -->
+<g id="edge20" class="edge">
+<title>f1_2&#45;&gt;f2_3</title>
+<path fill="none" stroke="#000000" d="M137.4224,-113.7466C149.3897,-106.5662 164.7024,-97.3785 177.9143,-89.4514"/>
+<polygon fill="#000000" stroke="#000000" points="179.8842,-92.3512 186.6584,-84.2049 176.2827,-86.3487 179.8842,-92.3512"/>
+</g>
+<!-- f1_2&#45;&gt;f2_4 -->
+<g id="edge21" class="edge">
+<title>f1_2&#45;&gt;f2_4</title>
+<path fill="none" stroke="#000000" d="M130.2798,-110.0642C145.3017,-92.0379 169.9189,-62.4973 187.2077,-41.7507"/>
+<polygon fill="#000000" stroke="#000000" points="189.9526,-43.924 193.6657,-34.0012 184.575,-39.4427 189.9526,-43.924"/>
+</g>
+<!-- f1_3&#45;&gt;f1_4 -->
+<!-- f1_3&#45;&gt;f2_1 -->
+<g id="edge23" class="edge">
+<title>f1_3&#45;&gt;f2_1</title>
+<path fill="none" stroke="#000000" d="M130.2798,-87.9358C145.3017,-105.9621 169.9189,-135.5027 187.2077,-156.2493"/>
+<polygon fill="#000000" stroke="#000000" points="184.575,-158.5573 193.6657,-163.9988 189.9526,-154.076 184.575,-158.5573"/>
+</g>
+<!-- f1_3&#45;&gt;f2_2 -->
+<g id="edge24" class="edge">
+<title>f1_3&#45;&gt;f2_2</title>
+<path fill="none" stroke="#000000" d="M137.4224,-84.2534C149.3897,-91.4338 164.7024,-100.6215 177.9143,-108.5486"/>
+<polygon fill="#000000" stroke="#000000" points="176.2827,-111.6513 186.6584,-113.7951 179.8842,-105.6488 176.2827,-111.6513"/>
+</g>
+<!-- f1_3&#45;&gt;f2_3 -->
+<g id="edge25" class="edge">
+<title>f1_3&#45;&gt;f2_3</title>
+<path fill="none" stroke="#000000" d="M144.003,-72C152.0277,-72 160.9665,-72 169.5309,-72"/>
+<polygon fill="#000000" stroke="#000000" points="169.7051,-75.5001 179.705,-72 169.705,-68.5001 169.7051,-75.5001"/>
+</g>
+<!-- f1_3&#45;&gt;f2_4 -->
+<g id="edge26" class="edge">
+<title>f1_3&#45;&gt;f2_4</title>
+<path fill="none" stroke="#000000" d="M137.4224,-59.7466C149.3897,-52.5662 164.7024,-43.3785 177.9143,-35.4514"/>
+<polygon fill="#000000" stroke="#000000" points="179.8842,-38.3512 186.6584,-30.2049 176.2827,-32.3487 179.8842,-38.3512"/>
+</g>
+<!-- f1_4&#45;&gt;f2_1 -->
+<g id="edge28" class="edge">
+<title>f1_4&#45;&gt;f2_1</title>
+<path fill="none" stroke="#000000" d="M126.4615,-35.0306C142.22,-63.396 173.9424,-120.4964 192.5256,-153.9461"/>
+<polygon fill="#000000" stroke="#000000" points="189.4784,-155.6681 197.3944,-162.71 195.5975,-152.2686 189.4784,-155.6681"/>
+</g>
+<!-- f1_4&#45;&gt;f2_2 -->
+<g id="edge29" class="edge">
+<title>f1_4&#45;&gt;f2_2</title>
+<path fill="none" stroke="#000000" d="M130.2798,-33.9358C145.3017,-51.9621 169.9189,-81.5027 187.2077,-102.2493"/>
+<polygon fill="#000000" stroke="#000000" points="184.575,-104.5573 193.6657,-109.9988 189.9526,-100.076 184.575,-104.5573"/>
+</g>
+<!-- f1_4&#45;&gt;f2_3 -->
+<g id="edge30" class="edge">
+<title>f1_4&#45;&gt;f2_3</title>
+<path fill="none" stroke="#000000" d="M137.4224,-30.2534C149.3897,-37.4338 164.7024,-46.6215 177.9143,-54.5486"/>
+<polygon fill="#000000" stroke="#000000" points="176.2827,-57.6513 186.6584,-59.7951 179.8842,-51.6488 176.2827,-57.6513"/>
+</g>
+<!-- f1_4&#45;&gt;f2_4 -->
+<g id="edge31" class="edge">
+<title>f1_4&#45;&gt;f2_4</title>
+<path fill="none" stroke="#000000" d="M144.003,-18C152.0277,-18 160.9665,-18 169.5309,-18"/>
+<polygon fill="#000000" stroke="#000000" points="169.7051,-21.5001 179.705,-18 169.705,-14.5001 169.7051,-21.5001"/>
+</g>
+<!-- f2_1&#45;&gt;f2_2 -->
+<!-- c -->
+<g id="node12" class="node">
+<title>c</title>
+<ellipse fill="#add8e6" stroke="#add8e6" cx="297" cy="-99" rx="27" ry="18"/>
+<text text-anchor="middle" x="297" y="-95.3" font-family="Times,serif" font-size="14.00" fill="#000000">c</text>
+</g>
+<!-- f2_1&#45;&gt;c -->
+<g id="edge17" class="edge">
+<title>f2_1&#45;&gt;c</title>
+<path fill="none" stroke="#000000" d="M223.0902,-165.5188C236.9542,-153.0413 257.1669,-134.8498 272.9519,-120.6433"/>
+<polygon fill="#000000" stroke="#000000" points="275.6541,-122.9201 280.7457,-113.6289 270.9713,-117.717 275.6541,-122.9201"/>
+</g>
+<!-- f2_2&#45;&gt;f2_3 -->
+<!-- f2_2&#45;&gt;c -->
+<g id="edge22" class="edge">
+<title>f2_2&#45;&gt;c</title>
+<path fill="none" stroke="#000000" d="M232.07,-118.479C241.5102,-115.6469 252.4169,-112.3749 262.564,-109.3308"/>
+<polygon fill="#000000" stroke="#000000" points="263.803,-112.6133 272.3755,-106.3874 261.7915,-105.9085 263.803,-112.6133"/>
+</g>
+<!-- f2_3&#45;&gt;f2_4 -->
+<!-- f2_3&#45;&gt;c -->
+<g id="edge27" class="edge">
+<title>f2_3&#45;&gt;c</title>
+<path fill="none" stroke="#000000" d="M232.07,-79.521C241.5102,-82.3531 252.4169,-85.6251 262.564,-88.6692"/>
+<polygon fill="#000000" stroke="#000000" points="261.7915,-92.0915 272.3755,-91.6126 263.803,-85.3867 261.7915,-92.0915"/>
+</g>
+<!-- f2_4&#45;&gt;c -->
+<g id="edge32" class="edge">
+<title>f2_4&#45;&gt;c</title>
+<path fill="none" stroke="#000000" d="M223.0902,-32.4812C236.9542,-44.9587 257.1669,-63.1502 272.9519,-77.3567"/>
+<polygon fill="#000000" stroke="#000000" points="270.9713,-80.283 280.7457,-84.3711 275.6541,-75.0799 270.9713,-80.283"/>
+</g>
+</g>
+</svg>
+
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Each node in the network represents a neuron. The neurons are organized in layers. We differentiate between the <em>input layer</em> (orange), the <em>hidden layers</em> (gray), and the <em>output layer</em> (blue). The input layer has one neuron for each feature and each of these neurons represents one feature. The example has three such neurons for features $x_1$, $x_2$, and $x_3$. The output layer contains our value of interest, in our case, the predicted class $c$. The hidden layers contain additional neurons and are used to correlated the information from the input layer in order to determine the value of the neurons in the output layer. These layers are <em>hidden</em>, because users of neural networks do observe what happens in these layers directly, but only indirectly through the input and the output. The edges between the neuron define to which other neurons the activation of the neurons is passed. In the example above, the we show <em>fully connected layers</em>, i.e., the activation is forwarded to each neuron in the next layer. A network that consists only of fully connected layers is also known as <em>Multilayer Perceptron</em> (MLP). There are many different kinds of neural network structures. However, a discussion of the different kinds of networks and their use cases is out of scope.</p>
+<p>Each neuron gets uses the weighted sum of the inputs to calculate its activation function. For example, the value of $f_{1,3}$ is calculated as</p>
+$$f_{1,1} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activation function</em> of the neuron and $w_i$ are the <em>weights</em> of each input. The activation function further transforms the input. Different activation functions have different effects. The visualization below shows four often used activation functions.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Identity&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;RelU&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="mi">1</span> <span class="o">/</span>
+                <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">))))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Logistic&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;tanh&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">top</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/07_Classification_59_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The simplest activation function is the identity, i.e., the weighted input are the activation of the neuron. The <em>recitified linear unit</em>, commonly just referred to as <em>RelU</em> is a variant of the identify, where all negative values are set to 0, i.e., there is no negative activation. The Logistic function and the tanh both have "S shapes". We already know the logistic function from the logistic regression. The logistic function maps the input to a probability distribution: if the weighted input is negative, the probability is less than 0.5, if the weighted input is positive, the weighted input is greater then 0.5. At around -3/+3, the output converges to -1/+1. <em>tanh</em> is roughly linear, if the weighted input is between -1 and 1. For values outside this range, the output of tanh quickly converges to -1/+1. Thus, with the exception of the identity, the other activation function somewhat "normalize" extreme inputs.</p>
+<p>The user of the neural network has to define the complete structure of the neural network, i.e., how many hidden layers there are, how many neurons there are on each layer, how the neurons are connected with each other to propagate their activations, and the activation function. The training of the neural network is the estimation of the weights, i.e., the influence of each input neuron on the activation function of a neuron. Below, we show how the choice of the activation function affects the training of a MLP for the Iris data, with three fully connected hidden layers that have 100 neurons each.</p>
+
 </div>
 </div>
 </div>
@@ -1817,6 +2264,7 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
                                     <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;tanh&#39;</span><span class="p">),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces of SVM (tanh)&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">top</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -1832,7 +2280,7 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_57_0.png"
+<img src="images/07_Classification_61_0.png"
 >
 </div>
 
@@ -1841,6 +2289,20 @@ $$score(c|c_1, ..., c_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As we can see, the decision surfaces all look different. Identity has linear decision boundary, Logistic and tanh both have a small curve in the decision boundaries and the shape of RelU can only be described as irregular. RelU also shows us the big risk when using neural networks: overfitting. Three fully connected layers with 100 neurons on each layer already have $2*(100*100)=20000$ weights that must be estimated, without even accounting for the weights between the input layer and the first hidden layer, and the last hidden layer and the output layer. This huge amount of parameters that must be estimated allowed the MLP with the RelU function to carve out a small yellow area for a single instance. This is a general problem of neural networks: if they are too small, they do not allow for good performance, if they are too large, there will be overfitting. Therefore, any kind of neural network should be used with care and the parameters should be carefully selected, e.g., with the help of a validation set, to prevent overfitting.</p>
+<blockquote><p>Note:</p>
+<p>This is not a "deep" dive into neural networks, we only scratch the surface of a vast amount of options you have with neural networks. There are different layer structures, e.g., convolution, pooling, or drop-out layers. Networks can also have "backward edges", leading to <em>recurrent</em> neural networks, or even have special kinds of neurons like Long-Short-Term-Memory (LSTM) networks. In general, this things lead to different "network architectures", where different architectures are well suited for different purposes, e.g., convolutional neural networks for object recognition, LSTM networks for text mining, or generative adversarial networks (GANs) to improve training or create artificial data. Thus, before using deep learning, there is a vast amount of options that you must be aware of, so you can define appropriate network structures. Please be aware that while powerful, neural networks usually require large amounts of data to achieve a good performance. Thus, if you only have a limited amount of data available, other options are often better than neural networks.</p>
+</blockquote>
+
+</div>
+</div>
 </div>
 </div>
 
