@@ -66,6 +66,7 @@
     - url: /exercises/Exercise_Data_Exploration
     - url: /exercises/Exercise_Association_Rule_Mining
     - url: /exercises/Exercise_Clustering
+    - url: /exercises/Exercise_Classification
 - url: /Solutions
   not_numbered: true
   expand_sections: false

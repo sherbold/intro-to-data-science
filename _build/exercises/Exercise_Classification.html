@@ -1,0 +1,91 @@
+---
+redirect_from:
+  - "/exercises/exercise-classification"
+interact_link: content/exercises/Exercise_Classification.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Classification
+pagenum: 14
+prev_page:
+  url: /exercises/Exercise_Clustering.html
+next_page:
+  url: /Solutions.html
+suffix: .ipynb
+search: data training exercise test try different classifiers parameters algorithms set performance sklearn classification learn good hyper task results not also please e g tree bonus consume amounts computational capacity evaluate need trees scikit org stable modules datasets fetchcovtype html because large such easily amount prediction acceptable compare metrics note biggest challenge select depths activation functions etc depends quickly huge libraries pretty straight forward apply determine best algorithm everything dominant types forests generated before start building separate into quite testing selecting small subset happen classes represented same stratified sampling avoid train available chapter notice require therefore suitable analysis classifier works well
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Classification</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With this exercise, you can learn more about classification. You can try out the algorithms on a data set and compare the performance of the different classifiers with different performance metrics.</p>
+<p>Please note that the biggest challenge of this exercise is to select good <em>hyper parameters</em> of the algorithms, e.g., tree depths, activation functions, etc. The performance of the algorithms depends on this. In the bonus task, you can see that this can quickly consume huge amounts of computational capacity.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>Your task in this exercise is pretty straight forward: apply different classification algorithms to a data set, evaluate the results, and determine the best algorithm. You can find everything you need in <code>sklearn</code>. We use <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_covtype.html#sklearn.datasets.fetch_covtype">data about dominant types of trees in forests</a> in this exercise.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Training-and-test-data">Training and test data<a class="anchor-link" href="#Training-and-test-data"> </a></h2><p>Before you can start building classifiers, you need to separate the data into training and test data. Because the data is quite large, please use 5% of the data for training, and 95% of the data for testing. Because you are selecting such a small subset, it could easily happen that not all classes are represented the same way in the training and in the test data. Use <em>stratified sampling</em> to avoid this.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Train,-Test,-Evaluate">Train, Test, Evaluate<a class="anchor-link" href="#Train,-Test,-Evaluate"> </a></h2><p>Now that training and test data are available, you can try out the classifiers from Chapter 7. You will notice that some classifiers may require a long amount of time for training and may, therefore, not be suitable for the analysis of this data set.</p>
+<p>Try to find a classifier that works well with the data. On this data, this means two things:</p>
+<ul>
+<li>Training and prediction in an acceptable amount of time. Use "less than 10 minutes" as definition for acceptable on this exercise sheet.</li>
+<li>Good prediction performance as measured with MCC, recall, precision, and F-Measure. </li>
+</ul>
+<p>The different classifiers have different parameters, also known as <em>hyper parameters</em>, e.g., the depth of a tree, or the number of trees used by a random forest. Try to find good parameters to improve the results.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Bonus-Task-(will-not-be-discussed-during-the-exercise-and-no-sample-solution)">Bonus Task (will not be discussed during the exercise and no sample solution)<a class="anchor-link" href="#Bonus-Task-(will-not-be-discussed-during-the-exercise-and-no-sample-solution)"> </a></h2><p>Other than trying out, you can also automatically tune your hyper parameters, if you have a training, a validation, and a test set. This is also supported by <code>sklearn</code> <a href="https://scikit-learn.org/stable/modules/grid_search.html">directly</a>. You may use this to try out how such automated tuning affets your results. But beware: this can easily consume large amounts of computational capacity!</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
