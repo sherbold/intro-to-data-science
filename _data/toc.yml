@@ -55,6 +55,9 @@
 - url: /07_Classification
   not_numbered: false
   
+- url: /08_Regression
+  not_numbered: false
+  
 - divider: true
 
 - url: /Exercises
