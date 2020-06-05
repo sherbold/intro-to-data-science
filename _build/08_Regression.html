@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: regression x r result data values mse model y f good bad because actual residuals mae function example mean dependent variable line prediction sum between features above linear o performance absolute classification instances our blue plot similar larger squared also e value errors only diagonal metrics frac variance adjusted relationship cars looks feature through mathcal not pattern ex error predictions axis thus arithmetic measures variables different important higher using analysis shows problem object mathbb same below where fit visual plots systematic large deviation clear under results however much into deviations random less denominator nominator consider following img src images png
+search: regression r result x data values mse model f y good bad because actual residuals mae function example dependent mean features variable e line prediction sum between above linear o performance absolute n classification instances our blue plot similar larger squared also value mathcal mathbb errors only diagonal metrics frac variance adjusted relationship variables cars looks feature through subseteq m not pattern error predictions axis thus arithmetic xi measures different important higher using analysis shows problem object same below where fit visual plots systematic large deviation clear under results however much into deviations random less denominator nominator consider following img
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -268,7 +268,7 @@ $$e_x = f^*(x)-f(x) = y-f(x),$$<p>i.e., the difference between the actual value 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Ideally, the prediction equals the actual values, which is on the diagonal of the plot. The further away the data is from the diagonal, the worse the prediction. For a good result, the predictions are close to the diagonal and the deviations are random without a clear pattern, similar to our prior visual analysis. For a bad results, the deviations from the diagonal are larger and there may be patterns that show systematic errors. This is the case for the bad result. For the data where the actual values are less than 0.35, the prediction is completely random, which we can see due to the random pattern with large deviations from the diagonal in this area. For larger actual values, we see systematic errors: first there is over prediction, then there is under prediction.</p>
-<h3 id="Performance-Metrics">Performance Metrics<a class="anchor-link" href="#Performance-Metrics"> </a></h3><p>There are also several performance metrics that can be used to assess the quality of regression models. These metrics are based on the residuals.</p>
+<h3 id="Performance-Metrics">Performance Metrics<a class="anchor-link" href="#Performance-Metrics"> </a></h3><p>There are also several performance metrics that can be used to assess the quality of regression models. These metrics are based on the residuals. Let $X = \{x_1, ..., x_n\} \subseteq \mathcal{F} \subseteq \mathbb{R}^m$ a sample of instance with $m$ features and $Y = \{y_1, ..., y_n\} \subseteq \mathbb{R}$ the corresponding dependent variables.</p>
 <table>
 <thead><tr>
 <th>Metric</th>
@@ -280,23 +280,19 @@ $$e_x = f^*(x)-f(x) = y-f(x),$$<p>i.e., the difference between the actual value 
 <tr>
 <td>Mean Absolute Error</td>
 <td>The arithmetic mean of the absolute residuals, i.e., the mean absolute deviation of the predictions from the actual values.</td>
-<td>$MAE = \frac{1}{</td>
-<td>X</td>
-<td>} \sum_{x \in X}</td>
-<td>e_x</td>
+<td>$MAE = \frac{1}{n} \sum_{i=1}^n</td>
+<td>e_{x_i}</td>
 <td>$</td>
 </tr>
 <tr>
 <td>Mean Squared Error</td>
 <td>The arithmetic mean of the squared residuals.</td>
-<td>$MSE = \frac{1}{</td>
-<td>X</td>
-<td>} \sum{x \in X} e_x^2$</td>
+<td>$MSE = \frac{1}{n} \sum_{i=1}^n e_{x_i}^2$</td>
 </tr>
 <tr>
 <td>R Squared, R2, $R^2$</td>
 <td>The coefficient of determination, which is defined as the fraction of the variance of the data that is explained by the regression model.</td>
-<td>$R^2 = 1 - \frac{\sum_{x \in X} (y-f(x))^2}{\sum{x \in X} (y-mean(y))^2} = 1 - \frac{\sum_{x \in X} e_x^2}{\sum{x \in X} (y-mean(y))^2}$</td>
+<td>$R^2 = 1 - \frac{\sum_{i=1}^n (y_i-f(x_i))^2}{\sum_{i=1}^n (y_i-mean(Y))^2} = 1 - \frac{\sum_{i=1}^n e_{x_i}^2}{\sum{x \in X} (y-mean(y))^2}$</td>
 </tr>
 <tr>
 <td>Adjusted R Squared</td>
