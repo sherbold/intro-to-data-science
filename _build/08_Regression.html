@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: regression r result data values mse model f x y good bad because actual residuals mae function n example dependent mean features variable e line prediction sum between above linear o performance absolute classification instances our blue plot similar larger squared also value mathcal mathbb errors only diagonal metrics frac variance adjusted relationship variables cars looks feature through subseteq m not pattern error predictions axis thus arithmetic xi measures different important higher using analysis shows problem object same below where fit visual plots systematic large deviation clear under results however much into deviations random less yi denominator nominator consider following
+search: regression x r b result y dependent f features data variable values mse model because example linear function good bad residuals n e actual mae coefficients also above line mean sum between value prediction classification instances o m performance absolute our feature mathbb blue plot similar only larger squared variables problem mathcal not errors however predictions axis thus diagonal metrics frac variance adjusted solutions relationship cars usually using looks through subseteq same where large pattern error arithmetic xi measures correlation dots optimal consider following different important higher set analysis shows object real estimate below very fit visual plots show quality
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -382,7 +382,34 @@ Adjusted R2: 0.68
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Linear-Regression">Linear Regression<a class="anchor-link" href="#Linear-Regression"> </a></h2><h3 id="Ordinary-Least-Squares">Ordinary Least Squares<a class="anchor-link" href="#Ordinary-Least-Squares"> </a></h3><h3 id="Ridge">Ridge<a class="anchor-link" href="#Ridge"> </a></h3><h3 id="Lasso">Lasso<a class="anchor-link" href="#Lasso"> </a></h3><h3 id="Elastic-Net">Elastic Net<a class="anchor-link" href="#Elastic-Net"> </a></h3>
+<h2 id="Linear-Regression">Linear Regression<a class="anchor-link" href="#Linear-Regression"> </a></h2><p>We already encountered linear regression, e.g., in <a href="07_Classification">Chapter 7</a> when we discussed Logistic Regression or in the example above. We now take a closer look at how linear regression works. The formula of the regression function of linear regression is</p>
+$$y = b_0 + b_1x_1 + ... + b_mx_m = b_0 + \sum_{i=1}^m b_ix_i$$<p>with <em>coefficients</em> $b_1, ..., b_m \in \mathbb{R}$ and the <em>intercept</em> $b_0$. The coefficients define how a feature influences the dependent variable. The coefficients are closely related to the correlation between the dependent variable and the features. Usually, a positive coefficient means that the feature is positively correlated to the dependent variable, a negative coefficient means that there is a negative correlation. However, there are also exceptions to this general rule, as we will see in the next sections.</p>
+<p>The intercept is "base value" of the dependent variable, i.e., the value of the dependent variable if all features would be zero. This concept can be visualized as the location where a regression line <em>intercepts</em> the axis of the coordinate system.</p>
+<p>The key aspect of Linear Regression is how the coefficients and intercept are determined, as this can affect not only the quality of the regression function, but also how the coefficients may be interpreted.</p>
+<h3 id="Ordinary-Least-Squares">Ordinary Least Squares<a class="anchor-link" href="#Ordinary-Least-Squares"> </a></h3><p>The standard way to estimate the coefficients of linear regression is using the <em>Ordinary Least Squares</em> (OLS) method. For this, we interpret the instance as matrix and the dependent variables and coefficients as vectors:</p>
+$$
+\begin{split}
+X &amp;= \begin{pmatrix}
+x_{1,1} &amp; \dots &amp; x_{1,m} \\
+\vdots &amp; \ddots &amp; \vdots \\
+x_{n,1} &amp; \dots &amp; x_{n,m} 
+\end{pmatrix} \\
+y &amp;= (y_1, \dots, y_n) \\
+b &amp;= (b_1, \dots, b_m)
+\end{split}$$<p>Because of this, we can use matrix multiplication to calculate all the predictions given a set of coefficients as a single vector, i.e.,</p>
+$$f(X) = b_0 + Xb.$$<p>Since we want to minimize the residuals, we can formulate this as an optimization problem</p>
+$$\min ||f(X) - f^*(X)||_2^2 = \min ||b_0 + Xb - y||_2^2.$$<p>Hence, we minimize the square of the Euclidean norm (see <a href="06_Clustering.html#Measuring-Similarity">Chapter 6</a>), in other words we are looking for the solution with the <em>least squares</em>.</p>
+<p>Because we have more instances than features (otherwise we have too many features), there are usually multiple optimal solutions for this optimization problem. While these solutions are the same with respect to the OLS, there can be interesting effects if the features are correlated with each other. This can be demonstrated with an example.</p>
+<p>Consider two features $x_1, x_2$ and a dependent variable $y$ such that $y = x_1 = x_2$. Here are some examples for optimal solutions:</p>
+<ul>
+<li>$b_0 = 0, b_1=0.5, b_2=0.5$</li>
+<li>$b_0 = 0, b_1=1, b_2=0$</li>
+<li>$b_0 = 0, b_1=0, b_2=1$</li>
+<li>$b_0 = 0, b_1=10000, b_2=-9999$</li>
+</ul>
+<p>In general, any solution with $b_0=0$ and $b_1+b_2=1$ is optimal. The first three solutions we listed seem reasonable. However, a solution with very large coefficients is also possible and optimal. This also demonstrates that the coefficients of features can be misleading in terms correlation with the dependent variable, because in the example above $b_1$ and $b_2$ can assume any real value and, thus indicate any possible correlation.</p>
+<p>In the following, we show how OLS can be modified with <em>regularization</em> to find the first three solutions and avoid the problems with correlated features.</p>
+<h3 id="Ridge">Ridge<a class="anchor-link" href="#Ridge"> </a></h3><h3 id="Lasso">Lasso<a class="anchor-link" href="#Lasso"> </a></h3><h3 id="Elastic-Net">Elastic Net<a class="anchor-link" href="#Elastic-Net"> </a></h3>
 </div>
 </div>
 </div>
