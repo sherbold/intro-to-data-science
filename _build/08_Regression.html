@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: regression x f data model y result good bad example line values function actual prediction above linear o between instances r blue because plot dependent variable our errors diagonal relationship classification cars features e through mathcal performance pattern residuals similar axis larger frac sum variables important analysis also value feature shows object mathbb same below not fit visual plots systematic large under results ex however deviations random consider following img src images png alt style width px different properties fuel top speed using looks set interest changes objects moreover phi m estimate very where expected expression second show close without
+search: regression x r result data values mse model y f good bad because actual residuals mae function example mean dependent variable line prediction sum between features above linear o performance absolute classification instances our blue plot similar larger squared also e value errors only diagonal metrics frac variance adjusted relationship cars looks feature through mathcal not pattern ex error predictions axis thus arithmetic measures variables different important higher using analysis shows problem object mathbb same below where fit visual plots systematic large deviation clear under results however much into deviations random less denominator nominator consider following img src images png
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -268,7 +268,52 @@ $$e_x = f^*(x)-f(x) = y-f(x),$$<p>i.e., the difference between the actual value 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Ideally, the prediction equals the actual values, which is on the diagonal of the plot. The further away the data is from the diagonal, the worse the prediction. For a good result, the predictions are close to the diagonal and the deviations are random without a clear pattern, similar to our prior visual analysis. For a bad results, the deviations from the diagonal are larger and there may be patterns that show systematic errors. This is the case for the bad result. For the data where the actual values are less than 0.35, the prediction is completely random, which we can see due to the random pattern with large deviations from the diagonal in this area. For larger actual values, we see systematic errors: first there is over prediction, then there is under prediction.</p>
-<h3 id="Performance-Metrics">Performance Metrics<a class="anchor-link" href="#Performance-Metrics"> </a></h3>$$MAE = \frac{1}{|X|} \sum_{x \in X} |e_x|$$$$MSE = \frac{1}{|X|} \sum{x \in X} e_x^2$$$$R^2 = 1 - \frac{\sum_{x \in X} (y-f(x))^2}{\sum{x \in X} (y-mean(y))^2}$$$$\bar{R}^2 = 1 - (1-R^2)\frac{|X|-1}{|X|-m-1}$$
+<h3 id="Performance-Metrics">Performance Metrics<a class="anchor-link" href="#Performance-Metrics"> </a></h3><p>There are also several performance metrics that can be used to assess the quality of regression models. These metrics are based on the residuals.</p>
+<table>
+<thead><tr>
+<th>Metric</th>
+<th>Description</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mean Absolute Error</td>
+<td>The arithmetic mean of the absolute residuals, i.e., the mean absolute deviation of the predictions from the actual values.</td>
+<td>$MAE = \frac{1}{</td>
+<td>X</td>
+<td>} \sum_{x \in X}</td>
+<td>e_x</td>
+<td>$</td>
+</tr>
+<tr>
+<td>Mean Squared Error</td>
+<td>The arithmetic mean of the squared residuals.</td>
+<td>$MSE = \frac{1}{</td>
+<td>X</td>
+<td>} \sum{x \in X} e_x^2$</td>
+</tr>
+<tr>
+<td>R Squared, R2, $R^2$</td>
+<td>The coefficient of determination, which is defined as the fraction of the variance of the data that is explained by the regression model.</td>
+<td>$R^2 = 1 - \frac{\sum_{x \in X} (y-f(x))^2}{\sum{x \in X} (y-mean(y))^2} = 1 - \frac{\sum_{x \in X} e_x^2}{\sum{x \in X} (y-mean(y))^2}$</td>
+</tr>
+<tr>
+<td>Adjusted R Squared</td>
+<td>Adjustment of $R^2$ that takes the model complexity into account</td>
+<td>$\bar{R}^2 = 1 - (1-R^2)\frac{</td>
+<td>X</td>
+<td>-1}{</td>
+<td>X</td>
+<td>-m-1}$</td>
+</tr>
+</tbody>
+</table>
+<p>The MAE measures the absolute difference between the predictions and the actual values. The similar measure MSE uses the squared distances instead of the actual distances. Because the MSE uses the squared residuals, it is more sensitive to outliers in the residuals than MAE. Thus, MSE increases strongly with outliers, while these may be hidden with MAE. The biggest problem with MAE and MSE is that both are absolute measures for the error and, thus, hard to interpret because there is no fixed reference point. The performance measures for classification were mostly distributed in the interval [0,1] and it was clear what a perfect result looks like and what the worst possible result looks like. To interpret MAE and MSE, detailed knowledge about the dependent variable is required, especially about the scale of the dependent variable and the meaning of differences.</p>
+<p>In that respect, $R^2$ is more similar to the metrics we know from classification and is distributed in the interval [0,1], where 1 is a perfect value. $R^2$ answers the question how much better the regression function is than just using the arithmetic mean of the data. The sum in the denominator is over the residuals of the arithmetic mean as the regression function. In the nominator, we have the sum of the residuals of the regression. If we would divide both the nominator and denominator by $|X|$, we would have the MSE as nominator and the variance as denominator. In other words, $R^2$ measures the ratio of MSE the model and the variance of the dependent variable. The lower the MSE in relation to the variance, the better.</p>
+<p>A weakness of $R^2$ is that this usually decreases with more features, which can lead to overfitting. Adjusted $R^2$ addresses this weakness by taking the number of features into account. Thus, if the decrease in MSE is less than the penalty of adjusted $R^2$ for the number of features, adjusted $R^2$ increases.</p>
+<p>We now look at the values of these performance metrics for our example.</p>
+
 </div>
 </div>
 </div>
@@ -328,6 +373,18 @@ Adjusted R2: 0.68
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We directly observe the problem with MAE and MSE: because we have randomly generated data, MAE and MSE have no real meaning for us. We only see that the values of the bad result are larger than the values for the good result: about 60% higher for MAE and about 3 times higher for MSE. Please note that the values for MSE are less than the values for MAE, because $x^2 &lt; x$ for $x \in (0,1)$. This further emphasizes that the interpretation of MAE and MSE is difficult.</p>
+<p>For $R^2$ we also see that the value of the good result is much larger than of the bad result. The bad result explains only about 2/3 of the variance, while the good result explains almost 90%. Adjusted $R^2$ is not different, because we only have a single feature.</p>
+
+</div>
+</div>
 </div>
 </div>
 
