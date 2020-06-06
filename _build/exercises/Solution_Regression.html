@@ -1,0 +1,391 @@
+---
+redirect_from:
+  - "/exercises/solution-regression"
+interact_link: content/exercises/Solution_Regression.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Classification
+pagenum: 23
+prev_page:
+  url: /exercises/Solution_Classification.html
+next_page:
+  url: /Appendix.html
+suffix: .ipynb
+search: data alpha try different coefficients test lasso exercise regression models learn performance linear also fit analysis house training observe classification algorithms into evaluate goodness need sklearn prices train ridge r change visual values location set compare metrics please task variants libraries meaning california scikit datasets fetchcaliforniahousing start happens elastic net results mse except respect y seem because without repeat not seems prediction nothing only shrink averooms avebedrms makes sense classifiers note biggest challenge select good hyper parameters e g tree depths activation functions etc depends bonus quickly consume huge amounts computational capacity should gain insights through everthing statsmodel another popular
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Classification</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With this exercise, you can learn more about classification. You can try out the algorithms on a data set and compare the performance of the different classifiers with different performance metrics.</p>
+<p>Please note that the biggest challenge of this exercise is to select good <em>hyper parameters</em> of the algorithms, e.g., tree depths, activation functions, etc. The performance of the algorithms depends on this. In the bonus task, you can see that this can quickly consume huge amounts of computational capacity.</p>
+<h1 id="Regression">Regression<a class="anchor-link" href="#Regression"> </a></h1><p>With this exercise, you can learn more about classification. You can try of different variants of linear regression on a data set and compare the performance with different metrics. You should also try to gain insights into the models through the coefficients.</p>
+<h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>Your task in this exercise is to try out different regression models, evaluate their goodness of fit and evaluate the meaning of the coefficients. You can find everthing you need in <code>sklearn</code>, <code>statsmodel</code> is another popular library for this kind of analysis.</p>
+<p>We use data about <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html#sklearn.datasets.fetch_california_housing">house prices in california</a> in this exercise.</p>
+<p>We start by loading the required libraries and data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">linear_model</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">r2_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">fetch_california_housing</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">fetch_california_housing</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span>
+<span class="n">predictors</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">feature_names</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>.. _california_housing_dataset:
+
+California Housing dataset
+--------------------------
+
+**Data Set Characteristics:**
+
+    :Number of Instances: 20640
+
+    :Number of Attributes: 8 numeric, predictive attributes and the target
+
+    :Attribute Information:
+        - MedInc        median income in block
+        - HouseAge      median house age in block
+        - AveRooms      average number of rooms
+        - AveBedrms     average number of bedrooms
+        - Population    block population
+        - AveOccup      average house occupancy
+        - Latitude      house block latitude
+        - Longitude     house block longitude
+
+    :Missing Attribute Values: None
+
+This dataset was obtained from the StatLib repository.
+http://lib.stat.cmu.edu/datasets/
+
+The target variable is the median house value for California districts.
+
+This dataset was derived from the 1990 U.S. census, using one row per census
+block group. A block group is the smallest geographical unit for which the U.S.
+Census Bureau publishes sample data (a block group typically has a population
+of 600 to 3,000 people).
+
+It can be downloaded/loaded using the
+:func:`sklearn.datasets.fetch_california_housing` function.
+
+.. topic:: References
+
+    - Pace, R. Kelley and Ronald Barry, Sparse Spatial Autoregressions,
+      Statistics and Probability Letters, 33 (1997) 291-297
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Generating-training-and-test-data">Generating training and test data<a class="anchor-link" href="#Generating-training-and-test-data"> </a></h2><p>Before you can start building regression models, you need to separate the data into training and test data. Please use 50% of the data for training, and 50% of the data for testing.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">Y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Train,-Test,-Evaluate">Train, Test, Evaluate<a class="anchor-link" href="#Train,-Test,-Evaluate"> </a></h3><p>Now that training and test data are available, you can try out the different variants of linear regression. What happens when you use OLS/Ridge/Lasso/Elastic Net? How does the goodness of fit measured with $R^2$ on the test data change? Additionally, perform a visual evaluation of the results. How do the coefficients change?</p>
+<p>We train and predict all models with scikit-learn. We try to values for of $\alpha$ for Ridge (1, 1000) and Lasso (1, 0.1). For the Elastic Net, we use $\alpha=0.1$ and $\rho=0.5$. We visualize the predicted versus the actual values and the coefficients of all models. The $R^2$ score and the MSE are printed in the heading of the plots.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Setup models</span>
+<span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">(),</span> 
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span>
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> 
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">),</span> 
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">ElasticNet</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span> <span class="p">]</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;OLS&#39;</span><span class="p">,</span><span class="s1">&#39;Ridge (alpha=1.0)&#39;</span><span class="p">,</span> <span class="s1">&#39;Ridge (alpha=1000)&#39;</span><span class="p">,</span> <span class="s1">&#39;Lasso (alpha=1)&#39;</span><span class="p">,</span><span class="s1">&#39;Lasso (alpha=0.1)&#39;</span><span class="p">,</span> <span class="s1">&#39;ElasticNet (alpha=0.1, rho=0.5)&#39;</span><span class="p">]</span>
+
+<span class="c1"># Training and prediction</span>
+<span class="n">Y_pred</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">models</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+    <span class="n">Y_pred</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Visualize Results</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">),</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mf">3.5</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)))</span>
+<span class="n">y_max</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">names</span><span class="p">)):</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+    <span class="n">mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> - R2=</span><span class="si">%.2f</span><span class="s1">, MSE=</span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">mse</span><span class="p">))</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>  <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_max</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="n">y_max</span><span class="p">]</span> <span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;actual (y)&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;predited (f(x))&#39;</span><span class="p">)</span>
+
+    
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Coefficients </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">predictors</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelrotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">top</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Regression_5_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We observe that all predictions, except those for Lasso with $\alpha=1$ are relatively similar in terms of $R^2$, MSE, and also with respect to the visual analysis. We also see that there is a all values of $y$ above 5 seem to be binned into the value 5.00001.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">sum</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">==</span><span class="mf">5.00001</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>965</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This happened, because we used the data, without a prior analysis of the distributions, as we explained in <a href="03_Data-Exploration">Chapter 3</a>. We repeat the experiment, but drop all instance with $y&gt;5$. This means we also need to repeat the train-test split.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dropping </span><span class="si">%i</span><span class="s1"> instances before running regression&#39;</span> <span class="o">%</span> <span class="nb">sum</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">&gt;</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">&lt;=</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">&lt;=</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">Y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Setup models</span>
+<span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">(),</span> 
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span>
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> 
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">),</span> 
+          <span class="n">linear_model</span><span class="o">.</span><span class="n">ElasticNet</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span> <span class="p">]</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;OLS&#39;</span><span class="p">,</span><span class="s1">&#39;Ridge (alpha=1.0)&#39;</span><span class="p">,</span> <span class="s1">&#39;Ridge (alpha=1000)&#39;</span><span class="p">,</span> <span class="s1">&#39;Lasso (alpha=1)&#39;</span><span class="p">,</span><span class="s1">&#39;Lasso (alpha=0.1)&#39;</span><span class="p">,</span> <span class="s1">&#39;ElasticNet (alpha=0.1, rho=0.5)&#39;</span><span class="p">]</span>
+
+<span class="c1"># Training and prediction</span>
+<span class="n">Y_pred</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">models</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+    <span class="n">Y_pred</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Visualize Results</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">),</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mf">3.5</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)))</span>
+<span class="n">y_max</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">names</span><span class="p">)):</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+    <span class="n">mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> - R2=</span><span class="si">%.2f</span><span class="s1">, MSE=</span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">mse</span><span class="p">))</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>  <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_max</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="n">y_max</span><span class="p">]</span> <span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;actual (y)&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;predited (f(x))&#39;</span><span class="p">)</span>
+
+    
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Coefficients </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">predictors</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelrotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">top</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Dropping 965 instances before running regression
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Regression_9_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Interestingly, the results did not change much, except for Lasso with $\alpha=1.0$, which got even worse and now seems to yield an almost constant prediction. This is because the regularization strength is to high, meaning that it is better for the optimization to do nothing, than to actually fit a linear model. With $\alpha=0.1$ Lasso works as expected and drops some coefficients without a big loss in the goodness of fit. With Ridge, we observe the opposite with respect to $\alpha$. With $\alpha=1.0$, nothing happens. Only when we increase $\alpha$ to 1000, we see that the coefficients shrink: we observe that AveRooms and AveBedrms both shrink, where AveRooms is negative and AveBedRms is positive. Since it makes sense, that the number of rooms and the number of bedrooms is correlated, this makes sense. With Lasso, only the MedInc, house age, and Latitude, and Longitude survive. This indicates that in California the realter phrase "location, location, location" seems to be true.</p>
+<p>Finally, we observe from the visual analysis, the the house prices seem to be roughly linear, but not completely. We see a systematic under prediction of house prices for the most expensive homes.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
