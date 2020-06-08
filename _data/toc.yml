@@ -58,6 +58,9 @@
 - url: /08_Regression
   not_numbered: false
   
+- url: /09_Time-Series-Analysis
+  not_numbered: false
+  
 - divider: true
 
 - url: /Exercises
