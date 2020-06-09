@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: series data e analysis t trend autocorrelation value models g example values seasonality month changes xt box jenkins consider model our seasonal stationary x between components change effects means mean following img src images png alt classification style width px measured every thus points problem regression random stochastic process difference three tt energy consumption st because rt not approach removed arma overview deals ordered sequences timeseriesgeneral foundation passenger numbers instance goal describe temporal structure explains done predict next bit abstract described follows timeseriesabstract enumerated describes related where say feature dependent variable very simple formal formally discrete mathbb r mathematically seen
+search: t series seasonal trend x data e mean seasonality xt values hat s model value differencing analysis thus changes regression between autocorrelation stationary means slope y pattern example our not get adjustment month points effect models monthly still g difference approach only passengers range order consider following every tt change st effects box jenkins case calculate detrended linear also axis however mod spikes delta next overall both modeling same plot left shows around observe through length season after upwards downwards derivative where random components increase because explained must removed explain zero spike fully well second frac img src images png
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -31,7 +31,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <p>The foundation of the time series analysis are passenger numbers measured every month. Thus, we have an instance for every month in the data. The goal of the time series analysis is to describe the temporal structure of the data, i.e., to find a model that explains how the data changes from month to month. This could be done, e.g., to predict the next value of a time series. A bit more abstract, time series analysis can be described as follows.</p>
 <p><img src="images/timeseries_abstract.png" alt="Example for Classification" style="width: 500px;"/></p>
 <p>Our data are values at enumerated points in time. The time series model describes how the data changes over time. This problem is related to regression: if we where to say that the time is our feature and the value at that time is our dependent variable, we would have a very simple time series analysis.</p>
-<h3 id="The-Formal-Problem">The Formal Problem<a class="anchor-link" href="#The-Formal-Problem"> </a></h3><p>Formally, we have discrete values $\{x_1, .., x_T\} = \{x_t\}_{t=1}^T$ with $x_t \in \mathbb{R}$. Mathematically, these values can be seen as a series of random variables or as a stochastic process. A core assumption of the series analysis is that the difference between the time $t$ and the time $t+1$ is equal for all $t=1, ..., T-1$. Thus, we have a fixed step size for the time, e.g., minutes, hours, days, weeks, months, or years.</p>
+<h3 id="The-Formal-Problem">The Formal Problem<a class="anchor-link" href="#The-Formal-Problem"> </a></h3><p>Formally, we have discrete values $\{x_1, .., x_T\} = \{x_t\}_{t=1}^T$ with $x_t \in \mathbb{R}$. We use the notation $\{x_t\}$ as shorthand for $\{x_t\}_{t=1}^T$. Mathematically, these values can be seen as a series of random variables or as a stochastic process. A core assumption of the series analysis is that the difference between the time $t$ and the time $t+1$ is equal for all $t=1, ..., T-1$. Thus, we have a fixed step size for the time, e.g., minutes, hours, days, weeks, months, or years.</p>
 <p>A time series consists of different <em>components</em>. We consider three such components:</p>
 <ul>
 <li>The <em>trend</em> of the time series $T_t$. The trend is the overall change over time, e.g., a steady growth or decline in values. An example for the trend is, e.g., the constantly growing energy consumption is most countries.  </li>
@@ -59,7 +59,7 @@ $$x_t = T_t + S_t + R_t.$$
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -108,13 +108,22 @@ $$x_t = T_t + S_t + R_t.$$
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Trend-and-Seasonal-Effects">Trend and Seasonal Effects<a class="anchor-link" href="#Trend-and-Seasonal-Effects"> </a></h2><h3 id="Regression-and-Seasonal-Means">Regression and Seasonal Means<a class="anchor-link" href="#Regression-and-Seasonal-Means"> </a></h3>
+<h2 id="Trend-and-Seasonal-Effects">Trend and Seasonal Effects<a class="anchor-link" href="#Trend-and-Seasonal-Effects"> </a></h2><p>We make the time series stationary by modeling the trend term $T_t$ and the seasonality $S_t$.  The general workflow is always the same:</p>
+<ul>
+<li>We model the trend $T_t$ of the time series $\{x_t\}$.</li>
+<li>We calculate the <em>detrended</em> time series $\hat{x}_t = x_t-T_t$.</li>
+<li>We model the seasonality $S_t$ of the detrended time series $\{\hat{x}_t\}$.</li>
+<li>We calculate the *detrended and seasonally adjusted" time series $\hat{\hat{x}}_t\ = \hat{x}_t -S_t$</li>
+</ul>
+<p>We consider two different approaches for modeling the trend and seasonality.</p>
+<h3 id="Regression-and-Seasonal-Means">Regression and Seasonal Means<a class="anchor-link" href="#Regression-and-Seasonal-Means"> </a></h3><p>The first approach towards detrending is to use a regression model. The trend of the air passenger data looks linear, i.e., like a steady increase of customers over time. In this case, we can fit a linear regression model to explain the trend.</p>
+
 </div>
 </div>
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -138,13 +147,11 @@ $$x_t = T_t + S_t + R_t.$$
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">T_pred</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time $t$&#39;</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">13</span><span class="p">)</span><span class="o">*</span><span class="mi">12</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;1949&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1951&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1953&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1955&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1957&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1959&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1961&#39;</span><span class="p">))</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Passengers&#39;</span><span class="p">)</span>
 
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Detrended Passengers over Time&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">air_passengers_detrended</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time $t$&#39;</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">13</span><span class="p">)</span><span class="o">*</span><span class="mi">12</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;1949&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1951&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1953&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1955&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1957&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1959&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1961&#39;</span><span class="p">))</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Passengers&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -176,6 +183,21 @@ $$x_t = T_t + S_t + R_t.$$
 
 <div class="jb_cell">
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The plot on the left shows how the linear regression fits the time series. We see that the fit is good and matches the shape of the time series. The slope of the linear regression, i.e., the coefficient is the monthly increase of passengers. Thus, this model for the trend gives us insights into the trend itself: there are 2.66 more passengers every month.</p>
+<p>The plot on the left shows the time series without the trend. We see that there is no increasing trend anymore, the values seem to be centered around zero. This means that the trend was successfully removed. We also observe that the range of the values on the y-axis decreased from $600-100=500$ to $150-(-100)=250$. This means that the trend explains about fifty percent of magnitude the change in the values over time.</p>
+<p>However, we still observe that there is a regular pattern in the fluctuation around zero. This is the seasonality of the data. Recall that the data we use is are monthly measurements. Therefore, it is a reasonable conjecture that the seasonality that we observe is a recurring pattern in the same month every year. We can further explore this by adjusting the seasonality through the <em>seasonal mean</em>. To calculate the seasonal mean, we must know the length of a season, i.e., after how many time steps the seasonal pattern repeats itself. In case of the sample data, we have a <em>monthly mean</em> with a length of $s=12$ timesteps for the seasons. We can then calculate the seasonal pattern as the difference of the overall mean of the detrended time series and the seasonal mean, i.e.,</p>
+$$\hat{\hat{x}}_t = mean(\{\hat{x}_t\})-mean(\{\hat{x}_{t'}\}_{\{t' \in 1, ..., T: mod(t',s)=mod(t,s)\}})$$<p>where $mod(t,s)$ is the modulo of $t$ divided by $s$. For example, if we have $s=12$ and $t=26$, $mod(t, s)=2$. In that case, the seasonal mean would be calculated over all values $t'$ where $mod(t', s)=2$, i.e., 2, 14, 26, 38, etc.</p>
+<p>For our sample data with a seasonality of $s=12$ we get the following.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
@@ -194,7 +216,6 @@ $$x_t = T_t + S_t + R_t.$$
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Passengers over Time without Trend and Seasonal Effect&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">air_passengers_detrended_unseasonal</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time $t$&#39;</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">13</span><span class="p">)</span><span class="o">*</span><span class="mi">12</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;1949&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1951&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1953&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1955&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1957&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1959&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1961&#39;</span><span class="p">))</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Passengers&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -212,7 +233,7 @@ $$x_t = T_t + S_t + R_t.$$
 
 
 <div class="output_png output_subarea ">
-<img src="images/09_Time-Series-Analysis_5_0.png"
+<img src="images/09_Time-Series-Analysis_6_0.png"
 >
 </div>
 
@@ -228,13 +249,27 @@ $$x_t = T_t + S_t + R_t.$$
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Differencing">Differencing<a class="anchor-link" href="#Differencing"> </a></h3>
+<p>We see that there are over 60 passengers more in July than on average, in November there are about 60 passengers less than average. The seasonal effect of the other months fluctuates between these values. March has almost no seasonal effect. Thus, we again get a great explanatory value for the seasonality, same as for the trend.</p>
+<p>When we use these monthly mean values for seasonal adjustment, we get the time series we see on the right. The range of the y-axis decreased to only $100-(-40)=140$. Thus, the seasonality and the trend explain most of the variation in the data. However, the plot shows that there is still a regular pattern. Please not that every original pattern had a single upwards spike and two downwards spikes next to each other. After seasonal adjustment, we have:</p>
+<ul>
+<li>Two upwards spikes and one downwards spike  before $t=70$.</li>
+<li>Almost no upwards/downwards spikes between $t=70$ and $t=100$. </li>
+<li>One upwards spike and two downwards spikes after $t=100$.</li>
+</ul>
+<p>This shows that the seasonality is not fully corrected. The reason is, that in this data, there is a trend in the seasonal effect: same as the overall number of passengers, the monthly fluctuations also get stronger over the years. In the middle of the data, the seasonal mean matches well with the data, hence no more spikes. At the beginning of the data, the seasonal mean is larger than the actual seasonal effect, which means the seasonal adjustment is too strong and the seasonal pattern is inverted. At the end of the data, the seasonal mean is less than the actual seasonal effect, which means that there is still something of seasonal effect left.</p>
+<p>Overall, our time series is still not fully stationary, as there are still seasonal patterns in the data. However, since the pattern is now relatively week (decrease in range of the y-axis), it would be possible to use this data to model the autoregressive part of the time series.</p>
+<h3 id="Differencing">Differencing<a class="anchor-link" href="#Differencing"> </a></h3><p>The second approach for modeling the trend and seasonality is based on <em>differencing</em>. Differencing is similar to the derivative of a function and more powerful than the adjustment through regression and seasonal means. The idea behind differencing is that the trend is nothing more than the slope of the time series. The slope is nothing more than the first derivative of the time series. If the trend of the time series is not constant, but changes over time, this would be the second order derivative. Thus, if we want to remove the trend, we can use the derivative to do this.</p>
+<p>With differencing, this idea is implement this with a variant of the <em>point slope equation</em>, which can be used to estimate the slope of a line. The slope between two points $(x_1, y_1), (x_2, y_2)$ is defined as $\frac{y_2-y_1}{x_2-x_1}$. We use that we have equidistant time steps $t$, i.e., to points next to each other in the time series are $(t-1, x_{t-1}), (t, x_t)$ and the slope is</p>
+$$\frac{x_t-x_{t-1}}{t-(t-1)} = \frac{x_t-x_{t-1}}{1} = x_t-x_{t-1}.$$<p>The slope between two points of the time series is the <em>first-order difference</em> and we use the notation</p>
+$$\Delta^1 x_t = x_t - x_{t-1}.$$<p>With the first order difference, we detrend time series that have a moving mean value, i.e., $\hat{x}_t = \Delta^1 x_t$. If both the mean value as well as the change of the mean are moving, we can use <em>second-order differencing</em>, which is defined as</p>
+$$\Delta^2 x_t = \Delta^1 x_t - \Delta^1 x_{t-1} ) = x_t - 2\cdot x_{t-1} + x_{t-2}.$$<p>When we apply first-order differencing to our example, we get the following.</p>
+
 </div>
 </div>
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -246,7 +281,6 @@ $$x_t = T_t + S_t + R_t.$$
 <span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Air Passengers Data&#39;</span> <span class="o">%</span> <span class="n">regr</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">T_pred</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time $t$&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">13</span><span class="p">)</span><span class="o">*</span><span class="mi">12</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;1949&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1951&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1953&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1955&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1957&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1959&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1961&#39;</span><span class="p">))</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Passengers&#39;</span><span class="p">)</span>
@@ -272,7 +306,7 @@ $$x_t = T_t + S_t + R_t.$$
 
 
 <div class="output_png output_subarea ">
-<img src="images/09_Time-Series-Analysis_7_0.png"
+<img src="images/09_Time-Series-Analysis_8_0.png"
 >
 </div>
 
@@ -285,6 +319,19 @@ $$x_t = T_t + S_t + R_t.$$
 </div>
 
 <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The resulting looks centered around 0, but there is still a seasonal fluctuation. We observe that the range of the y-axis is only $75-(-100)=175$, i.e., about two thirds of the range of the time series values is explained by the trend.</p>
+<p>Differencing can also be used for seasonal adjustment. In this case, we do not use the difference between two points next to each other, but rather between two consecutive points in time during the season. Thus, if we have a length of a season of $s$, we can calculate our seasonal adjustment as $\hat{\hat{x}} = \Delta_s \hat{x}_t$ with</p>
+$$\Delta_s \hat{x}_t = \hat{x}_t - \hat{x}_{t-s}.$$<p>When we apply seasonal differencing with a length of the season of $s=12$, we get the following.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -321,7 +368,7 @@ $$x_t = T_t + S_t + R_t.$$
 
 
 <div class="output_png output_subarea ">
-<img src="images/09_Time-Series-Analysis_8_0.png"
+<img src="images/09_Time-Series-Analysis_10_0.png"
 >
 </div>
 
@@ -337,13 +384,26 @@ $$x_t = T_t + S_t + R_t.$$
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Autocorrelation-with-ARMA">Autocorrelation with ARMA<a class="anchor-link" href="#Autocorrelation-with-ARMA"> </a></h2>
+<p>There is no pattern left in the plot on the right. The fluctuations around zero look completely random, which is a strong indication that the time series is now stationary. Moreover, the range of the $y-axis$ is further reduced to only $40-(-40)=80$, i.e., about half magnitude of the changes in the time series after detrended are explained through the seasonality. The remainder is the autocorrelation of the time series, that must still be modeled.</p>
+<h3 id="Comparison-of-the-Approaches">Comparison of the Approaches<a class="anchor-link" href="#Comparison-of-the-Approaches"> </a></h3><p>The two methods for modeling the trend and seasonality both have advantages and weaknesses. The advantage of regression and seasonal means is that we get interpretable values through the slope of the regression and the monthly mean values. However, this method is limited, because it only works for linear trends and with seasonal effects that have no trend. Thus, the data may not be fully stationary with this approach.</p>
+<p>This is the strength of differencing: it can deal with both changes in the mean, as well as changes in the movement of the mean. This also holds true for the seasonal adjustment, which could also have higher orders, even though we only showed first-order seasonal adjustment. Thus, the likelihood of getting stationary data is higher with this approach. However, we get no interpretable values for the trend or seasonality that somehow quantify the effects.</p>
+
 </div>
 </div>
 </div>
 </div>
 
 <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Autocorrelation-with-ARMA">Autocorrelation with ARMA<a class="anchor-link" href="#Autocorrelation-with-ARMA"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -383,7 +443,7 @@ $$x_t = T_t + S_t + R_t.$$
 
 
 <div class="output_png output_subarea ">
-<img src="images/09_Time-Series-Analysis_10_0.png"
+<img src="images/09_Time-Series-Analysis_13_0.png"
 >
 </div>
 
@@ -395,7 +455,7 @@ $$x_t = T_t + S_t + R_t.$$
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -428,7 +488,7 @@ $$x_t = T_t + S_t + R_t.$$
 
 
 <div class="output_png output_subarea ">
-<img src="images/09_Time-Series-Analysis_11_0.png"
+<img src="images/09_Time-Series-Analysis_14_0.png"
 >
 </div>
 
