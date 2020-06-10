@@ -1,0 +1,85 @@
+---
+redirect_from:
+  - "/exercises/exercise-time-series-analysis"
+interact_link: content/exercises/Exercise_Time_Series_Analysis.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Time Series Analysis
+pagenum: 18
+prev_page:
+  url: /exercises/Exercise_Regression.html
+next_page:
+  url: /Solutions.html
+suffix: .ipynb
+search: data seasonal values arma adjustment model detrending series analysis exercise effects autocorrelation visualize year learn parameters partial including fitting forecasting provide csv regression mean monthly adjustments differencing detrended e actual determine trends pick suitable based libraries task perform everything need pandas statsmodels set revenue online mail retail business us years download file here user informatik uni goettingen de sherbold onlineandmailshopping detrend using linear removing order fit appropriate p q adjusted both versions without drop plots determining good fitted models forecast differences between forecasted should trend effect
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Time Series Analysis</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With this exercise, you can learn more about time series analysis with ARMA. You can learn how to determine trends and seasonal effects and how to pick suitable parameters for an ARMA model based on the (partial) autocorrelation.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>Your task in this exercise is to perform time series analysis, including detrending, seasonal adjustment, ARMA model fitting, and forecasting. You can find everything you need in <code>pandas</code> and <code>statsmodels</code>.</p>
+<p>For this exercise set, we provide revenue data about online and mail retail business in the US. The data we provide is for the years 2002-2014. You can download a CSV file with the data <a href="https://user.informatik.uni-goettingen.de/~sherbold/online_and_mail_shopping.csv">here</a>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Detrending-and-seasonal-adjustment-with-regression-and-mean-values">Detrending and seasonal adjustment with regression and mean values<a class="anchor-link" href="#Detrending-and-seasonal-adjustment-with-regression-and-mean-values"> </a></h2><p>Detrend the data using a linear regression and then do a seasonal adjustment by removing the monthly mean values from the data. Visualize the effects of these adjustments.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Detrending-and-seasonal-adjustment-with-differencing">Detrending and seasonal adjustment with differencing<a class="anchor-link" href="#Detrending-and-seasonal-adjustment-with-differencing"> </a></h2><p>Use first order differencing for detrending the data and do a monthly seasonal adjustment for the detrended data. Visualize the effects of these adjustments.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Forecasting-with-ARMA">Forecasting with ARMA<a class="anchor-link" href="#Forecasting-with-ARMA"> </a></h2><p>Fit an ARMA model with appropriate parameters $p$ and $q$ to the detrended and seasonal adjusted data (both versions) without the year 2013 (i.e., drop year 2013 for the model fitting). You can use plots of the autocorrelation and the partial autocorrelation for determining good values. Use the fitted models to forecast the values for the year 2013 and visualize the differences between the forecasted values and the actual values. You should do this with the actual values, i.e., including trend and seasonal effect.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
