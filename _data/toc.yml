@@ -85,6 +85,7 @@
   - url: /exercises/Solution_Clustering
   - url: /exercises/Solution_Classification
   - url: /exercises/Solution_Regression
+  - url: /exercises/Solution_Time_Series_Analysis
 
 - url: /Appendix
   not_numbered: true
