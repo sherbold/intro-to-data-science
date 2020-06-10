@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: t series seasonal x autocorrelation model values trend data e between mean xt value seasonality p q not means hat thus effect partial example differencing regression random s correlation steps direct influence our points models case also pattern get adjustment ar analysis changes stationary passengers linear slope y ma following change because past only still part used month approach both arma monthly detrended shows however after second relationship g next difference effects correlated explained same plot zero observe range through strong order january impact residual autocorrelations c epsilont j consider every different three tt st box jenkins calculate axis mod
+search: t series seasonal x autocorrelation model values trend data e between mean xt value seasonality p q not means hat thus differencing effect partial example regression random models s correlation also steps direct influence analysis our points case pattern get adjustment ar changes stationary arma passengers linear slope y ma following change because past only same still part used month approach both monthly detrended shows however after second order relationship g next difference effects correlated explained plot zero observe range through where strong january impact residual autocorrelations c epsilont j consider every different three tt st box jenkins calculate axis
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -651,6 +651,17 @@ $$x_t = c + \epsilon_t + \sum_{i=1}^p a_ix_{t-i} + \sum_{j=1}^q b_j \epsilon_{t-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In this case, we observe no strong partial autocorrelations, i.e., $p=0$ is because there is no direct impact of the past values on the current values. In the autocorrelations, we see that the first value is with about -0.3 notable, afterwards this tends to zero. As we explained above, this means that $q=1$ is a suitable choice.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="ARIMA">ARIMA<a class="anchor-link" href="#ARIMA"> </a></h3><p>Often, you will also find ARIMA models for time series analysis. ARIMA models have the parameter $p, d, q$. ARIMA is the same as ARMA, where $d$-th order differencing is applied to the data. Thus, ARIMA is the same as detrending with differencing and then creating an ARMA model.</p>
 
 </div>
 </div>
