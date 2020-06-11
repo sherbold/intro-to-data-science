@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: statistics hypothesis testing effect sizes confidence intervals
+search: hypothesis mean test data t distribution normal x not value testing null alternative normally distributed populations standard statistics distributions looks used rejected students values deviation often chapter also e following both effect difference questions h assumption level significance does probability means determine different frac example visually histogram left however without additional just samples blue orange similar bit random us need statistical confidence intervals assumptions holds failed ha related welchs equal thus same whether because likely given case p drawn sd n motivation far looked exploration analyzed below histograms analyze bell shape indicates cannot sure analysis possible randomly outlier really shows
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -22,6 +22,17 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <div id="page-info"><div id="page-title">Statistics</div>
 </div>
     
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Motivation">Motivation<a class="anchor-link" href="#Motivation"> </a></h2><p>So far, we have often looked at data. For example, in <a href="03_Data-Exploration">Chapter 3</a> we visually analyzed the distributions of data. Below are two histograms of data that we could also visually analyze.</p>
+
+</div>
+</div>
+</div>
+</div>
+
 <div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
@@ -68,7 +79,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_0_0.png"
+<img src="images/11_Statistics_1_0.png"
 >
 </div>
 
@@ -84,7 +95,34 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Hypothesis-Testing">Hypothesis Testing<a class="anchor-link" href="#Hypothesis-Testing"> </a></h2>
+<p>The histogram on the left looks like it has a bell shape, which indicates that the data may be normal. However, we cannot be sure, without additional analysis. It could would also be possible that the data just randomly looks like that, i.e., is some outlier and that the data is not really normal.</p>
+<p>The histogram on the left shows two samples, to which we refer in the following as "blue" and "orange". Both look similar, but it looks like the mean value of the blue data may be a bit smaller than that of the orange data. However, this could also just be a random effect, and there is no real difference.</p>
+<p>Statistics gives us the methods we need to get (probabilistic) answers to these questions. Within this Chapter, we give a short introduction into the (quite large) world of statistics. Upon completion of this chapter, you should know what hypothesis testing is, how this can be used correctly, and why hypothesis testing is often not useful, if used without additional statistical tools like effect size and confidence intervals.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hypothesis-Testing">Hypothesis Testing<a class="anchor-link" href="#Hypothesis-Testing"> </a></h2><p>Hypothesis testing is the primary tool of <em>frequentist statistics</em>. The idea behind hypothesis testing is the following. If we have certain assumptions on the data, we can formulate these assumptions as an hypothesis about the data. We always have two hypothesis, the <em>null hypothesis</em> and the <em>alternative hypothesis</em>.</p>
+<ul>
+<li>Null Hypothesis ($H_0$): Assumption of the test holds and is failed to be rejected at some level of significance.</li>
+<li>Alternative Hypothesis ($H_1$, $H_a$): Assumption of the test does not hold and is rejected at some level of significance.</li>
+</ul>
+<p>The question is, what these abstract concept mean. What exactly is the assumption of a test? What does "(failed to be) rejected at some level of significance" mean? Since these questions are often misunderstood and misused, we explain them using the example of the $t$-test.</p>
+<h3 id="$t$-Test">$t$-Test<a class="anchor-link" href="#$t$-Test"> </a></h3><p>The $t$-Test can be seen as the father of all statistical tests and was first introduced by William Gosset under the pseodonym "Student". This oldest version of the test and the related probability distribution are there called Student's $t$-Test and Student's distribution. Here, we consider a newer variant of the $t$-Test, i.e., Welch's $t$-Test. Welch's $t$-Test has the following null and alternative hypotheses:</p>
+<ul>
+<li>$H_0$: The means of two normally distributed populations $X_1$ and $X_2$ are equal.</li>
+<li>$H_a$: $X_1$ and $X_2$ are not from two normally distributed populations with equal mean values.</li>
+</ul>
+<p>Thus, this test can be used to determine if two normally distributed populations have the same mean value. This is relevant in many use cases, e.g., to answer questions like "does this medication improve the health" or "is my deep neural network better than a random forest". Please note that the alternative hypothesis of the $t$-Test is not that the mean values are different. Only if both distributions are normal, this would mean that the mean values are different. If one of the populations is not normally distributed, we do not know whether the null hypothesis was rejected because the data was not normal or because the means are different. This misinterpretation of alternative hypothesis is one of the common mistakes when hypothesis testing is used.</p>
+<p>In order to determine evaluate whether the null hypothesis holds, hypothesis testing evaluates <em>how likely the data is, given the hypothesis</em>. For the $t$-Test this means that we want to calculate how likely it is that we observe the populations $X_1$ and $X_2$, in case both are normally distributed with the same mean value. This probability is the infamous <em>$p$-value</em>.</p>
+<p>To determine the p-value, we need the probability density function of a test statistic. In case of the $t$-Test, this is Student's $t$-Distribution.</p>
+
 </div>
 </div>
 </div>
@@ -123,7 +161,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_2_0.png"
+<img src="images/11_Statistics_4_0.png"
 >
 </div>
 
@@ -132,6 +170,18 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This distribution looks similar to the normal distribution, the difference is that the tails are a bit longer than those of the normal distribution. Student's $t$-distribution is defined as the distribution of the  deviation of the arithmetic mean of a sample drawn from a standard normal distribution with a mean value of 0 and a standard deviation of 1 deviates. Thus, the $t$-Distribution tells us how much deviation of the mean values between two samples drawn from a standard normal distributions we can expect. This is directly related to the likelihood of the data, given the hypothesis that data is normal.</p>
+<p>The difference we still have is that the $t$ distribution is for a specific mean value and standard deviation, while our hypothesis is for normal distributions with any mean value and standard distribution.</p>
+$$t = \frac{mean(X_1)-mean(X_2)}{\sqrt{\frac{sd(X_1)^2}{N_1}+\frac{sd(X_2)}{N_2}}}$$
+</div>
+</div>
 </div>
 </div>
 
@@ -173,7 +223,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_3_0.png"
+<img src="images/11_Statistics_6_0.png"
 >
 </div>
 
@@ -276,7 +326,7 @@ the null hypothesis at significance level alpha=0.005.
 </div>
 </div>
 
-<div class="jb_cell">
+<div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -375,7 +425,7 @@ the null hypothesis at significance level alpha=0.005.
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_8_0.png"
+<img src="images/11_Statistics_11_0.png"
 >
 </div>
 
@@ -426,7 +476,7 @@ the null hypothesis at significance level alpha=0.005.
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_9_0.png"
+<img src="images/11_Statistics_12_0.png"
 >
 </div>
 
