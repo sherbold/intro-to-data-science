@@ -64,6 +64,9 @@
 - url: /10_Text-Mining
   not_numbered: false
   
+- url: /11_Statistics
+  not_numbered: false
+  
 - divider: true
 
 - url: /Exercises
