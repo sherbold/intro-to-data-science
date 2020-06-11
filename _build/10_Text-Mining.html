@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: words text tweets documents data e mining bag g not also example stemming n such used case same often context lemmatization document relevant different occur only following corpus our irrelevant get textual into meaning well topic preprocessing apply frequency techniques content good through between stem approach grams information reviews related moreover structure within works want cases cannot punctuation because stop thus terms count similar inverse instead embeddings application goal examples language numeric challenges representation learning possible however idea processing general analyze step twitter list separate completely just another therefore should specific while mean reduced harmonization based term t tfidf far
+search: words text only mining not tweets also data documents example e bag g often such used n context different stemming meaning following case same lemmatization preprocessing told mistress loved document our relevant because occur textual into well corpus irrelevant get language topic between problems apply terms approach frequency grams techniques structure content good within through just cannot every stop thus stem similar features embeddings information examples analysis reviews related problem natural numeric moreover representation possible however huge works algorithms want cases therefore punctuation sentence mean count inverse very instead large hit man stick else application goal applications categorical challenges learning
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -1193,7 +1193,7 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Beyond-the-Bag-of-Words">Beyond the Bag-of-Words<a class="anchor-link" href="#Beyond-the-Bag-of-Words"> </a></h3><p>While the bag-of-words is a good technique that scales well, there are also some severe limitations. One such limitations are that the bag-of-words does not account for the structure of documents, i.e., grammar and the context are completely ignored. Another one is that the similarity between words is ignored. For example, it makes sense that <code>dollar</code> and <code>euro</code> are two separate terms in the bag-of-words. However, the words are similar to each other, because both are currencies, which may be relevant for the text mining.</p>
 <p>There are also more complex techniques that can be used. A simple extension of the bag-of-words that accounts at least to some degree for the context and structure is to use $n$-grams instead of words. A $n$-gram consists of subsequences of $n$ words. Thus, we do not count how often words occur anymore, but rather how often sequences of words occur. The drawbacks of $n$-grams is that the chance that it is unlikely that $n$-grams for larger values of $n$ occur more than once, because this would require the exact same wording. Thus, $n$-grams may be needlessly specific and, therefore, hinder generalization. Moreover, the number of $n$-grams growths exponentially with $n$. Thus, this approach only works to capture the direct context of a word.</p>
-<p>A recent approach is to use <em>word embeddings</em> instead of the bag-of-words. Word embeddings transform words into a high dimensional space (e.g., the $\mathbb{R}^d}) such that similar words are close to each other in the embedded space. State-of-the-art word embeddings like BERT can also take the context of words into account and, thereby, further improve the similarity. The word embeddings themselves are learned through deep neural networks with a <em>transformer</em> architecture using huge amounts of textual data.</p>
+<p>A recent approach is to use <em>word embeddings</em> instead of the bag-of-words. Word embeddings transform words into a high dimensional space (e.g., the $\mathbb{R}^d$) such that similar words are close to each other in the embedded space. State-of-the-art word embeddings like BERT can also take the context of words into account and, thereby, further improve the similarity. The word embeddings themselves are learned through deep neural networks with a <em>transformer</em> architecture using huge amounts of textual data.</p>
 
 </div>
 </div>
@@ -1204,7 +1204,37 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Challenges">Challenges<a class="anchor-link" href="#Challenges"> </a></h2><h3 id="Dimensionality">Dimensionality<a class="anchor-link" href="#Dimensionality"> </a></h3><h3 id="Ambiguities">Ambiguities<a class="anchor-link" href="#Ambiguities"> </a></h3><h3 id="Syntax-and-Semantic">Syntax and Semantic<a class="anchor-link" href="#Syntax-and-Semantic"> </a></h3><h3 id="Parsing">Parsing<a class="anchor-link" href="#Parsing"> </a></h3>
+<h2 id="Challenges">Challenges<a class="anchor-link" href="#Challenges"> </a></h2><p>The difficulties with text mining do not stop, just because we now have a numeric representation of the text that we can use as input for algorithms. There are many other problems, many of them not yet solved, that make text mining into such a hard problem.</p>
+<h3 id="Dimensionality">Dimensionality<a class="anchor-link" href="#Dimensionality"> </a></h3><p>The first problem is the dimensionality. In our example of just eight tweets, we already have 70 different terms after preprocessing. In longer text, there are several thousand unique terms, even after preprocessing. Thus, there is a huge amount of categorical features. However, not only the number of features may be very large, the number of documents can also be very large. For example, there are already over 50,000 tweets by Donald Trump (June 2020), and hundreds of millions of tweets every day.</p>
+<p>The combination of many features and many instances means that text mining can consume huge amounts of runtime. Therefore, large text mining applications only work with efficiently implemented algorithms, often on dedicated hardware that allows for massive parallelization. These requirements are also the reason why an algorithm that scales well with large amounts of data, like Multinomial Naive Bayes, is still a popular choice for text mining.</p>
+<h3 id="Ambiguities">Ambiguities<a class="anchor-link" href="#Ambiguities"> </a></h3><p>The second problem is that natural language if often ambiguous. Partially, this cannot be solved, because natural language is, unless used with great care, imprecise and the exact meaning is often only understandable from a very broad context. For example, the following sentence can have a different meaning, that can only be understood from the context.</p>
+<ul>
+<li>I hit a man with a stick. (I used a stick to hit a man.)</li>
+<li>I hit a man with a stick. (I hit the man who was holding a stick.)</li>
+</ul>
+<p>Such problems are often impossible to resolve and lead to noise in the analysis.</p>
+<p>Other problems with ambiguities are to some degree solvable, but may also lead to noise in the analysis, especially with a bag-of-words. <em>Homonyms</em> are words with multiple meanings. For example, <em>break</em> can mean <em>to break something</em>, but also <em>take a break</em>. The bag-of-words does not differentiate between these meanings. Other approaches, such as $n$-grams and word embeddings can, to some degree, account for this, but also not perfectly.</p>
+<p>There are also syntactic ambiguities, where the meaning changes depending on the syntactic structure of a sentence. The following nine-word sentence uses the word <em>only</em> in every possible position. The meaning changes with every position.</p>
+<ul>
+<li>Only he told his mistress that he loved her. (Nobody else did.)</li>
+<li>He only told his mistress that he loved her. (He didn't show her.)</li>
+<li>He told only his mistress that he loved her. (Kept it a secret from everyone else.)</li>
+<li>He told his only mistress that he loved her. (Stresses that he had only ONE!)</li>
+<li>He told his mistress only that he loved her. (Didn't tell her anything else.)</li>
+<li>He told his mistress that only he loved her. ("I'm all you got, nobody else wants you.")</li>
+<li>He told his mistress that he only loved her. (Not that he wanted to marry her.)</li>
+<li>He told his mistress that he loved only her. (Yeah, don't they all...)</li>
+<li>He told his mistress that he loved her only. (Similar to above one.)</li>
+</ul>
+<h3 id="And-Many-More">And Many More<a class="anchor-link" href="#And-Many-More"> </a></h3><p>Above, we discussed some examples in detail. There are many others, for example the following.</p>
+<ul>
+<li>Bad spelling which leads to unknown words. </li>
+<li>The evolution of language, especially in form of new words or slang. </li>
+<li>Imperfection of preprocessing approaches, e.g., synonyms that are not part of the wordlist for lemmatization. </li>
+<li>The parsing of text, which have different encodings and character sets (Chinese, Japanese, Korean, Arabic, Latin, ...)</li>
+</ul>
+<p>This also means that text mining applications are, at least currently, never finished, because there are always more unsolved problems with textual data. Users of text mining must be aware of this, because otherwise projects may never finish. At some point, a decision must be made that the remaining problems are not within the scope of a project and the performance of a text mining approach is sufficient.</p>
+
 </div>
 </div>
 </div>
