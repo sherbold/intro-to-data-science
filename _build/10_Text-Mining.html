@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: text mining oct twitter iphone pm data t co words textual e g challenges good made minnesota vote u s techniques goal infer information related sentences texts numeric categorical often structure content into not only also context document still idea general works thank stop great need taxes spending bag overview application discussed far examples applications analysis costumer reviews sentiment automated grouping documents problem analyzing natural language longer neither nor moreover inherent headlines introductions references summaries read automatically identify structures internally biggest finding representation such used machine learning somehow encoded little loss possible ideal encoding captures meaning grammatical well broader within
+search: text data tweets mining case e g example irrelevant documents words relevant often content also topic corpus textual information reviews into only cases different punctuation application goal challenges such used not context document general analyze preprocessing want twitter same techniques far infer analysis grouping related sentences texts numeric categorical structure automatically good representation machine learning possible meaning well within chapter idea processing works following collection our tweet internet contains timestamps links completely link just string differences between source cannot dropped consider dropping us bag overview discussed examples applications costumer sentiment automated problem analyzing natural language longer neither nor moreover inherent
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -28,24 +28,255 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Overview">Overview<a class="anchor-link" href="#Overview"> </a></h2><p>Text mining is the application of the techniques we discussed so far to textual data with the goal to infer information from the data. Examples for text mining applications are, e.g., the analysis of costumer reviews to infer their sentiment or the automated grouping of related documents. The problem with analyzing natural language text is that sentences or longer texts are neither numeric nor categorical data. Moreover, there is often some inherent structure in texts, e.g., headlines, introductions, references to other related content, or summaries. When we read text, we automatically identify these structures that textual data has internally. This is one of the biggest challenges of text mining: finding a good representation of the text such that it can be used for machine learning.</p>
 <p>For this, the text has to be somehow <em>encoded</em> into numeric or categorical data with as little loss of information as possible. The ideal encoding captures not only the words, but also the meaning of the words in their <em>context</em>, the grammatical structure, as well as the broader context of the text, e.g., of sentences within a document. To achieve this is still a subject of ongoing research. However, there were many advancements in recent years that made text mining into a powerful, versatile, and often sufficiently reliable tool. Since text mining itself is a huge field, we can only scratch the surface of the topic. The goal is that upon reading this chapter, you have a good idea the challenges of text mining, know basic text processing techniques, and also have a general idea of how more advanced text mining works.</p>
-<p>We will use the following eight tweets from Donald Trump as an example for textual data to demonstrate how text mining works in general.</p>
+<p>We will use the following eight tweets from Donald Trump as an example for textual data to demonstrate how text mining works in general. All data processing steps are done with the goal to prepare the text such that it is possible to analyze the topic of the tweets.</p>
 
-<pre><code>Oct 4, 2018 08:03:25 PM Beautiful evening in Rochester, Minnesota. VOTE, VOTE, VOTE! https://t.co/SyxrxvTpZE [Twitter for iPhone] 
+</div>
+</div>
+</div>
+</div>
 
-Oct 4, 2018 07:52:20 PM Thank you Minnesota - I love you! https://t.co/eQC2NqdIil [Twitter for iPhone] 
+<div class="jb_cell tag_hide_input">
 
-Oct 4, 2018 05:58:21 PM Just made my second stop in Minnesota for a MAKE AMERICA GREAT AGAIN rally. We need to elect @KarinHousley to the U.S. Senate, and we need the strong leadership of @TomEmmer, @Jason2CD, @JimHagedornMN and @PeteStauber in the U.S. House! [Twitter for iPhone] 
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-Oct 4, 2018 05:17:48 PM Congressman Bishop is doing a GREAT job! He helped pass tax reform which lowered taxes for EVERYONE! Nancy Pelosi is spending hundreds of thousands of dollars on his opponent because they both support a liberal agenda of higher taxes and wasteful spending! [Twitter for iPhone] 
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">TextWrapper</span>
 
-Oct 4, 2018 02:29:27 PM “U.S. Stocks Widen Global Lead” https://t.co/Snhv08ulcO [Twitter for iPhone] 
+<span class="n">tweets_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Oct 4, 2018 08:03:25 PM Beautiful evening in Rochester, Minnesota. VOTE, VOTE, VOTE! https://t.co/SyxrxvTpZE [Twitter for iPhone]&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;Oct 4, 2018 07:52:20 PM Thank you Minnesota - I love you! https://t.co/eQC2NqdIil [Twitter for iPhone]&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;Oct 4, 2018 05:58:21 PM Just made my second stop in Minnesota for a MAKE AMERICA GREAT AGAIN rally. We need to elect @KarinHousley to the U.S. Senate, and we need the strong leadership of @TomEmmer, @Jason2CD, @JimHagedornMN and @PeteStauber in the U.S. House! [Twitter for iPhone]&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;Oct 4, 2018 05:17:48 PM Congressman Bishop is doing a GREAT job! He helped pass tax reform which lowered taxes for EVERYONE! Nancy Pelosi is spending hundreds of thousands of dollars on his opponent because they both support a liberal agenda of higher taxes and wasteful spending! [Twitter for iPhone]&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;Oct 4, 2018 02:29:27 PM &quot;U.S. Stocks Widen Global Lead&quot; https://t.co/Snhv08ulcO [Twitter for iPhone]&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;Oct 4, 2018 02:17:28 PM Statement on National Strategy for Counterterrorism: https://t.co/ajFBg9Elsj https://t.co/Qr56ycjMAV [Twitter for iPhone]&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;Oct 4, 2018 12:38:08 PM Working hard, thank you! https://t.co/6HQVaEXH0I [Twitter for iPhone]&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;Oct 4, 2018 09:17:01 AM This is now the 7th. time the FBI has investigated Judge Kavanaugh. If we made it 100, it would still not be good enough for the Obstructionist Democrats. [Twitter for iPhone]&#39;</span><span class="p">]</span>
 
-Oct 4, 2018 02:17:28 PM Statement on National Strategy for Counterterrorism: https://t.co/ajFBg9Elsj https://t.co/Qr56ycjMAV [Twitter for iPhone] 
+<span class="n">wrapper</span> <span class="o">=</span> <span class="n">TextWrapper</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets_list</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">tweet</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
 
-Oct 4, 2018 12:38:08 PM Working hard, thank you! https://t.co/6HQVaEXH0I [Twitter for iPhone] 
+    </div>
+</div>
+</div>
 
-Oct 4, 2018 09:17:01 AM This is now the 7th. time the FBI has investigated Judge Kavanaugh. If we made it 100, it would still not be good enough for the Obstructionist Democrats. [Twitter for iPhone]</code></pre>
+<div class="output_wrapper">
+<div class="output">
 
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Oct 4, 2018 08:03:25 PM Beautiful evening in Rochester, Minnesota.
+VOTE, VOTE, VOTE! https://t.co/SyxrxvTpZE [Twitter for iPhone]
+
+Oct 4, 2018 07:52:20 PM Thank you Minnesota - I love you!
+https://t.co/eQC2NqdIil [Twitter for iPhone]
+
+Oct 4, 2018 05:58:21 PM Just made my second stop in Minnesota for a
+MAKE AMERICA GREAT AGAIN rally. We need to elect @KarinHousley to the
+U.S. Senate, and we need the strong leadership of @TomEmmer,
+@Jason2CD, @JimHagedornMN and @PeteStauber in the U.S. House! [Twitter
+for iPhone]
+
+Oct 4, 2018 05:17:48 PM Congressman Bishop is doing a GREAT job! He
+helped pass tax reform which lowered taxes for EVERYONE! Nancy Pelosi
+is spending hundreds of thousands of dollars on his opponent because
+they both support a liberal agenda of higher taxes and wasteful
+spending! [Twitter for iPhone]
+
+Oct 4, 2018 02:29:27 PM &#34;U.S. Stocks Widen Global Lead&#34;
+https://t.co/Snhv08ulcO [Twitter for iPhone]
+
+Oct 4, 2018 02:17:28 PM Statement on National Strategy for
+Counterterrorism: https://t.co/ajFBg9Elsj https://t.co/Qr56ycjMAV
+[Twitter for iPhone]
+
+Oct 4, 2018 12:38:08 PM Working hard, thank you!
+https://t.co/6HQVaEXH0I [Twitter for iPhone]
+
+Oct 4, 2018 09:17:01 AM This is now the 7th. time the FBI has
+investigated Judge Kavanaugh. If we made it 100, it would still not be
+good enough for the Obstructionist Democrats. [Twitter for iPhone]
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Preprocessing">Preprocessing<a class="anchor-link" href="#Preprocessing"> </a></h2><p>Through preprocessing, text is transformed into a representation that we can use for machine learning algorithms, e.g., for the classification or for the grouping with clustering.</p>
+<h3 id="Creation-of--a-Corpus">Creation of  a Corpus<a class="anchor-link" href="#Creation-of--a-Corpus"> </a></h3><p>The first preprocessing step is to create a <em>corpus</em> of <em>documents</em>. In the sense of the terminology we have used so far, the documents are the objects that we want to reason about, the corpus is a collection of object. In our Twitter example, the corpus is a collection of tweets, and each tweet is a document. In our case, we already have a list of tweets, which is the same as a corpus of documents. In other use cases, this can be more difficult. For example, if you crawl the internet to collect reviews for a product, it is likely that you find multiple reviews on the same Web site. In this case, you must extract the reviews into separate documents, which can be challenging.</p>
+<h3 id="Relevant-Content">Relevant Content<a class="anchor-link" href="#Relevant-Content"> </a></h3><p>Textual data, especially text that was automatically collected from the Internet, often contains irrelevant content for a given use case. For example, if we only want to analyze the topic of tweets, the timestamps are irrelevant. It does also not matter if a tweet was sent with an iPhone or a different application. Links are a tricky case, as they may contain relevant information, but are also often irrelevant. For example, the URL of this page contains relevant information, e.g., the author, the general topic, and the name of the current chapter. Other parts, like the http are irrelevant. Other links are completely irrelevant, e.g., in case link shorteners are used. In this case a link is just a random string.</p>
+<p>When we strip the irrelevant content from the tweets, we get the following.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">tweets_relevant_content</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets_list</span><span class="p">:</span>
+    <span class="c1"># remove the first 24 chars, because they are the time stamp</span>
+    <span class="c1"># remove everything after last [ because this is the source of the tweet</span>
+    <span class="n">modified_tweet</span> <span class="o">=</span> <span class="n">tweet</span><span class="p">[</span><span class="mi">24</span><span class="p">:</span><span class="n">tweet</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">)]</span>
+    <span class="c1"># drop links</span>
+    <span class="n">modified_tweet</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;http\S+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">modified_tweet</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">tweets_relevant_content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_tweet</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets_relevant_content</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">tweet</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Beautiful evening in Rochester, Minnesota. VOTE, VOTE, VOTE!
+
+Thank you Minnesota - I love you!
+
+Just made my second stop in Minnesota for a MAKE AMERICA GREAT AGAIN
+rally. We need to elect @KarinHousley to the U.S. Senate, and we need
+the strong leadership of @TomEmmer, @Jason2CD, @JimHagedornMN and
+@PeteStauber in the U.S. House!
+
+Congressman Bishop is doing a GREAT job! He helped pass tax reform
+which lowered taxes for EVERYONE! Nancy Pelosi is spending hundreds of
+thousands of dollars on his opponent because they both support a
+liberal agenda of higher taxes and wasteful spending!
+
+&#34;U.S. Stocks Widen Global Lead&#34;
+
+Statement on National Strategy for Counterterrorism:
+
+Working hard, thank you!
+
+This is now the 7th. time the FBI has investigated Judge Kavanaugh. If
+we made it 100, it would still not be good enough for the
+Obstructionist Democrats.
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>What is relevant and irrelevant can also depend on the context. For example, a different use case for Twitter data would be to analyze if tweets there a differences between tweets from different sources. In this case, the source cannot be dropped, but would be needed to divide the tweets by their source. Another analysis of Twitter data may want to consider how the content of tweets evolves over time. In this case, the timestamps cannot just be dropped. Therefore, every text mining application should carefully consider what is relevant and tailor the contents of the text to the specific needs.</p>
+<h3 id="Punctuation-and-Cases">Punctuation and Cases<a class="anchor-link" href="#Punctuation-and-Cases"> </a></h3><p>When we are only interested in the topic of documents, the punctuation, as well as the cases of the letters are often not useful and introduce unwanted differences between the same words. A relevant corner case of dropping punctuation and cases are acronyms. The acronym <code>U.S.</code> from the tweets is a perfect example for this, because this becomes <code>us</code>, which has a completely different meaning. If you are aware that the may be such problems within your data, you can manually address them, e.g., by mapping and <code>US</code> to <code>usa</code> after dropping the punctuation, but before lower casing the string.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">string</span>
+<span class="n">tweets_lowercase</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets_relevant_content</span><span class="p">:</span>
+    <span class="n">modified_tweet</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">))</span>
+    <span class="n">modified_tweet</span> <span class="o">=</span> <span class="n">modified_tweet</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;US&#39;</span><span class="p">,</span> <span class="s1">&#39;usa&#39;</span><span class="p">)</span>
+    <span class="n">modified_tweet</span> <span class="o">=</span> <span class="n">modified_tweet</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">tweets_lowercase</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_tweet</span><span class="p">)</span>
+    
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets_lowercase</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">tweet</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>beautiful evening in rochester minnesota vote vote vote
+
+thank you minnesota  i love you
+
+just made my second stop in minnesota for a make america great again
+rally we need to elect karinhousley to the usa senate and we need the
+strong leadership of tomemmer jason2cd jimhagedornmn and petestauber
+in the usa house
+
+congressman bishop is doing a great job he helped pass tax reform
+which lowered taxes for everyone nancy pelosi is spending hundreds of
+thousands of dollars on his opponent because they both support a
+liberal agenda of higher taxes and wasteful spending
+
+usa stocks widen global lead
+
+statement on national strategy for counterterrorism
+
+working hard thank you
+
+this is now the 7th time the fbi has investigated judge kavanaugh if
+we made it 100 it would still not be good enough for the
+obstructionist democrats
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Stop-Words">Stop Words<a class="anchor-link" href="#Stop-Words"> </a></h3>
 </div>
 </div>
 </div>
@@ -55,7 +286,37 @@ Oct 4, 2018 09:17:01 AM This is now the 7th. time the FBI has investigated Judge
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Preprocessing">Preprocessing<a class="anchor-link" href="#Preprocessing"> </a></h2><h3 id="Creation-of--a-Corpus">Creation of  a Corpus<a class="anchor-link" href="#Creation-of--a-Corpus"> </a></h3><h3 id="Relevant-Content">Relevant Content<a class="anchor-link" href="#Relevant-Content"> </a></h3><h3 id="Punctuation-and-Cases">Punctuation and Cases<a class="anchor-link" href="#Punctuation-and-Cases"> </a></h3><h3 id="Stop-Words">Stop Words<a class="anchor-link" href="#Stop-Words"> </a></h3><h3 id="Stemming-and-Lemmatization">Stemming and Lemmatization<a class="anchor-link" href="#Stemming-and-Lemmatization"> </a></h3><h3 id="Bag-of-Words">Bag-of-Words<a class="anchor-link" href="#Bag-of-Words"> </a></h3><h3 id="Inverse-Document-Frequency">Inverse Document Frequency<a class="anchor-link" href="#Inverse-Document-Frequency"> </a></h3><h3 id="Beyond-the-Bag-of-Words">Beyond the Bag-of-Words<a class="anchor-link" href="#Beyond-the-Bag-of-Words"> </a></h3>
+<h3 id="Stemming-and-Lemmatization">Stemming and Lemmatization<a class="anchor-link" href="#Stemming-and-Lemmatization"> </a></h3>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Bag-of-Words">Bag-of-Words<a class="anchor-link" href="#Bag-of-Words"> </a></h3>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Inverse-Document-Frequency">Inverse Document Frequency<a class="anchor-link" href="#Inverse-Document-Frequency"> </a></h3>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Beyond-the-Bag-of-Words">Beyond the Bag-of-Words<a class="anchor-link" href="#Beyond-the-Bag-of-Words"> </a></h3>
 </div>
 </div>
 </div>
