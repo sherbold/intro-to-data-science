@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: hypothesis test data t not mean normal null values p value distribution difference populations testing significance tests x level probability means true e statistical given used reject different also normally distributed determine likely case often samples welchs thus same because standard statistics distributions both alternative equal g alpha results does students between such significant false example chapter looks analysis blue orange effect why assumptions assumption rejected question using answer calculate deviation still our any fail statistically generated statements mann whitney u shapiro wilk parametric positive however just following similar bit us need probabilistic questions should h since under only defined
+search: hypothesis test data mean t not normal values difference null p value distribution x populations significance tests means testing level probability standard e used statistical true d samples given effect reject normally distributed thus different deviation often also determine same likely case between distributions size welchs because statistics example following both alternative equal g our small alpha results significant geq looks does students frac such false chapter analysis blue orange large why assumptions assumption rejected question using answer calculate defined still while any sd n very fail statistically generated statements mann whitney u shapiro wilk parametric positive s cohens histogram
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -59,7 +59,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Histogram of randomly generated data</span><span class="se">\n</span><span class="s2">Question: Are the mean values different?both samples from the same distribution?&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Histogram of randomly generated data</span><span class="se">\n</span><span class="s1">mean(&quot;blue&quot;): </span><span class="si">%.2f</span><span class="s1"> - mean(&quot;orange&quot;): </span><span class="si">%.2f</span><span class="se">\n</span><span class="s1">Question: Are the mean values different?&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s2</span><span class="p">)))</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
 
@@ -370,7 +370,106 @@ rejecting the null hypothesis at significance level alpha=0.050.
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Effect-Sizes">Effect Sizes<a class="anchor-link" href="#Effect-Sizes"> </a></h2>
+<h2 id="Effect-Sizes">Effect Sizes<a class="anchor-link" href="#Effect-Sizes"> </a></h2><p>An often forgotten aspect of statistical tests is that significant is not the same as meaningful. In our example, we have two normal distributions with the following arithmetic mean and standard deviation.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell tag_hide_input">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean (&quot;blue&quot;) = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sd (&quot;blue&quot;)   = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean (&quot;blue&quot;) = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sd (&quot;blue&quot;)   = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>mean (&#34;blue&#34;) = -0.01
+sd (&#34;blue&#34;)   = 0.20
+mean (&#34;blue&#34;) = 0.07
+sd (&#34;blue&#34;)   = 0.20
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This means that we have a difference of means that is relatively small in comparison to the standard deviation. The <em>effect size</em> extends the context of significance with a notion of how large the difference actually is. For normally distributed data, the effect size for the difference between the mean values can be measured with Cohen's $d$, which is defined as</p>
+$$d = \frac{mean(X_1)-mean(X_2)}{s}$$<p>where</p>
+$$s = \sqrt{\frac{(n_1-1)\cdot sd(X_1)^2+(n_2-1)\cdot sd(X_2)^2}{n_1+n_2-2}}.$$<p>While $s$ looks complicated, this is nothing else but <em>pooled standard deviation</em> of the two samples, i.e., the weighted mean of the standard deviations of the two samples, where the weights are determined by the number of samples. Thus, Cohen's $d$ measure the ratio of the difference between the mean values to the standard deviation and the meaning of $d=1$ is that the difference of sample means is one standard deviation. According to Cohen and Sawilowsky, the following table can be used as a guide to interpret the <em>magnitude</em> of the effect size.</p>
+<table>
+<thead><tr>
+<th>Cohen's $d$</th>
+<th>Effect size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$</td>
+<td>d</td>
+<td>\geq 0.01$</td>
+<td>Very small</td>
+</tr>
+<tr>
+<td>$</td>
+<td>d</td>
+<td>\geq 0.2$</td>
+<td>Small</td>
+</tr>
+<tr>
+<td>$</td>
+<td>d</td>
+<td>\geq 0.5$</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>$</td>
+<td>d</td>
+<td>\geq 0.8$</td>
+<td>Large</td>
+</tr>
+<tr>
+<td>$</td>
+<td>d</td>
+<td>\geq 1.2$</td>
+<td>Very large</td>
+</tr>
+<tr>
+<td>$</td>
+<td>d</td>
+<td>\geq 2.0$</td>
+<td>Huge</td>
+</tr>
+</tbody>
+</table>
+<p>We note that this table was designed for use within the social sciences. Regardless, these values are broadly used, independent of the domain.</p>
+<p>In our example, we have the following effect size.</p>
+
 </div>
 </div>
 </div>
@@ -390,14 +489,16 @@ rejecting the null hypothesis at significance level alpha=0.050.
 <span class="n">cohens_d</span> <span class="o">=</span> <span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span> <span class="o">/</span> <span class="n">s</span>
 
 <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">0.01</span><span class="p">:</span>
-    <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;very small&quot;</span>
+    <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;negligible&quot;</span>
 <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">0.2</span><span class="p">:</span>
-    <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;small&quot;</span>
+    <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;very small&quot;</span>
 <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">0.5</span><span class="p">:</span>
-    <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
+    <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;small&quot;</span>
 <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">0.8</span><span class="p">:</span>
-    <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;large&quot;</span>
+    <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
 <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1.2</span><span class="p">:</span>
+    <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;large&quot;</span>
+<span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">:</span>
     <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;very large&quot;</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;huge&quot;</span>
@@ -416,7 +517,7 @@ rejecting the null hypothesis at significance level alpha=0.050.
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Effect size (Cohen&#39;s d): -0.394 - medium effect size
+<pre>Effect size (Cohen&#39;s d): -0.368 - small effect size
 </pre>
 </div>
 </div>
@@ -424,6 +525,17 @@ rejecting the null hypothesis at significance level alpha=0.050.
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Thus, we have a small effect size. This is in line with the histogram of the data: we see that there may be a difference between the two samples, but the difference is relatively small. This is confirmed by Cohen's $d$.</p>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -475,7 +587,7 @@ rejecting the null hypothesis at significance level alpha=0.050.
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_13_0.png"
+<img src="images/11_Statistics_16_0.png"
 >
 </div>
 
@@ -526,7 +638,7 @@ rejecting the null hypothesis at significance level alpha=0.050.
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_14_0.png"
+<img src="images/11_Statistics_17_0.png"
 >
 </div>
 
