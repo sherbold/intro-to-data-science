@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: hypothesis test data mean t not normal values difference null p value distribution x populations significance tests means testing level probability standard e used statistical true d samples given effect reject normally distributed thus different deviation often also determine same likely case between distributions size welchs because statistics example following both alternative equal g our small alpha results significant geq looks does students frac such false chapter analysis blue orange large why assumptions assumption rejected question using answer calculate defined still while any sd n very fail statistically generated statements mann whitney u shapiro wilk parametric positive s cohens histogram
+search: hypothesis test data mean t not normal values difference null p value distribution x populations significance tests means testing level probability standard e used statistical true d vert samples given effect reject normally distributed thus different deviation often also determine same likely case between distributions size welchs because statistics example following both alternative equal g our small alpha results significant geq looks does students frac such false chapter analysis blue orange large why assumptions assumption rejected question using answer calculate defined still while any sd n very fail statistically generated statements mann whitney u shapiro wilk parametric positive s cohens
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -384,10 +384,10 @@ rejecting the null hypothesis at significance level alpha=0.050.
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean (&quot;blue&quot;) = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sd (&quot;blue&quot;)   = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean (&quot;blue&quot;) = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sd (&quot;blue&quot;)   = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean (&quot;blue&quot;)   = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sd   (&quot;blue&quot;)   = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean (&quot;orange&quot;) = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sd   (&quot;orange&quot;) = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -401,10 +401,10 @@ rejecting the null hypothesis at significance level alpha=0.050.
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>mean (&#34;blue&#34;) = -0.01
-sd (&#34;blue&#34;)   = 0.20
-mean (&#34;blue&#34;) = 0.07
-sd (&#34;blue&#34;)   = 0.20
+<pre>mean (&#34;blue&#34;)   = -0.01
+sd   (&#34;blue&#34;)   = 0.20
+mean (&#34;orange&#34;) = 0.07
+sd   (&#34;orange&#34;) = 0.20
 </pre>
 </div>
 </div>
@@ -430,39 +430,27 @@ $$s = \sqrt{\frac{(n_1-1)\cdot sd(X_1)^2+(n_2-1)\cdot sd(X_2)^2}{n_1+n_2-2}}.$$<
 </thead>
 <tbody>
 <tr>
-<td>$</td>
-<td>d</td>
-<td>\geq 0.01$</td>
+<td>$\vert d \vert \geq 0.01$</td>
 <td>Very small</td>
 </tr>
 <tr>
-<td>$</td>
-<td>d</td>
-<td>\geq 0.2$</td>
+<td>$\vert d \vert \geq 0.2$</td>
 <td>Small</td>
 </tr>
 <tr>
-<td>$</td>
-<td>d</td>
-<td>\geq 0.5$</td>
+<td>$\vert d \vert \geq 0.5$</td>
 <td>Medium</td>
 </tr>
 <tr>
-<td>$</td>
-<td>d</td>
-<td>\geq 0.8$</td>
+<td>$\vert d \vert \geq 0.8$</td>
 <td>Large</td>
 </tr>
 <tr>
-<td>$</td>
-<td>d</td>
-<td>\geq 1.2$</td>
+<td>$\vert d \vert \geq 1.2$</td>
 <td>Very large</td>
 </tr>
 <tr>
-<td>$</td>
-<td>d</td>
-<td>\geq 2.0$</td>
+<td>$\vert d \vert \geq 2.0$</td>
 <td>Huge</td>
 </tr>
 </tbody>
