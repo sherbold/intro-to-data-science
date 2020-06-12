@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: hypothesis mean test data t distribution normal x not value testing null alternative normally distributed populations standard statistics distributions looks used rejected students values deviation often chapter also e following both effect difference questions h assumption level significance does probability means determine different frac example visually histogram left however without additional just samples blue orange similar bit random us need statistical confidence intervals assumptions holds failed ha related welchs equal thus same whether because likely given case p drawn sd n motivation far looked exploration analyzed below histograms analyze bell shape indicates cannot sure analysis possible randomly outlier really shows
+search: hypothesis test data t not mean normal null values p value distribution difference populations testing significance tests x level probability means true e statistical given used reject different also normally distributed determine likely case often samples welchs thus same because standard statistics distributions both alternative equal g alpha results does students between such significant false example chapter looks analysis blue orange effect why assumptions assumption rejected question using answer calculate deviation still our any fail statistically generated statements mann whitney u shapiro wilk parametric positive however just following similar bit us need probabilistic questions should h since under only defined
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -59,7 +59,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Histogram of randomly generated data</span><span class="se">\n</span><span class="s2">Question: Are both samples from the same distribution?&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Histogram of randomly generated data</span><span class="se">\n</span><span class="s2">Question: Are the mean values different?both samples from the same distribution?&quot;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
 
@@ -120,7 +120,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <li>$H_a$: $X_1$ and $X_2$ are not from two normally distributed populations with equal mean values.</li>
 </ul>
 <p>Thus, this test can be used to determine if two normally distributed populations have the same mean value. This is relevant in many use cases, e.g., to answer questions like "does this medication improve the health" or "is my deep neural network better than a random forest". Please note that the alternative hypothesis of the $t$-Test is not that the mean values are different. Only if both distributions are normal, this would mean that the mean values are different. If one of the populations is not normally distributed, we do not know whether the null hypothesis was rejected because the data was not normal or because the means are different. This misinterpretation of alternative hypothesis is one of the common mistakes when hypothesis testing is used.</p>
-<p>In order to determine evaluate whether the null hypothesis holds, hypothesis testing evaluates <em>how likely the data is, given the hypothesis</em>. For the $t$-Test this means that we want to calculate how likely it is that we observe the populations $X_1$ and $X_2$, in case both are normally distributed with the same mean value. This probability is the infamous <em>$p$-value</em>.</p>
+<p>In order to determine evaluate whether the null hypothesis holds, hypothesis testing evaluates <em>how likely the data is, given the hypothesis</em>. For the $t$-Test this means that we want to calculate how likely it is that we observe the populations $X_1$ and $X_2$, in case both are normally distributed with the same mean value. This probability is the infamous <em>p-value</em>.</p>
 <p>To determine the p-value, we need the probability density function of a test statistic. In case of the $t$-Test, this is Student's $t$-Distribution.</p>
 
 </div>
@@ -178,8 +178,9 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This distribution looks similar to the normal distribution, the difference is that the tails are a bit longer than those of the normal distribution. Student's $t$-distribution is defined as the distribution of the  deviation of the arithmetic mean of a sample drawn from a standard normal distribution with a mean value of 0 and a standard deviation of 1 deviates. Thus, the $t$-Distribution tells us how much deviation of the mean values between two samples drawn from a standard normal distributions we can expect. This is directly related to the likelihood of the data, given the hypothesis that data is normal.</p>
-<p>The difference we still have is that the $t$ distribution is for a specific mean value and standard deviation, while our hypothesis is for normal distributions with any mean value and standard distribution.</p>
-$$t = \frac{mean(X_1)-mean(X_2)}{\sqrt{\frac{sd(X_1)^2}{N_1}+\frac{sd(X_2)}{N_2}}}$$
+<p>The difference we still have is that the $t$ distribution is for a specific mean value and standard deviation, while our hypothesis is for normal distributions with any mean value and standard distribution. This is why we need a <em>test statistic</em>, in case of the $t$-Test the $t$ value, which is defined as</p>
+$$t = \frac{mean(X_1)-mean(X_2)}{\sqrt{\frac{sd(X_1)^2}{n_1}+\frac{sd(X_2)}{n_2}}}$$<p>A bit simplified, the test statistics $t$ us the rescaled the difference between the two populations $X_1$ and $X_2$ such that this is the difference to estimates the difference of the means as if they were two standard normal distributions. Thus, we can use the $t$ value and Student's $t$-distribution to calculate how probable it is, that these populations are observed, given that the means are not different. For this, we calculate the area under the $t$-distribution outside of $\pm t$.</p>
+
 </div>
 </div>
 </div>
@@ -198,7 +199,7 @@ $$t = \frac{mean(X_1)-mean(X_2)}{\sqrt{\frac{sd(X_1)^2}{N_1}+\frac{sd(X_2)}{N_2}
 <span class="n">xfill_right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">rv</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.9999</span><span class="p">),</span><span class="n">tvalue</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;p-values with Student&#39;s $t$-distribution&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;p-values with Student&#39;s $t$-distribution.</span><span class="se">\n</span><span class="s2">The green area is the p-value.&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">tvalue</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="o">-</span><span class="n">tvalue</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
@@ -235,6 +236,38 @@ $$t = \frac{mean(X_1)-mean(X_2)}{\sqrt{\frac{sd(X_1)^2}{N_1}+\frac{sd(X_2)}{N_2}
 </div>
 </div>
 
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The green area in the plot above is the probability, that the mean of a sample drawn from a standard normal distribution deviates by at least $t$ from 0. Since we calculated $t$ such that this is the same as the probability that the means of $X_1$ and $X_2$ are different, this is the p-value of the test, hence the probability that the data is observed given the null hypothesis is true.</p>
+<h3 id="Significance-Level">Significance Level<a class="anchor-link" href="#Significance-Level"> </a></h3><p>Since the p-value is how likely the data is, given that the null hypothesis is true, it is reasonable to argue that the null hypothesis may not be true, if the p-value is very small, i.e., the data is very unlikely if the null hypothesis were true. This concept is formalized with the <em>significance level</em> $\alpha$ that is used to define the <em>statistical significance</em> of results.</p>
+<p>The significance level decides is defined as the (acceptable) probability of rejecting the null hypothesis, given that it is true. While the significance level depends on the domains, commonly used values are 0.05, or more recently also 0.005. With the significance level, we can decide if we reject the null hypothesis or not:</p>
+<ul>
+<li>If $p-value &gt; \alpha$ we fail to reject the null hypothesis. This means that the data can be reasonably well explained, if the null hypothesis were true. </li>
+<li>If $p-value \leq \alpha$ we reject the null hypothesis and have a <em>statistically significant result</em>, e.g., a statistically significant difference of the mean values in case of the $t$-Test if both populations are normal. </li>
+</ul>
+<p>Please not that neither case means with absolute certainty that the null hypothesis or the alternative hypothesis is true. Hypothesis testing is probabilistic. When we fail to reject the null hypothesis, the null hypothesis could still be false, but this is not supported by the data. When we reject the null hypothesis, the null hypothesis could still be true, it is just unlikely - but not impossible! -  that such extreme data would be generated. This is also why we use the somewhat complicated wording of "fail to reject" or "reject" at some significance level. Absolute statements of the form "there is a difference", are not supported by hypothesis testing, only probabilistic statements of the form "there is a statistically significant difference with a significance level of $\alpha$.</p>
+<h3 id="Overview-of-Statistical-Tests">Overview of Statistical Tests<a class="anchor-link" href="#Overview-of-Statistical-Tests"> </a></h3><p>The explanations above are similar for all statistical tests: we have a null hypothesis that is based on our assumptions and we calculate a p-value that we can use to either fail to reject are reject the null hypothesis given some level of significance.</p>
+<p>Here are the null hypothesis of some important statistical tests.</p>
+<ul>
+<li>Welch's $t$-Test: The means of two normally distributed populations are equal</li>
+<li>Mann-Whitney-U Test / Wilcoxon-Ranksum-Test: The values from one population dominate the values of another population (more or less difference of means/medians)</li>
+<li>Shapiro-Wilk Test: A population of 3 to 5000 independent samples is normally distributed.</li>
+<li>Levene's Test: The variances of a group of populations are equal.</li>
+<li>ANOVA (F-Test): The mean values of a group normally distributed populations with equal variances are equal.</li>
+<li>Kolmogorov-Smirnoff Test: Two populations have the same probability distribution.</li>
+</ul>
+<p>We already know that we can use Welch's $t$-Test to determine if the means of two normal distributions are significantly different. In case the data is not normal, we can use the Mann-Whitney-U Test instead. We can use the Shapiro-Wilk Test to determine if our samples are normal, e.g., to decide which test to use for the difference in the central tendency. When we have more than one populations, we can use ANOVA to test for differences in the central tendency, given the data is normal and all variances are the same. Levene's tests can be used to determine if is this is the case.</p>
+<p>In general, we say that a test is <em>parametric</em> if the tests has assumptions about the distribution of the data (e.g., that the data must be normal), and <em>non-parametric</em> if the test does not make such assumption. Welch's $t$-Test is an example of parametric test, the Mann-Whitney-U Test is the non-parametric counterpart.</p>
+<p>The Kolmogorov-Smirnoff Tests is one of the most generic statistical tests, because it can test for arbitrary populations of continuous data if they are from the same distribution. Thus, this test can be used under any nearly any circumstances. Regardless, using this test is some sort of "last resort", because in case of differences, we have no idea what the difference may be. In comparison, if we first conduct Shapiro-Wilk tests to determine that data is normal and then use Welch's $t$-Test and find that there is a significant different, we not only know that there likely is a difference between the populations, but also that this difference is due to a difference in mean values.</p>
+<h3 id="Using-the-$t$-Test">Using the $t$-Test<a class="anchor-link" href="#Using-the-$t$-Test"> </a></h3><p>Now that we have discussed the statistical tests in detail, we come back to our motivation and try to answer the question from the beginning of this chapter: are the mean values of the blue and orange samples different? We already learned, that we cannot answer this question absolutely. But we can use the statistical tests to answer the question if the mean values of the blue and orange samples are significantly different at a significance level of $\alpha$. To determine this, we first apply the Shapiro-Wilk test to both samples, to check if they are normal. If both are normal, we use Welch's $t$-Test, otherwise we use the Mann-Whitney-U test.</p>
+
+</div>
+</div>
+</div>
+</div>
+
 <div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
@@ -249,7 +282,7 @@ $$t = \frac{mean(X_1)-mean(X_2)}{\sqrt{\frac{sd(X_1)^2}{N_1}+\frac{sd(X_2)}{N_2}
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">string</span><span class="p">)))</span>
 
 
-<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.005</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
 <span class="n">pval_shapiro1</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">s1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">pval_shapiro2</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">s2</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -277,9 +310,9 @@ $$t = \frac{mean(X_1)-mean(X_2)}{\sqrt{\frac{sd(X_1)^2}{N_1}+\frac{sd(X_2)}{N_2}
 <span class="nb">print</span><span class="p">()</span>    
 <span class="n">wrap_print</span><span class="p">(</span><span class="s2">&quot;p-value of Welch&#39;s t-tests: </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pval_equal</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">pval_equal</span><span class="o">&gt;</span><span class="n">alpha</span><span class="p">:</span>
-    <span class="n">wrap_print</span><span class="p">(</span><span class="s1">&#39;The test found that the population means are equal, failing to reject the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">wrap_print</span><span class="p">(</span><span class="s1">&#39;The test found that the population means are probably equal, failing to reject the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">wrap_print</span><span class="p">(</span><span class="s1">&#39;The test found that the population means are not equal, rejecting the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">wrap_print</span><span class="p">(</span><span class="s1">&#39;The test found that the population means are probably not equal, rejecting the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -293,19 +326,19 @@ $$t = \frac{mean(X_1)-mean(X_2)}{\sqrt{\frac{sd(X_1)^2}{N_1}+\frac{sd(X_2)}{N_2}
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>p-value of Shapiro-Wilk test for &#34;blue&#34; data:   0.7442
+<pre>p-value of Shapiro-Wilk test for &#34;blue&#34; data:   0.1071
 The test found that the data sample was normal, failing to reject
-the null hypothesis at significance level alpha=0.005.
+the null hypothesis at significance level alpha=0.050.
 
-p-value of Shapiro-Wilk test for &#34;orange&#34; data: 0.4496
+p-value of Shapiro-Wilk test for &#34;orange&#34; data: 0.6994
 The test found that the data sample was normal, failing to reject
-the null hypothesis at significance level alpha=0.005.
+the null hypothesis at significance level alpha=0.050.
 
 Both populations normal. Using Welch&#39;s t-test.
 
-p-value of Welch&#39;s t-tests: 0.000096
-The test found that the population means are not equal, rejecting
-the null hypothesis at significance level alpha=0.005.
+p-value of Welch&#39;s t-tests: 0.008343
+The test found that the population means are probably not equal,
+rejecting the null hypothesis at significance level alpha=0.050.
 </pre>
 </div>
 </div>
@@ -313,6 +346,23 @@ the null hypothesis at significance level alpha=0.005.
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Thus, the tests indicate that the data is likely normal and that the mean values are likely not exactly the same meaning that we found a statistically significant difference between the two mean values at a significance level of $\alpha=0.05$.</p>
+<h3 id="Common-Misuses-of-Hypothesis-Testing">Common Misuses of Hypothesis Testing<a class="anchor-link" href="#Common-Misuses-of-Hypothesis-Testing"> </a></h3><p>With hypothesis testing the devil is in the details, i.e., there are many things that can be forgotten or used in an imprecise way, which often leads to overstating the results. There are some big issues that are frequently misinterpreted.</p>
+<p>First, people often use hypothesis testing to make binary statements, e.g., "the data is normal" instead of "the statistical test indicates that the data is likely normal". This is a big difference: one leaves room for the expected errors with hypothesis testing, the other is an absolute statement indicating that this is true. That these mistakes happen (a lot!), is understandable. Writing about the results of statistical tests in a correct way is hard, because you have to be careful to avoid binary statements, while still drawing relevant conclusions. Regardless, good scientific practice mandates that this should be avoided.</p>
+<p>Second, p-values are misused because many people do not understand what the p-values. This is why there are many researchers advocating that hypothesis testing and p-values should be abolished, in favor of other methods. There are also many reseachers who say that abolishing p-values would not solve the problem that people do not understand statistics, which is the reason for the misuse. The two most important misuses <em>scoring</em> and <em>p-hacking</em>.</p>
+<p>Scoring means that the p-values are used as scores and the differences between populations are <em>ranked</em> using the p-values. This does not make any sense, because the p-values are not the probability that the hypothesis is true, but rather that the data was generated given that the hypothesis is true. Thus, ranking of p-values would mean that we somehow score the data, which is not the intend.</p>
+<p>The other problem, the p-hacking, often happens inadvertently. As discussed above, the p-value is the probability that the data was generated, given the hypothesis. Thus, if the p-value is 0.05, there would be a 5% probability that this data was generated, given the hypothesis. In other words, there already is the expectation that there are <em>false positive test results</em>, i.e., that we sometimes reject the null hypothesis, even if the null hypothesis is true. In general, this is not a problem, if we keep this probability low. However, if you conduct 20 tests and each test has a 5% probability that the test is a false positive, it is almost certain that there are false positive results. This effect can be countered by <em>adjusting</em> the p-value, e.g., with <a href="https://mathworld.wolfram.com/BonferroniCorrection.html">Bonferroni correction</a>.</p>
+<p>Such p-hacking also often happens inadvertantly through <em>subgroup analysis</em>. A famous example of this is <a href="https://doi.org/10.1016/S0140-6736(88">this article</a>92833-4), where the authors were forced to conduct subgroup analysis that were not planned. To demonstrate that this likely leads to false positive results, they included an analysis of the impact of the zodiac signs on the treatment.</p>
+
+</div>
+</div>
 </div>
 </div>
 
@@ -425,7 +475,7 @@ the null hypothesis at significance level alpha=0.005.
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_11_0.png"
+<img src="images/11_Statistics_13_0.png"
 >
 </div>
 
@@ -476,7 +526,7 @@ the null hypothesis at significance level alpha=0.005.
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_12_0.png"
+<img src="images/11_Statistics_14_0.png"
 >
 </div>
 
