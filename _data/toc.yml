@@ -82,6 +82,7 @@
     - url: /exercises/Exercise_Regression
     - url: /exercises/Exercise_Time_Series_Analysis
     - url: /exercises/Exercise_Text_Mining
+    - url: /exercises/Exercise_Statistics
 - url: /Solutions
   not_numbered: true
   expand_sections: false
