@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: hypothesis test data mean t not normal values difference null p value distribution x populations significance tests means testing level probability standard e used statistical true d vert samples given effect reject normally distributed thus different deviation often also determine same likely case between distributions size welchs because statistics example following both alternative equal g our small alpha results significant geq looks does students frac such false chapter analysis blue orange large why assumptions assumption rejected question using answer calculate defined still while any sd n very fail statistically generated statements mann whitney u shapiro wilk parametric positive s cohens
+search: hypothesis test data mean t p value not normal values difference null x distribution confidence e statistical probability means tests populations standard level significance testing true interval different statistics samples used d vert c often example effect same given deviation also following normally distributed thus g reject case our determine likely between results significant distributions size welchs because frac such theta looks analysis both alternative equal sample sd n small alpha false geq within large should does question students answer defined still while any statistically positive where zc chapter just blue orange questions why intervals assumptions assumption rejected using under
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -45,7 +45,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span>
 
 <span class="c1"># generate data</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span> 
 <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span> <span class="c1"># mean and standard deviation</span>
 <span class="n">s1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 <span class="n">s2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="o">+</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
@@ -326,17 +326,17 @@ $$t = \frac{mean(X_1)-mean(X_2)}{\sqrt{\frac{sd(X_1)^2}{n_1}+\frac{sd(X_2)}{n_2}
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>p-value of Shapiro-Wilk test for &#34;blue&#34; data:   0.1071
+<pre>p-value of Shapiro-Wilk test for &#34;blue&#34; data:   0.8290
 The test found that the data sample was normal, failing to reject
 the null hypothesis at significance level alpha=0.050.
 
-p-value of Shapiro-Wilk test for &#34;orange&#34; data: 0.6994
+p-value of Shapiro-Wilk test for &#34;orange&#34; data: 0.2498
 The test found that the data sample was normal, failing to reject
 the null hypothesis at significance level alpha=0.050.
 
 Both populations normal. Using Welch&#39;s t-test.
 
-p-value of Welch&#39;s t-tests: 0.008343
+p-value of Welch&#39;s t-tests: 0.000102
 The test found that the population means are probably not equal,
 rejecting the null hypothesis at significance level alpha=0.050.
 </pre>
@@ -402,7 +402,7 @@ rejecting the null hypothesis at significance level alpha=0.050.
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>mean (&#34;blue&#34;)   = -0.01
-sd   (&#34;blue&#34;)   = 0.20
+sd   (&#34;blue&#34;)   = 0.19
 mean (&#34;orange&#34;) = 0.07
 sd   (&#34;orange&#34;) = 0.20
 </pre>
@@ -505,7 +505,7 @@ $$s = \sqrt{\frac{(n_1-1)\cdot sd(X_1)^2+(n_2-1)\cdot sd(X_2)^2}{n_1+n_2-2}}.$$<
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Effect size (Cohen&#39;s d): -0.368 - small effect size
+<pre>Effect size (Cohen&#39;s d): -0.393 - small effect size
 </pre>
 </div>
 </div>
@@ -531,7 +531,46 @@ $$s = \sqrt{\frac{(n_1-1)\cdot sd(X_1)^2+(n_2-1)\cdot sd(X_2)^2}{n_1+n_2-2}}.$$<
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Confidence-Intervals">Confidence Intervals<a class="anchor-link" href="#Confidence-Intervals"> </a></h2>
+<h2 id="Confidence-Intervals">Confidence Intervals<a class="anchor-link" href="#Confidence-Intervals"> </a></h2><p>Finally, we may wonder how trustworthy the estimation of mean values is. This depends on two factors: the number of instances in a sample and the variability of the sample. The following example makes the intuition behind this clear. Imagine you want to know the average age of your customers. Your estimation obviously gets more accurate, the more customers you ask for their age. Moreover, imagine the first customer answer 18, the second 75, the third 22, the you observe 44, etc. This means there is obviously a large variability in the customer age. To counter this, you must ask more customers.</p>
+<p>In the following, we use an example that directly relates to machine learning. Imagine you have twenty different data sources (e.g., data from twenty stores) to train a classification model, e.g., for customer churn. You use the data from five stores for training, and the data from the remaining 15 stores to evaluate the quality of the model. This means you get 15 performance estimates. Now assume that you observe a normal distribution of the accuracy mean value of 0.83 and a standard deviation of 0.13. The question is how accurate this mean accuracy is. In other words: what could you expect, if you apply your model to fifteen other scores?</p>
+<p>The <em>confidence interval</em> allows this kind of estimation. It is defined as follows.</p>
+<blockquote><p><em>Definition: Confidence Interval</em></p>
+<p>A $C\%$ confidence interval $\theta$ for some parameter $p$ is an interval that is expected with probability $C\%$ to contain $p$.</p>
+</blockquote>
+<p>Thus, there can be a confidence interval for any statistical marker $p$. The idea is that the actual value of $p$ is somewhere within the interval. In our case, $p$ is the mean value of a normal distribution. $C$ is called the confidence level. For example, if $C=0.95$, we expect that the there is a 95% chance that future estimations of the mean value would be within the confidence interval.</p>
+<p>This confidence interval of the mean of a normally distributed sample $X = \{x_1, ..., x_n\}$ can be calculated as</p>
+$$\theta = [mean(X) - z_C\frac{sd(X)}{\sqrt{n}},  mean(X) + z_C\frac{sd(X)}{\sqrt{n}}]$$<p>where $z_C$ is the so-called <em>z-value</em> for the confidence level. We see that this Definition matches the intuition: the interval gets smaller, with more samples and/or a smaller standard deviation. In practice, $z_C$ is often just looked in a table.</p>
+<table>
+<thead><tr>
+<th>$C$</th>
+<th>$z_C$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>90%</td>
+<td>1.645</td>
+</tr>
+<tr>
+<td>95%</td>
+<td>1.96</td>
+</tr>
+<tr>
+<td>99%</td>
+<td>2.58</td>
+</tr>
+<tr>
+<td>99.5%</td>
+<td>2.807</td>
+</tr>
+<tr>
+<td>99.9%</td>
+<td>3.291</td>
+</tr>
+</tbody>
+</table>
+<p>The origin of the z-value is the standard normal distribution. The z-value is choosen such that the are under the probability density function is $C$.</p>
+
 </div>
 </div>
 </div>
@@ -555,10 +594,11 @@ $$s = \sqrt{\frac{(n_1-1)\cdot sd(X_1)^2+(n_2-1)\cdot sd(X_2)^2}{n_1+n_2-2}}.$$<
 <span class="n">xfill</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">zc</span><span class="p">,</span> <span class="n">zc</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Density function of the standard normal distribution (mean=0,sd=1)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Density function of the standard normal distribution (mean=0, sd=1)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">xfill</span><span class="p">,</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">xfill</span><span class="p">),</span> <span class="n">y2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([</span><span class="o">-</span><span class="n">tvalue</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">tvalue</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;$-z_C$&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">,</span><span class="s1">&#39;$z_C$&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([</span><span class="o">-</span><span class="n">zc</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">zc</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;$-z_C$&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">,</span><span class="s1">&#39;$z_C$&#39;</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="s2">&quot;C% probability mass&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
@@ -587,6 +627,17 @@ $$s = \sqrt{\frac{(n_1-1)\cdot sd(X_1)^2+(n_2-1)\cdot sd(X_2)^2}{n_1+n_2-2}}.$$<
 </div>
 </div>
 
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For our example, the confidence interval of our example looks as follows for different confidence levels.</p>
+
+</div>
+</div>
+</div>
+</div>
+
 <div class="jb_cell tag_hide_input">
 
 <div class="cell border-box-sizing code_cell rendered">
@@ -607,7 +658,7 @@ $$s = \sqrt{\frac{(n_1-1)\cdot sd(X_1)^2+(n_2-1)\cdot sd(X_2)^2}{n_1+n_2-2}}.$$<
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y_lower</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.999</span><span class="p">],[</span><span class="mf">0.83</span><span class="p">,</span><span class="mf">0.83</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_upper</span><span class="p">,</span> <span class="n">y2</span><span class="o">=</span><span class="n">y_lower</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Confidence intervals for different confidence levels&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Confidence intervals for different confidence levels</span><span class="se">\n</span><span class="s1">mean=0.83, sd=0.13, n=15&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Confidence Level&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Confidence Interval&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -626,7 +677,7 @@ $$s = \sqrt{\frac{(n_1-1)\cdot sd(X_1)^2+(n_2-1)\cdot sd(X_2)^2}{n_1+n_2-2}}.$$<
 
 
 <div class="output_png output_subarea ">
-<img src="images/11_Statistics_17_0.png"
+<img src="images/11_Statistics_18_0.png"
 >
 </div>
 
@@ -635,6 +686,39 @@ $$s = \sqrt{\frac{(n_1-1)\cdot sd(X_1)^2+(n_2-1)\cdot sd(X_2)^2}{n_1+n_2-2}}.$$<
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Same as the p-value, the confidence interval is often misinterpreted. The correct interpretation of a $C%$ confidence interval is, e.g., one of the following.</p>
+<ul>
+<li>There is a $C\%$ chance that the results of future replications of the same experiment fall into $\theta$.</li>
+<li>There is no statistically significant different of the estimated parameter for all values within $\theta$ with a $C\%$ confidence.</li>
+<li>There is a $1-C\%$ probability of the observed data, if the true value for the estimated parameter is outside of $\theta$. </li>
+</ul>
+<p>Common misinterpretations of the confidence interval that should absolutely be avoided are, e.g., the following.</p>
+<ul>
+<li>The true value of $p$ lies with $C\%$ probability in $\theta$. Same as hypothesis tests, confidence intervals are a statement about the observed data. </li>
+<li>$C\%$ of the observe data is ins $\theta$. This mixes up the confidence interval with the quantiles. </li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Good-Statistical-Reporting">Good Statistical Reporting<a class="anchor-link" href="#Good-Statistical-Reporting"> </a></h2><p>While many publications still rely only on reporting the p-value and simply state that a result is significant, good statistical reporting goes beyond this and also considers additional aspects, such as effect sizes and confidence intervals. Moreover, all statistical analysis should be planned beforehand and not be conducted in an exploratory fashion, as this leads to p-hacking. Therefore, many scientific fields are turning towards <em>registered reports</em>, where the planned statistical analysis is described in detail before conducting the study. This in an effective measure to prevent exploratory statistics, which lead to false positive findings.</p>
+<p>Moreover, the statistics we discussed here is <em>frequentist statistics</em>. Good reporting may also use a completely different approach, i.e., <em>Bayesian statistics</em>. Bayesian statistics is based on Bayes theorom and evaluates data through the estimation of the <em>degree of believe</em> in an outcome. Scientists in favor of Bayesian approaches argue that the results are often easier to interpret than frequentist statistics and better aligned with the actual research questions.</p>
+
+</div>
+</div>
 </div>
 </div>
 
