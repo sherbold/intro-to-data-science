@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /exercises/Solution_Classification.html
 suffix: .ipynb
-search: clusters data clustering between results city cluster dbscan not means minpts also k different separation regions similar values green only sklearn algorithms features pca plots good three because very difference exercise within large centers suburbs em analysis using should suitable determine scatterplot blue center small boundary mean boston both version scatterplots thus already scaled plot clear e pairwise indus nox orange rural areas algorithm differences seven value epsilon dendrogram slink least get based well scale effects seems due density degree single even consider bic here region split into hierarchical does any same problem part python learn stable fourteen problems regarding
+search: clusters data clustering between results city cluster dbscan not means minpts also k different separation values regions similar green very only sklearn algorithms features pca plots good three because difference exercise within large centers suburbs em bic analysis using should thus suitable determine e scatterplot blue center while seven small boundary mean boston both version scatterplots already scaled plot clear pairwise indus nox less orange rural areas algorithm differences value epsilon dendrogram slink least get based well scale effects indicates seems due density degree close single even consider note zero exactly result here region split into hierarchical does any same
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -359,8 +359,8 @@ Ratio of variance explained:  0.5853943917417506
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The pairwise plots of the fourteen features provide a large amount of information. The main problem with such a plot is knowing where to start learning about the clusters. My suggestion is to first see if there are clear separations between the clusters in the density plots on the diagonal, because this can tell us a lot about the distribution of the data within the clusters. For example, we can learn the following:</p>
 <ul>
-<li>The blue cluster has the lowest values for INDUS, NOX, AGE and LSTAT and the largest values for ZN and DIS. Thus, the regions in this cluster have only little industry and office space, a low pollution, new houses, a lower degree of education, and a large distance to employment centers and large proportion of houses for residents. </li>
-<li>The green cluster is more or less the opposite of the blue cluster. The regions have largest proportion of industry and office space, the most pollution, the oldest houses, the highest degree of eduction and are closest to the employment centers. </li>
+<li>The blue cluster has the lowest values for INDUS, NOX, AGE and LSTAT and the largest values for ZN and DIS. Thus, the regions in this cluster have only little industry and office space, a low pollution, new houses, a less people with a low degree of education, and a large distance to employment centers and large proportion of houses for residents. </li>
+<li>The green cluster is more or less the opposite of the blue cluster. The regions have largest proportion of industry and office space, the most pollution, the oldest houses, the lowest degree of eduction and are closest to the employment centers. </li>
 <li>The orange cluster is somewhere between blue and green in all these features. </li>
 </ul>
 <p>Thus, we already get a fairly good description of the clusters just by analyzing the diagonal: blue seems to be suburbs and rural areas, green is the city center and industrial areas, and orange are the suburbs very close to the city and the outer regions of the city.</p>
@@ -630,6 +630,9 @@ Ratio of variance explained:  0.5853943917417506
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We can see the clear separation of the centers in the variables we expect, but also in some others, e.g., RAD, even though this is not clearly visible and in the scatterplots. Such difference should be considered carefully and not overstated. If the differences cannot be seen in the data, this could also mean that there is no real difference between the cluster for that feature and that the actual location of the centers is random for the feature.</p>
+<blockquote><p>Note:</p>
+<p>While values like -1.77e-15 are technically negative and non-zero, we note that this is very close to exactly zero. That this is not exactly zero is usually the result of the imprecision of floating point operations. Thus, it it reasonable to assume that this would be exactly zero, while analyzing the data.</p>
+</blockquote>
 
 </div>
 </div>
@@ -713,7 +716,7 @@ Ratio of variance explained:  0.5853943917417506
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The BIC clearly indicates that seven would be the optimal number of clusters. We start by analyzing the clustering results with the PCA.</p>
+<p>The BIC clearly indicates that seven would be the optimal number of clusters. While 10 has a slightly lower BIC than 7, the chart indicates that BIC leveled off at seven and that the BIC between 7 and 15 is more or less constant with smaller random fluctuations. We start by analyzing the clustering results with the PCA.</p>
 
 </div>
 </div>
