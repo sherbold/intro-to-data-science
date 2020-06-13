@@ -1,0 +1,338 @@
+---
+redirect_from:
+  - "/exercises/solution-statistics"
+interact_link: content/exercises/Solution_Statistics.ipynb
+kernel_name: python3
+kernel_path: content/exercises
+has_widgets: false
+title: |-
+  Statistics
+pagenum: 32
+prev_page:
+  url: /exercises/Solution_Text_Mining.html
+next_page:
+  url: 
+suffix: .ipynb
+search: data effect size difference statistics confidence interval statistical mcc classifiers significant observe very exercise performance train classifier mean standard deviation between d results apply sizes determine tests compare classification models sklearn iris repeated training nearest neighbor random forest test splits calculate values both statistically cohens estimate while fairly increasing iterations also large range less samples small learn hypothesis testing machine learning experiment libraries task everything need scipy stats available sampling estimators using different randomized matthews correlation coefficient create arrays comparison summary median min max estimates moreover value reliability estimation repeat above depend repetitions markers stable changes five ten not almost
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Statistics</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With this exercise, you can learn more about statistics and apply hypothesis testing, effect sizes, and determine the confidence interval of an machine learning experiment.</p>
+<h2 id="Data-and-Libraries">Data and Libraries<a class="anchor-link" href="#Data-and-Libraries"> </a></h2><p>Your task in this exercise is to apply statistical tests to compare the performance of two classification models. You can find everything you need in <code>sklearn</code> and <code>scipy.stats</code>. For this exercise, we use the Iris data. The data is available in <code>sklearn</code>.</p>
+<h2 id="Repeated-Training-with-Repeated-Sampling">Repeated Training with Repeated Sampling<a class="anchor-link" href="#Repeated-Training-with-Repeated-Sampling"> </a></h2><p>Train classification models with a 5-nearest neighbor classifier and random forest classifier (100 estimators) for the Iris data using  5 different randomized train/test-splits with 50% data as training data. Calculate Matthews Correlation Coefficient (MCC) for each of these classifiers and create two arrays: one with the MCC values of the nearest neighbor classifier and one for the random forest.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Statistical-Comparison">Statistical Comparison<a class="anchor-link" href="#Statistical-Comparison"> </a></h2><p>Compare the summary statistics mean, standard deviation, median, min, and max of the estimates for the MCC of both classifiers. Use statistical tests to determine if there is a statistically significant difference between the classifiers. If the difference is significant, use Cohen's $d$ to estimate the effect size. Moreover, calculate the confidence interval for the mean value of MCC to estimate the reliability of your performance estimation.</p>
+<p>Repeat all of the above with 10, 50, and 100 train/test splits. How do the results depend on the number of repetitions?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">load_iris</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="k">import</span> <span class="n">resample</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">matthews_corrcoef</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span>
+<span class="kn">from</span> <span class="nn">statistics</span> <span class="k">import</span> <span class="n">mean</span><span class="p">,</span> <span class="n">stdev</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">TextWrapper</span>
+
+<span class="n">wrapper</span> <span class="o">=</span> <span class="n">TextWrapper</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">65</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">wrap_print</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">string</span><span class="p">)))</span>
+
+
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">scores_rf</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">scores_knn</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">repetitions</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
+    <span class="n">wrap_print</span><span class="p">(</span><span class="s2">&quot;----------------------------------------------------------------&quot;</span><span class="p">)</span>
+    <span class="n">wrap_print</span><span class="p">(</span>
+        <span class="s2">&quot;estimating performances of KNN and random forest with </span><span class="si">%i</span><span class="s2"> train/test splits&quot;</span> <span class="o">%</span> <span class="n">repetitions</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">repetitions</span><span class="p">):</span>
+        <span class="c1"># bootstrap loop</span>
+        <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">Y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+            <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.50</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
+        <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
+        <span class="n">Y_pred</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+        <span class="n">scores_rf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">))</span>
+        <span class="n">knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
+        <span class="n">Y_pred</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+        <span class="n">scores_knn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">Y_pred</span><span class="p">))</span>
+
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">scores_rf</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">scores_knn</span>
+
+    <span class="k">def</span> <span class="nf">calc_ci</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sd</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">cl</span><span class="p">):</span>
+        <span class="n">dev</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">cl</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">sd</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mu</span><span class="o">+</span><span class="n">dev</span><span class="p">,</span> <span class="n">mu</span><span class="o">-</span><span class="n">dev</span>
+
+    <span class="n">s1_lower</span><span class="p">,</span> <span class="n">s1_upper</span> <span class="o">=</span> <span class="n">calc_ci</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="mf">0.95</span><span class="p">)</span>
+    <span class="n">s2_lower</span><span class="p">,</span> <span class="n">s2_upper</span> <span class="o">=</span> <span class="n">calc_ci</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s2</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">),</span> <span class="mf">0.95</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Random Forest: mean   = </span><span class="si">%.4f</span><span class="s2"> [</span><span class="si">%.4f</span><span class="s2">,</span><span class="si">%.4f</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="n">s1_lower</span><span class="p">,</span> <span class="n">s1_upper</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;               sd     = </span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;               median = </span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;               min    = </span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;               max    = </span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">s1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;KNN:           mean   = </span><span class="si">%.4f</span><span class="s2"> [</span><span class="si">%.4f</span><span class="s2">,</span><span class="si">%.4f</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s2</span><span class="p">),</span> <span class="n">s2_lower</span><span class="p">,</span> <span class="n">s2_upper</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;               sd     = </span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;               median = </span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;               min    = </span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;               max    = </span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.005</span>
+    <span class="n">pval_shapiro1</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">s1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">pval_shapiro2</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">s2</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;p-value of Shapiro-Wilk test for random forest data:   </span><span class="si">%.4f</span><span class="s1">&#39;</span> <span class="o">%</span>
+          <span class="n">pval_shapiro1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pval_shapiro1</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="p">:</span>
+        <span class="n">wrap_print</span><span class="p">(</span><span class="s1">&#39;The test found that the data sample was normal, failing to reject the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wrap_print</span><span class="p">(</span>
+            <span class="s1">&#39;The test found that the data sample was not normal, rejecting the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;p-value of Shapiro-Wilk test for KNN data: </span><span class="si">%.4f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pval_shapiro2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pval_shapiro1</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="p">:</span>
+        <span class="n">wrap_print</span><span class="p">(</span><span class="s1">&#39;The test found that the data sample was normal, failing to reject the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wrap_print</span><span class="p">(</span>
+            <span class="s1">&#39;The test found that the data sample was not normal, rejecting the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">pval_shapiro1</span> <span class="o">&gt;</span> <span class="n">alpha</span> <span class="ow">and</span> <span class="n">pval_shapiro2</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="p">:</span>
+        <span class="n">wrap_print</span><span class="p">(</span><span class="s2">&quot;Both populations normal. Using Welch&#39;s t-test.&quot;</span><span class="p">)</span>
+        <span class="n">pval_equal</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">equal_var</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;p-value of Welch&#39;s t-tests: </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pval_equal</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wrap_print</span><span class="p">(</span>
+            <span class="s2">&quot;At least one population not normal. Using Mann-Whitney-U test.&quot;</span><span class="p">)</span>
+        <span class="n">pval_equal</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">mannwhitneyu</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">&#39;two-sided&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;p-value of Mann-Whitney-U test: </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pval_equal</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pval_equal</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="p">:</span>
+        <span class="n">wrap_print</span><span class="p">(</span><span class="s1">&#39;The test found that the population means are equal, failing to reject the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wrap_print</span><span class="p">(</span><span class="s1">&#39;The test found that the population means are not equal, rejecting the null hypothesis at significance level alpha=</span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="c1"># test conditions</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(((</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">stdev</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                  <span class="o">*</span> <span class="n">stdev</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">cohens_d</span> <span class="o">=</span> <span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span> <span class="o">/</span> <span class="n">s</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+            <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;negligible&quot;</span>
+        <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.2</span><span class="p">:</span>
+            <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;very small&quot;</span>
+        <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;small&quot;</span>
+        <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.8</span><span class="p">:</span>
+            <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
+        <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.2</span><span class="p">:</span>
+            <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;large&quot;</span>
+        <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cohens_d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;very large&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">effsizestr</span> <span class="o">=</span> <span class="s2">&quot;huge&quot;</span>
+
+        <span class="n">wrap_print</span><span class="p">(</span><span class="s2">&quot;Effect size (Cohen&#39;s d): </span><span class="si">%.3f</span><span class="s2"> - </span><span class="si">%s</span><span class="s2"> effect&quot;</span> <span class="o">%</span>
+                   <span class="p">(</span><span class="n">cohens_d</span><span class="p">,</span> <span class="n">effsizestr</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>----------------------------------------------------------------
+estimating performances of KNN and random forest with 5
+train/test splits
+
+Random Forest: mean   = 0.9289 [0.9048,0.9530]
+               sd     = 0.0275
+               median = 0.9403
+               min    = 0.8800
+               max    = 0.9610
+KNN:           mean   = 0.9448 [0.9220,0.9676]
+               sd     = 0.0260
+               median = 0.9403
+               min    = 0.9022
+               max    = 0.9803
+
+p-value of Shapiro-Wilk test for random forest data:   0.5128
+The test found that the data sample was normal, failing to reject
+the null hypothesis at significance level alpha=0.005
+
+p-value of Shapiro-Wilk test for KNN data: 0.7981
+The test found that the data sample was normal, failing to reject
+the null hypothesis at significance level alpha=0.005
+
+Both populations normal. Using Welch&#39;s t-test.
+
+p-value of Welch&#39;s t-tests: 0.425976
+The test found that the population means are equal, failing to
+reject the null hypothesis at significance level alpha=0.005
+----------------------------------------------------------------
+estimating performances of KNN and random forest with 10
+train/test splits
+
+Random Forest: mean   = 0.9224 [0.9089,0.9358]
+               sd     = 0.0266
+               median = 0.9403
+               min    = 0.8621
+               max    = 0.9610
+KNN:           mean   = 0.9355 [0.9262,0.9447]
+               sd     = 0.0183
+               median = 0.9403
+               min    = 0.9022
+               max    = 0.9803
+
+p-value of Shapiro-Wilk test for random forest data:   0.0531
+The test found that the data sample was normal, failing to reject
+the null hypothesis at significance level alpha=0.005
+
+p-value of Shapiro-Wilk test for KNN data: 0.0658
+The test found that the data sample was normal, failing to reject
+the null hypothesis at significance level alpha=0.005
+
+Both populations normal. Using Welch&#39;s t-test.
+
+p-value of Welch&#39;s t-tests: 0.141088
+The test found that the population means are equal, failing to
+reject the null hypothesis at significance level alpha=0.005
+----------------------------------------------------------------
+estimating performances of KNN and random forest with 50
+train/test splits
+
+Random Forest: mean   = 0.9272 [0.9211,0.9333]
+               sd     = 0.0251
+               median = 0.9403
+               min    = 0.8621
+               max    = 0.9610
+KNN:           mean   = 0.9438 [0.9381,0.9495]
+               sd     = 0.0234
+               median = 0.9403
+               min    = 0.8838
+               max    = 1.0000
+
+p-value of Shapiro-Wilk test for random forest data:   0.0005
+The test found that the data sample was not normal, rejecting the
+null hypothesis at significance level alpha=0.005
+
+p-value of Shapiro-Wilk test for KNN data: 0.0079
+The test found that the data sample was not normal, rejecting the
+null hypothesis at significance level alpha=0.005
+
+At least one population not normal. Using Mann-Whitney-U test.
+
+p-value of Mann-Whitney-U test: 0.000831
+The test found that the population means are not equal, rejecting
+the null hypothesis at significance level alpha=0.005
+Effect size (Cohen&#39;s d): -0.678 - medium effect
+----------------------------------------------------------------
+estimating performances of KNN and random forest with 100
+train/test splits
+
+Random Forest: mean   = 0.9263 [0.9222,0.9304]
+               sd     = 0.0267
+               median = 0.9240
+               min    = 0.8409
+               max    = 1.0000
+KNN:           mean   = 0.9450 [0.9411,0.9490]
+               sd     = 0.0258
+               median = 0.9423
+               min    = 0.8602
+               max    = 1.0000
+
+p-value of Shapiro-Wilk test for random forest data:   0.0000
+The test found that the data sample was not normal, rejecting the
+null hypothesis at significance level alpha=0.005
+
+p-value of Shapiro-Wilk test for KNN data: 0.0000
+The test found that the data sample was not normal, rejecting the
+null hypothesis at significance level alpha=0.005
+
+At least one population not normal. Using Mann-Whitney-U test.
+
+p-value of Mann-Whitney-U test: 0.000000
+The test found that the population means are not equal, rejecting
+the null hypothesis at significance level alpha=0.005
+Effect size (Cohen&#39;s d): -0.712 - medium effect
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We observe that while the statistical markers are fairly stable, the results of the statistics changes with an increasing number of iterations. With five and ten iterations, we do not find a statistically significant difference. We also observe that the confidence interval is fairly large, with a range of almost 5%. Once the sample size is increases to 50 and 100, we can observe that the difference between the two algorithms is significant. Similarly, we see that the confidence interval shrinks with increasing data size to a range of less than 1% with 100 samples.</p>
+<p>This demonstrate the most important aspect of any data analysis: never trust results with very few samples.</p>
+<p>Regarding the effect size, we observe that Cohen's $d$ can also be misleading. We see that the effect size is medium with $d \approx 0.7$. However, the actual difference between the mean values is less than 2%, i.e., the performance of both classifiers is very similar. Regardless, the effect size is relatively large, because the standard deviation is very small. This demonstrates that effect sizes, while effective, should be used with care, especially if the standard deviation is very small.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
