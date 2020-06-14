@@ -32,3 +32,17 @@ build:
 site: build
 	bundle exec jekyll build
 	touch _site/.nojekyll
+    
+pdf:
+	rm -rf _pdfbuild
+	mkdir -p _pdfbuild
+	cp -r content/0* _pdfbuild
+	cp -r content/1* _pdfbuild
+	mkdir _pdfbuild/images
+	cp -r content/images/* _pdfbuild/images
+	cp -r pdfconfig/* _pdfbuild
+	python _pdfbuild/strip_hidden_input.py
+	sphinx-build -b latex _pdfbuild _pdfbuild/latex/
+	python _pdfbuild/remove_empty_codeboxes.py
+	cd _pdfbuild/latex && make
+	cp _pdfbuild/latex/introductiontodatascience.pdf content/
