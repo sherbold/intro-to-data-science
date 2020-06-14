@@ -45,4 +45,4 @@ pdf:
 	sphinx-build -b latex _pdfbuild _pdfbuild/latex/
 	python _pdfbuild/remove_empty_codeboxes.py
 	cd _pdfbuild/latex && make
-	cp _pdfbuild/latex/introductiontodatascience.pdf content/
+	cp _pdfbuild/latex/introductiontodatascience.pdf content/pdf/
