@@ -1,0 +1,86 @@
+---
+redirect_from:
+  - "/12-big-data-and-map-reduce"
+interact_link: content/12_Big-Data-and-Map-Reduce.ipynb
+kernel_name: python3
+kernel_path: content
+has_widgets: false
+title: |-
+  Big Data Processing
+pagenum: 12
+prev_page:
+  url: /11_Statistics.html
+next_page:
+  url: /Exercises.html
+suffix: .ipynb
+search: data tasks distributed compute big memory network not computing computational storage message passing such nodes must large parallelization physical shared parallelism different does analysis cluster img src images png alt style width px layer apache processing only parallel approach isolated environments between e parts communication machine system via even also need problems computations both node implemented problem chapter innovative forms information want discuss why case pioneer used ox larger computers three programming executed independently communicate g because required using operating environment share same variables sharing single model machines possible usually similar solution require results thus since store account architecture outline
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Big Data Processing</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Distributed-Computing">Distributed Computing<a class="anchor-link" href="#Distributed-Computing"> </a></h2><p>As we know from <a href="01_Introduction">Chapter 1</a>, Big Data is data whose volume, velocity, and variety requires <em>innovative forms of information processing</em>. In this chapter, we want to discuss in greater detail why this is the case and how Big Data can processed.</p>
+<p>The foundation of any large computational effort is <em>parallelism</em>. There is a famous quote from computer science pioneer Grace Hopper: "<em>In pioneer days they used oxen for heavy pulling, and when one ox couldn't budge a log, they didn't try to grow a larger ox. We should be trying for bigger computers, but for more systems of computers</em>. In other words, large tasks can only be solved by pooling resources. There are three general methods for the parallelization of computational tasks.</p>
+<h3 id="Parallel-Programming-Models">Parallel Programming Models<a class="anchor-link" href="#Parallel-Programming-Models"> </a></h3><p>First approach <em>message passing</em> tasks are executed independently in isolated environments. Whenever these tasks want to communicate, they send messages to each other. This way, the tasks can exchange data between each other, e.g., because the data is required by different parts of the computation. This communication can be done locally on one physical machine, by using the provided functions by the operating system, or remotely in a distributed environment by communicating via the network.</p>
+<p>The second approach is <em>shared memory</em>. In this case, the computational tasks are not performed in isolated environments, but share a common address space in the memory, i.e., they can read and write the same variables. Interactions between the tasks happens by updating the values of variables in the shared memory. Sharing memory within a single physical machine is directly supported by the operating system, and may even be a property of the model for parallelization (threads share the same memory, processes not). Sharing memory across different physical machines is also possible, e.g., via network attached storage of other networking solutions, but usually has some communication overhead.</p>
+<p>The third approach is <em>data parallelism</em>. Similar to message passing, tasks are executed independently in isolated environments. The difference to message passing is that the tasks do not need to communicate with each other, because the solution of the computational tasks does not require intermediary results of other tasks. Thus, the application of data parallelism is limited to problems where this strong decoupling of tasks is possible. Such problems are also called <em>embarrassingly parallel</em>.</p>
+<h3 id="Distributed-Computing-for-Data-Analysis">Distributed Computing for Data Analysis<a class="anchor-link" href="#Distributed-Computing-for-Data-Analysis"> </a></h3><p>Since Big Data is to large to compute or store on single physical machines, we need a distributed environment for computations that involve Big Data. Before computational centers started to account for Big Data, the architecture of such a <em>compute cluster</em> was similar to the outline below.</p>
+<p><img src="images/computing_architectures.png" alt="Distributed Computing Outline" style="width: 600px;"/></p>
+<p>There is a layer for data storage and a layer for computations. Both are using different <em>nodes</em> in the compute cluster. Each node is a physical machine. Data storage nodes must provide fast storage (latency, throughput, or both), but do not require much computational power. This is usually implement in a database or a <em>storage area network</em> (SAN). Vice versa, compute nodes must provide the computational power through CPUs (and possibly GPUs) and a sufficient amount of memory, local storage is less important and often only used for caching and the installation of software. A user of such a system submits jobs to a job queue to gain insights. For the analysis of data, this means that the data is stored in the database or SAN and then accessed by the compute nodes to generate the desired results of the analysis, from which the data scientists can get insights.</p>
+<p>All three parallelization modes we discussed above can be implemented in such a traditional distributed compute cluster. However, none of these approaches is suitable for big data applications in such a compute cluster. Message passing and shared memory have the biggest scalability problems.</p>
+<p><img src="images/mpi_sm.png" alt="Distributed Computing with MPI/SM" style="width: 600px;"/></p>
+<p>Since it is unclear which parts of the data are required by the different parallel tasks, it is possibly that every compute node must load all data. While this is not a problem for small data sets, this does not scale with large data sets. Imagine that Terabytes, or even Petabytes of data would have to be copied regularly over the network. The transfer of the data would block the execution of the analysis and the compute nodes would be mostly idle, waiting for data. This does not even account for additional network traffic due to the communication between the tasks.</p>
+<p>Data parallelization fares a bit better, but also does not scale.</p>
+<p><img src="images/data_parallelism.png" alt="Distributed Computing with Data Parallelism" style="width: 600px;"/></p>
+<p>The advantage of message passing and shared memory is that only parts of the data must be copied to each compute node. While this decreases the stress on the network, all data must still be transfered over network. Thus, data parallelization can handle larger amounts of data than message passing and shared memory, at some point the amount of data becomes to large for the transfer via the network.</p>
+<h3 id="Data-Locality">Data Locality<a class="anchor-link" href="#Data-Locality"> </a></h3><p>We see that there is a fundamental problem with traditional distributed computing for big data, which is why we need the <em>innovative forms of information processing</em>. The solution is actually quite simple: if the problem is that we cannot copy our data over the network, we must change our architecture such that avoid that. The straightforward way to achieve this is to break the separation of the storage layer from the compute layer: all nodes both store data and can perform computations on that data.</p>
+<p><img src="images/data_locality.png" alt="Distributed Computing with Data Locality" style="width: 400px;"/></p>
+<p>In the following, we explain how this is implemented in practice. We discuss the MapReduce programming model that became the defacto standard for Big Data applications. Then, we show Apache Hadoop and Apache Spark to demonstrate how the distributed computing with Big Data is implemented.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="MapReduce">MapReduce<a class="anchor-link" href="#MapReduce"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Apache-Hadoop">Apache Hadoop<a class="anchor-link" href="#Apache-Hadoop"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Apache-Spark">Apache Spark<a class="anchor-link" href="#Apache-Spark"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

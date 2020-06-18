@@ -67,6 +67,9 @@
 - url: /11_Statistics
   not_numbered: false
   
+- url: /12_Big-Data-and-Map-Reduce
+  not_numbered: false
+  
 - divider: true
 
 - url: /Exercises
