@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: data key map value mapreduce reduce list tasks function distributed big functions not values compute e memory such shuffle parallelization network storage pairs keys computing computational results name bond parallelism only parallel different pair input message passing physical single nodes must our f processing large g using shared does thus computations img src images png alt style width px both often initial defined udf example text james line general programming between because computation communication same limited where analysis cluster layer user problem following apache concept output start processed any used approach independently isolated environments required parts machine system via read
+search: data key mapreduce value map hadoop file reduce hdfs distributed not img src images png alt style width px list tasks function e job text namenode values such big storage compute user block count functions memory single nodes shuffle name large computational only parallelization network pairs new keys intwritable processing computing different results cluster outline apache pair input bond datanodes datanode class parallelism parallel g does stored output blocks used message passing physical system via computations node must our result defined f example stream public context hadoopwordcount send because using shared same directly also thus limited where layer both amount
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -114,7 +114,95 @@ your 1</code></pre>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Apache-Hadoop">Apache Hadoop<a class="anchor-link" href="#Apache-Hadoop"> </a></h2>
+<h2 id="Apache-Hadoop">Apache Hadoop<a class="anchor-link" href="#Apache-Hadoop"> </a></h2><p><a href="https://hadoop.apache.org/">Apache Hadoop</a> is an open source implementation of MapReduce. For many years, Hadoop was the standard solution for any MapReduce application and Hadoop is still relevant for many applications. All major cloud providers offer Hadoop clusters in their portfolio. Hadoop 2.0 implements MapReduce in an architecture with three layers.</p>
+<p><img src="images/hadoop_architecture.png" alt="Outline of MapReduce" style="width: 400px;"/></p>
+<p>The lowest layer is the <em>Hadoop Distributed File System</em> (HDFS) that is in charge of the data management. <em>Yet Another Resource Negotiator</em> (YARN) is running on top of the file system. YARN manages the use of computational resources within a Hadoop cluster. Applications for data processing that want to use the Hadoop cluster are running on top of YARN. For example, such applications can be written with the Hadoop implmentation of MapReduce. However, due to the success of the HDFS and YARN, there are also other technologies that can be used for data processing, e.g., <a href="#Apache-Spark">Apache Spark</a>, which we discuss below.</p>
+<h3 id="HDFS">HDFS<a class="anchor-link" href="#HDFS"> </a></h3><p>The HDFS is the core of Hadoop. All data that should be analyzed is stored in the HDFS. HDFS was designed with the goal to enable Big Data processing, which is why HDFS behave quite differently from other file systems that we regularly use like NTFS, ext3, or xfs.</p>
+<ul>
+<li>HDFS favors high throughput at the cost of low latency. This means that loading and storing large amounts of data is fast, but you may have to wait some time before the operation starts. </li>
+<li>HDFS supports extremely large files. The file size is only limited by the amount of <em>distributed</em> storage, i.e., files can be large than the storage available at a single node. </li>
+<li>HDFS is designed to support data local computations and minimize the data that needs to be send around in a cluster for file operations.</li>
+<li>Since outages of single nodes in a large compute cluster is not a rare event, but rather a part of the daily work, HDFS is designed to be resilient against hardware failures, such that there is no loss of data and no interruption of service. </li>
+</ul>
+<p>In principle, HDFS uses a master/worker paradigm with a <em>NameNode</em> that manages <em>DataNodes</em>.</p>
+<p><img src="images/hadoop_hdfs.png" alt="Outline of MapReduce" style="width: 600px;"/></p>
+<p>Clients access the HDFS via the NameNode. All file system operations, such as the creating, deletion, copying of a file is performed by requesting this at the NameNode. Whenever a file is created, it is split into smaller blocks. The NameNode organizes the creation, deletion, and replication of <em>blocks</em> on DataNodes. Replication means that each block is not just stored on a single DataNode, but on multiple DataNodes. This ensures that no data is lost, if a data node is lost. To avoid that the HDFS is not available if the NameNode crashes, there can also be a secondary NameNode. This avoids that the NameNode is a single point of failure. If there is a problem with the primary NameNode, the secondary NameNode can take over without loss of service.</p>
+<p>Another important aspect of the HDFS is that while users access the HDFS via the NameNode, the actual data is never send via the NameNode to the DataNodes, but directly from the users to the DataNodes. The following figure shows how a file in HDFS is created by a user.</p>
+<p><img src="images/hadoop_writefile.png" alt="Outline of MapReduce" style="width: 700px;"/></p>
+<ol>
+<li>The user contacts the NameNode with the request to create a new file. </li>
+<li>The name node responds with a data stream that can be used for writing the file. From the users perspective, this is a normal file stream that would be used for local data access (e.g., <code>FileInputStream</code> in Java, <code>ifstream</code> in C++, <code>open</code> in Python).</li>
+<li>The user writes the contents of the file to the file stream. The NameNode configured the file stream with the information how the blocks should look like and where the data should be send. The data is directly send block-wise to one of the DataNodes. </li>
+<li>The DataNode that receives the block does not necesarily store the block itself. Instead, the block may be forwarded to other DataNodes for storage. Each block is stored at different nodes and the number of these nodes is defined by the <em>replication level</em>. Moreover, the HDFS ensures that blocks are evenly distributed among the data nodes, i.e., a DataNode only stores multiple blocks of a file, if the block cannot be stored at another DataNode. Ideally, all DataNodes store the same amount of blocks of a file.</li>
+<li>When a DataNode stores a block, this is acknowledged to the DataNode that receives the data from the user.</li>
+<li>Once the DataNode received acknowledgements for all replications of a block, the DataNode acknowledges to the user that the block is stored. The user can then start sending the data for the next block (goto step 3), until all blocks are written. The user does not observe this behavior directly, because this is automatically handled by the file stream. </li>
+<li>The user informs the NameNode that the writing finished and closes the file stream.</li>
+</ol>
+<h3 id="YARN">YARN<a class="anchor-link" href="#YARN"> </a></h3><p><img src="images/hadoop_yarn.png" alt="Outline of MapReduce" style="width: 600px;"/></p>
+<p><img src="images/hadoop_execution.png" alt="Outline of MapReduce" style="width: 600px;"/></p>
+<h3 id="MapReduce-with-Hadoop">MapReduce with Hadoop<a class="anchor-link" href="#MapReduce-with-Hadoop"> </a></h3><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TokenizerMapper</span> <span class="kd">extends</span> <span class="n">Mapper</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">IntWritable</span> <span class="n">one</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="n">Text</span> <span class="n">word</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Text</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">map</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">,</span> <span class="n">Text</span> <span class="n">value</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span>
+                   <span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+        <span class="c1">// text into tokens</span>
+        <span class="n">StringTokenizer</span> <span class="n">itr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringTokenizer</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">its</span><span class="o">.</span><span class="na">hasMoreTokens</span><span class="o">())</span> <span class="o">{</span>
+            <span class="c1">// add an output pair &lt;word, 1&gt; for each token</span>
+            <span class="n">word</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">itr</span><span class="o">.</span><span class="na">nextToken</span><span class="o">());</span>
+            <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">one</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">IntSumReader</span> <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">IntWritable</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">Text</span> <span class="n">key</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">IntWritable</span><span class="o">&gt;</span> <span class="n">values</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span>
+                       <span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+        <span class="c1">// calculate sum of word counts</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">IntWritable</span> <span class="n">val</span> <span class="o">:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">val</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">sum</span><span class="o">);</span>
+        <span class="c1">// write result</span>
+        <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordCount</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">// Hadoop configuration</span>
+        <span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
+
+        <span class="c1">// Create a Job with the name &quot;word count&quot;</span>
+        <span class="n">Job</span> <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="s">&quot;word count&quot;</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setJahrByClass</span><span class="o">(</span><span class="n">WordCount</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+        <span class="c1">// set mapper, reducer, and output types</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setMapperClass</span><span class="o">(</span><span class="n">TokenizerMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setReduczer</span><span class="o">(</span><span class="n">IntSumReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setOutputKeyClass</span><span class="o">(</span><span class="n">Text</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setOutputValueClass</span><span class="o">(</span><span class="n">IntWritable</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+        <span class="c1">// specify input and output files</span>
+        <span class="n">FileInputFormat</span><span class="o">.</span><span class="na">addInputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]));</span>
+        <span class="n">FileOutputFormat</span><span class="o">.</span><span class="na">setOutputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]));</span>
+
+        <span class="c1">// run job and wait for completion</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">waitForCompletion</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+<h3 id="Word-Count-with-Hadoop">Word Count with Hadoop<a class="anchor-link" href="#Word-Count-with-Hadoop"> </a></h3><p><img src="images/hadoop_wordcount_1.png" alt="Hadoop Word Count (1)" style="width: 600px;"/></p>
+<p><img src="images/hadoop_wordcount_2.png" alt="Hadoop Word Count (2)" style="width: 600px;"/></p>
+<p><img src="images/hadoop_wordcount_3.png" alt="Hadoop Word Count (3)" style="width: 600px;"/></p>
+<p><img src="images/hadoop_wordcount_4.png" alt="Hadoop Word Count (4)" style="width: 600px;"/></p>
+<p><img src="images/hadoop_wordcount_5.png" alt="Hadoop Word Count (5)" style="width: 600px;"/></p>
+<p><img src="images/hadoop_wordcount_6.png" alt="Hadoop Word Count (6)" style="width: 600px;"/></p>
+<h3 id="Streaming-Mode">Streaming Mode<a class="anchor-link" href="#Streaming-Mode"> </a></h3><h3 id="Additional-Components">Additional Components<a class="anchor-link" href="#Additional-Components"> </a></h3>
 </div>
 </div>
 </div>
