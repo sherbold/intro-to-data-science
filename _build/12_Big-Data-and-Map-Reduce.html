@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: data hadoop map mapreduce key function reduce application value job hdfs not output values tasks resources e count input file resource manager required text distributed functions results such compute img src images png alt style width px standard pairs list class computational g where user shuffle example namenode used only nodes execution context big keys mrappmaster should memory single also storage cluster applications block line yarn datanodes datanode intwritable same stored types name finished java different network read does computations node pair new bond multiple reducer information large parallelization executed must means apache task result start running written master blocks
+search: data hadoop map key mapreduce reduce function spark not application value hdfs tasks e job output input count resources values file functions resource manager big used results such distributed required also compute pairs text g example only img src images png alt style width px apache where user standard list class computational memory applications execution shuffle line namenode same storage nodes context processing should cluster keys yarn mrappmaster different single thus computations stored block task multiple written datanodes datanode java python intwritable executed using read analysis users types name finished streaming because network does node often pair new defined bond
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -278,7 +278,7 @@ your 1</code></pre>
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </pre></div>
 <p>Similarly, the reduce() function would also use the standard input and output.</p>
-<div class="highlight"><pre><span></span><span class="err">!</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">env</span> <span class="n">python</span>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="sd">&quot;&quot;&quot;reducer.py&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
@@ -324,7 +324,7 @@ your 1</code></pre>
 <p><em>Combiner</em> functions are similar to reduce() function, but are running locally on each DataNode and are executed before shuffling the data to another node. In many use cases, the combiners are identical to reduce(). In the word count example, we can apply reduce() multiple times in a row without problems, since the reducer function creates the sum of the values of the keys. Without a combiner, these values will always be exactly one. With a combiner, we would create a word count locally on each DataNode, then shuffle the word counts of the nodes to reduce() function, that would create the total word count from the word counts on each DataNode. Combiners can, therefore, reduce the traffic between nodes by aggregating results prior to the reduce() function. For example, we would shuffle one pair &lt;bond, 2&gt; instead of two pairs &lt;bond, 1&gt; to the reducer, thereby cutting the traffic in half. The larger the amount of data that is handled locally at each node in the Hadoop cluster, the larger the potential for reducing the traffic with a combiner. The requirement for chaining functions this way is that the functions are <em>idempotent</em>.</p>
 <p>The <em>MapReduce Job History Server</em> is another user-facing component of a Hadoop deployment. Users of a Hadoop cluster can access the Job History Server to access information about submitted Hadoop application. This information includes log files of the job execution, start and end times, as well as the state of the job, e.g., whether it it pending, running, finished, or failing.</p>
 <h3 id="Limitations">Limitations<a class="anchor-link" href="#Limitations"> </a></h3><p>Hadoop has two major limitations. The first is that if an algorithm requires multiple map() and/or reduce() functions, their order of execution must be manually specified through the creation of <code>Job</code> objects and through the definition of their dependencies. This means that we cannot just add multiple map() or reduce() jobs in a specific order to a Job object, but instead have to define multiple Job objects, specify which Job object needs to wait for which other objects, to which Job object the output of a Job object should possibly be forwarded as input, etc. This manual modeling of dependencies is error prone and mistakes are hard to spot.</p>
-<p>Related to this limitation is the the jobs always have to write their intermediary results to the HDFS. While this is not a problem is</p>
+<p>Related to this limitation is the the jobs always have to write their intermediary results to the HDFS. While this is not a problem is the data only needs to be read and processed once, this is severe overhead if multiple computations on the same data are performed, because the results are not kept in-memory. Thus, iterative algorithms are not very efficient with Hadoop.</p>
 
 </div>
 </div>
@@ -335,7 +335,44 @@ your 1</code></pre>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Apache-Spark">Apache Spark<a class="anchor-link" href="#Apache-Spark"> </a></h2>
+<h2 id="Apache-Spark">Apache Spark<a class="anchor-link" href="#Apache-Spark"> </a></h2><p>Apache Spark is another framework for working with Big Data that was created with the motivation to overcome the limitations of Hadoop: in memory data analysis, such that intermediary results do not have to be written to the HDFS and the convenient support for complex algorithms with many map() and reduce() functions.</p>
+<h3 id="Components">Components<a class="anchor-link" href="#Components"> </a></h3><p>The first difference of Spark in comparison to Hadoop is that Spark contains a powerful software stack for data analysis, while Hadoop only provides basic functionality, which is often used by other software to provide these functions. Apache Spark consists of core components that are responsible for the Big Data processing. On top of these functionality, Spark provides libraries that simplify the definition of data analysis tasks.</p>
+<p><img src="images/spark_architecture.png" alt="Components of Apache Spark" style="width: 400px;"/></p>
+<p><em>Spark SQL</em> suppers SQL-like queries to the data that is used within analysis. Because SQL is such a widespread language for working with data, this allows users to load and manipulate data with Apache Spark without a steep learning curve. <em>Spark Streaming</em> enables the live processing of <em>streaming data</em>. This way, Spark can handle continously incoming data, which is another limitation of Hadoop. With the MLlib and GraphX, Spark also contains two libraries for data analysis. MLlib provides implementations for many of the algorithms we saw in the last chapters. GraphX is for processing of graph data, e.g., social networks.</p>
+<h3 id="Data-Structures">Data Structures<a class="anchor-link" href="#Data-Structures"> </a></h3><p>The data structures of Spark are designed for in-memory data processing, which is in contrast to the HDFS approach by Hadoop where file operations are used. At the core, data is contained in <em>Resilient Distributed Datasets</em> (RDDs). These data structures provide an abstraction layer for data operations, independent of the actual type of the data. The RDDs organize data in immutable partitions, such that all elements in a RDD can be processed in parallel. Thus, the RDDs are similar to the key-value pairs of Hadoops MapReduce. Consequently, Spark allows the definition of map() and reduce() functions on RDDs, given that the data within the RDD are key-value pairs. However, Spark goes beyond the capabilities of Hadoop, because RDDs can also contain data that are not key-value pairs, filtering of RDDs is supported and, in general, any user-defined function can be applied to the data within an RDD. Additionally, the RDDs can be persisted to the storage, if requested.</p>
+<p>Since Spark 2.0, users of Apache Spark do not have to work with RDDs anymore, but can also use data frames, similar to the data frames we know from pandas. This data frame API is rightly coupled with the Spark SQL components, which is the primary way for creating the data frames. The support for data frames is another reason why getting started with Spark is often simpler than with other Big Data frameworks.</p>
+<h3 id="Infrastructure">Infrastructure<a class="anchor-link" href="#Infrastructure"> </a></h3><p>While Spark contains all components to create a compute cluster, this is not the normal way in which Spark is used. Instead, Spark is usually used together with one of the many compatible technologies. For example, Spark is fully compatible with YARN and HDFS, i.e., data stored in Hadoop clusters can also be analyzed with Apache Spark. Spark can also be used with many other technologies, e.g., EC2 clouds or Kubernetes for computation or databases like Cassandra, HBase, or MongoDB for storage. Thus, analysis designed with Apache Spark are not locked into a specific framework, which is another notable difference to Hadoop.</p>
+<h3 id="Word-Count-with-Spark">Word Count with Spark<a class="anchor-link" href="#Word-Count-with-Spark"> </a></h3><p>While Spark itself is written in Scala, Spark applications can also be written in Java, Python (PySpark), and R (SparkR). Users do not have to define the dependencies between different tasks manually. Instead, Spark assumes that the order in which the tasks are defined is the order in which they should be executed. If tasks are using different data, they can be executed in parallel, if a task requires data from a previously defined task, this data is automatically shuffled to the task and the execution only starts when the data is available. Due to this, the source code for Spark jobs contains less boilerplate code for defining formats than that of Hadoop applications. For example, with Apache Spark, the word count my look like this.</p>
+<div class="highlight"><pre><span></span><span class="c1"># sc is the SparkContext, which is similar to the Configuration of Hadoop</span>
+<span class="n">text_file</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="s2">&quot;hdfs://data.txt&quot;</span><span class="p">)</span>
+<span class="c1"># flatMap can input map the input to multiple outputs</span>
+<span class="c1"># map maps each input to exactly one output</span>
+<span class="c1"># reduce by key is the same as reduce in Hadoop</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">text_file</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))</span> \
+             <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">word</span><span class="p">:</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> \
+             <span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">counts</span><span class="o">.</span><span class="n">saveAsTextFile</span><span class="p">(</span><span class="s2">&quot;hdfs://wc.txt&quot;</span><span class="p">)</span>
+</pre></div>
+<p>Thus, complex tasks can be implemented easier with a framework like Spark.</p>
+<blockquote><p>Note:</p>
+<p>Python <code>lambda</code> functions are anonymous functions that can expressed in one line. For example, <code>lambda a, b: a+b</code> would be the same as defining and calling a function</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
+</pre></div>
+</blockquote>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Beyond-Hadoop-and-Spark">Beyond Hadoop and Spark<a class="anchor-link" href="#Beyond-Hadoop-and-Spark"> </a></h2><p>With Hadoop and Spark we present to popular technologies for Big Data analysis. However, due to importance of Big Data in the last decade, there are also many other important technologies, e.g., databases that are optimized for Big Data, alternatives for Stream processing of data, or tools for the management of compute clusters. There are whole ecosystems around Hadoop, Spark, and other technologies, that are often to some degree compatible with each other. This tool landscape is still evolving and constantly changing, even though the some core technologies, like Hadoop or Spark for computations, or databases like Cassandra have now been important parts of the market for many years. Regardless, a complete discussion of tools is out of our scope.</p>
+<p>A strong aspect of Big Data is that most of the state of the art technologies are open source, meaning that often there are no licensing costs associated with using the software. Regardless, using these tools is still often not cheap, because the resources for running Big Data applications are expensive.</p>
+
 </div>
 </div>
 </div>

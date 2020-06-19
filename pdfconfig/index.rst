@@ -22,4 +22,5 @@ Welcome to Introduction to Data Science's documentation!
    09_Time-Series-Analysis
    10_Text-Mining
    11_Statistics
+   12_Big-Data-and-Map-Reduce
 
