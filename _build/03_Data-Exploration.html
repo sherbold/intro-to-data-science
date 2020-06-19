@@ -725,11 +725,15 @@ standard deviation of y1, ..., y4
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
-<span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">wrap</span>
-<span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">TextWrapper</span>
+
+<span class="n">wrapper</span> <span class="o">=</span> <span class="n">TextWrapper</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">65</span><span class="p">,</span> <span class="n">replace_whitespace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">break_long_words</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">wrap_print</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">line</span><span class="p">)))</span>
 
 <span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+<span class="n">wrap_print</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -748,51 +752,72 @@ standard deviation of y1, ..., y4
 Boston house prices dataset
 ---------------------------
 
-**Data Set Characteristics:**  
+**Data Set Characteristics:**
 
-    :Number of Instances: 506 
+    :Number of Instances: 506
 
-    :Number of Attributes: 13 numeric/categorical predictive. Median Value (attribute 14) is usually the target.
+    :Number of Attributes: 13 numeric/categorical predictive.
+Median Value (attribute 14) is usually the target.
 
     :Attribute Information (in order):
         - CRIM     per capita crime rate by town
-        - ZN       proportion of residential land zoned for lots over 25,000 sq.ft.
-        - INDUS    proportion of non-retail business acres per town
-        - CHAS     Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
-        - NOX      nitric oxides concentration (parts per 10 million)
+        - ZN       proportion of residential land zoned for lots
+over 25,000 sq.ft.
+        - INDUS    proportion of non-retail business acres per
+town
+        - CHAS     Charles River dummy variable (= 1 if tract
+bounds river; 0 otherwise)
+        - NOX      nitric oxides concentration (parts per 10
+million)
         - RM       average number of rooms per dwelling
-        - AGE      proportion of owner-occupied units built prior to 1940
-        - DIS      weighted distances to five Boston employment centres
+        - AGE      proportion of owner-occupied units built prior
+to 1940
+        - DIS      weighted distances to five Boston employment
+centres
         - RAD      index of accessibility to radial highways
         - TAX      full-value property-tax rate per $10,000
         - PTRATIO  pupil-teacher ratio by town
-        - B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
+        - B        1000(Bk - 0.63)^2 where Bk is the proportion
+of blacks by town
         - LSTAT    % lower status of the population
-        - MEDV     Median value of owner-occupied homes in $1000&#39;s
+        - MEDV     Median value of owner-occupied homes in
+$1000&#39;s
 
     :Missing Attribute Values: None
 
     :Creator: Harrison, D. and Rubinfeld, D.L.
 
 This is a copy of UCI ML housing dataset.
-https://archive.ics.uci.edu/ml/machine-learning-databases/housing/
+https://archive.ics.uci.edu/ml/machine-learning-
+databases/housing/
 
 
-This dataset was taken from the StatLib library which is maintained at Carnegie Mellon University.
+This dataset was taken from the StatLib library which is
+maintained at Carnegie Mellon University.
 
-The Boston house-price data of Harrison, D. and Rubinfeld, D.L. &#39;Hedonic
-prices and the demand for clean air&#39;, J. Environ. Economics &amp; Management,
-vol.5, 81-102, 1978.   Used in Belsley, Kuh &amp; Welsch, &#39;Regression diagnostics
-...&#39;, Wiley, 1980.   N.B. Various transformations are used in the table on
+The Boston house-price data of Harrison, D. and Rubinfeld, D.L.
+&#39;Hedonic
+prices and the demand for clean air&#39;, J. Environ. Economics &amp;
+Management,
+vol.5, 81-102, 1978.   Used in Belsley, Kuh &amp; Welsch, &#39;Regression
+diagnostics
+...&#39;, Wiley, 1980.   N.B. Various transformations are used in the
+table on
 pages 244-261 of the latter.
 
-The Boston house-price data has been used in many machine learning papers that address regression
-problems.   
-     
+The Boston house-price data has been used in many machine
+learning papers that address regression
+problems.
+
 .. topic:: References
 
-   - Belsley, Kuh &amp; Welsch, &#39;Regression diagnostics: Identifying Influential Data and Sources of Collinearity&#39;, Wiley, 1980. 244-261.
-   - Quinlan,R. (1993). Combining Instance-Based and Model-Based Learning. In Proceedings on the Tenth International Conference of Machine Learning, 236-243, University of Massachusetts, Amherst. Morgan Kaufmann.
+   - Belsley, Kuh &amp; Welsch, &#39;Regression diagnostics: Identifying
+Influential Data and Sources of Collinearity&#39;, Wiley, 1980.
+244-261.
+   - Quinlan,R. (1993). Combining Instance-Based and Model-Based
+Learning. In Proceedings on the Tenth International Conference of
+Machine Learning, 236-243, University of Massachusetts, Amherst.
+Morgan Kaufmann.
 
 </pre>
 </div>
@@ -1198,7 +1223,7 @@ problems.
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
 
 <span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
+<span class="n">wrap_print</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1220,7 +1245,8 @@ Iris plants dataset
 **Data Set Characteristics:**
 
     :Number of Instances: 150 (50 in each of three classes)
-    :Number of Attributes: 4 numeric, predictive attributes and the class
+    :Number of Attributes: 4 numeric, predictive attributes and
+the class
     :Attribute Information:
         - sepal length in cm
         - sepal width in cm
@@ -1230,7 +1256,7 @@ Iris plants dataset
                 - Iris-Setosa
                 - Iris-Versicolour
                 - Iris-Virginica
-                
+
     :Summary Statistics:
 
     ============== ==== ==== ======= ===== ====================
@@ -1248,31 +1274,46 @@ Iris plants dataset
     :Donor: Michael Marshall (MARSHALL%PLU@io.arc.nasa.gov)
     :Date: July, 1988
 
-The famous Iris database, first used by Sir R.A. Fisher. The dataset is taken
-from Fisher&#39;s paper. Note that it&#39;s the same as in R, but not as in the UCI
+The famous Iris database, first used by Sir R.A. Fisher. The
+dataset is taken
+from Fisher&#39;s paper. Note that it&#39;s the same as in R, but not as
+in the UCI
 Machine Learning Repository, which has two wrong data points.
 
 This is perhaps the best known database to be found in the
-pattern recognition literature.  Fisher&#39;s paper is a classic in the field and
-is referenced frequently to this day.  (See Duda &amp; Hart, for example.)  The
-data set contains 3 classes of 50 instances each, where each class refers to a
-type of iris plant.  One class is linearly separable from the other 2; the
+pattern recognition literature.  Fisher&#39;s paper is a classic in
+the field and
+is referenced frequently to this day.  (See Duda &amp; Hart, for
+example.)  The
+data set contains 3 classes of 50 instances each, where each
+class refers to a
+type of iris plant.  One class is linearly separable from the
+other 2; the
 latter are NOT linearly separable from each other.
 
 .. topic:: References
 
-   - Fisher, R.A. &#34;The use of multiple measurements in taxonomic problems&#34;
-     Annual Eugenics, 7, Part II, 179-188 (1936); also in &#34;Contributions to
+   - Fisher, R.A. &#34;The use of multiple measurements in taxonomic
+problems&#34;
+     Annual Eugenics, 7, Part II, 179-188 (1936); also in
+&#34;Contributions to
      Mathematical Statistics&#34; (John Wiley, NY, 1950).
-   - Duda, R.O., &amp; Hart, P.E. (1973) Pattern Classification and Scene Analysis.
-     (Q327.D83) John Wiley &amp; Sons.  ISBN 0-471-22361-1.  See page 218.
-   - Dasarathy, B.V. (1980) &#34;Nosing Around the Neighborhood: A New System
-     Structure and Classification Rule for Recognition in Partially Exposed
-     Environments&#34;.  IEEE Transactions on Pattern Analysis and Machine
+   - Duda, R.O., &amp; Hart, P.E. (1973) Pattern Classification and
+Scene Analysis.
+     (Q327.D83) John Wiley &amp; Sons.  ISBN 0-471-22361-1.  See page
+218.
+   - Dasarathy, B.V. (1980) &#34;Nosing Around the Neighborhood: A
+New System
+     Structure and Classification Rule for Recognition in
+Partially Exposed
+     Environments&#34;.  IEEE Transactions on Pattern Analysis and
+Machine
      Intelligence, Vol. PAMI-2, No. 1, 67-71.
-   - Gates, G.W. (1972) &#34;The Reduced Nearest Neighbor Rule&#34;.  IEEE Transactions
+   - Gates, G.W. (1972) &#34;The Reduced Nearest Neighbor Rule&#34;.
+IEEE Transactions
      on Information Theory, May 1972, 431-433.
-   - See also: 1988 MLC Proceedings, 54-64.  Cheeseman et al&#34;s AUTOCLASS II
+   - See also: 1988 MLC Proceedings, 54-64.  Cheeseman et al&#34;s
+AUTOCLASS II
      conceptual clustering system finds 3 classes in the data.
    - Many, many more ...
 </pre>
