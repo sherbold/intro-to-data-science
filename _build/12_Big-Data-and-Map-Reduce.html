@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /Exercises.html
 suffix: .ipynb
-search: data key mapreduce map hadoop value application reduce tasks e function not values hdfs file job text distributed resources such img src images png alt style width px list class computational compute namenode g count context big only functions user pairs input output required memory storage applications block keys resource manager intwritable should single results shuffle types name yarn datanodes same also where computations cluster nodes stored new example large used parallelization different network does execution apache pair datanode java processing computing thus outline node must means result bond start finished master blocks nodemanagers parallelism parallel between physical using system
+search: data hadoop map mapreduce key function reduce application value job hdfs not output values tasks resources e count input file resource manager required text distributed functions results such compute img src images png alt style width px standard pairs list class computational g where user shuffle example namenode used only nodes execution context big keys mrappmaster should memory single also storage cluster applications block line yarn datanodes datanode intwritable same stored types name finished java different network read does computations node pair new bond multiple reducer information large parallelization executed must means apache task result start running written master blocks
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -225,13 +225,107 @@ your 1</code></pre>
 <span class="o">}</span>
 </pre></div>
 <p>The application is a normal Java application with a main method and the code is more or less self-explanatory. First, we create the configuration of Hadoop application. This object contains, e.g., the context and MapReduce tasks. We use the configuration to create a new MapReduce job. Then, we configure the Job. We define in which class it is defined, which classes are used for the map() and reduce() steps, and what the types of the outputs are. Finally, we specify where the input data come from and where the output should be written, based on the command line arguments of the application. The final line starts the job and blocks further execution, until the job is finished, i.e., all map() and reduce() functions finished their work and the results are available in the file system.</p>
-<h3 id="Word-Count-with-Hadoop">Word Count with Hadoop<a class="anchor-link" href="#Word-Count-with-Hadoop"> </a></h3><p><img src="images/hadoop_wordcount_1.png" alt="Hadoop Word Count (1)" style="width: 600px;"/></p>
+<h3 id="Word-Count-with-Hadoop">Word Count with Hadoop<a class="anchor-link" href="#Word-Count-with-Hadoop"> </a></h3><p>Since it is not intuitive how Hadoop/YARN orchestrate the execution of a MapReduce application, we now demonstrate this in detail step by step using the word count example.</p>
+<p><img src="images/hadoop_wordcount_1.png" alt="Hadoop Word Count (1)" style="width: 600px;"/></p>
+<ol>
+<li>The user builds the jar-Archive of the MapReduce application and submits this application to the Resource Manager. </li>
+<li>The Resource Manager launches the MRAppMaster application master to orchestrate the execution of the WordCount.jar. </li>
+</ol>
 <p><img src="images/hadoop_wordcount_2.png" alt="Hadoop Word Count (2)" style="width: 600px;"/></p>
+<ol>
+<li>The MRAppMaster evaluates the configuration of the Hadoop application in the WordCount.jar and finds one jobs that consists of a map() and a reduce() function. The MRAppMaster requests the required resources for the map() function from the Resource Manager.</li>
+<li>The Resource Manager provides the required compute resources. The resources are allocated on the DataNodes, where blocks of the input data are stored, such that this data does not need to be transfered over the network.</li>
+<li>The Resource Manager sends the information where the map() task can be executed to the MRAppMaster. </li>
+<li>The MRAppMaster launches the map() function in the containers that were allocated. The required data is directly read from the HDFS.</li>
+<li>The map() function is executed and the results are written by to intermediary results files in the HDFS. </li>
+</ol>
 <p><img src="images/hadoop_wordcount_3.png" alt="Hadoop Word Count (3)" style="width: 600px;"/></p>
+<ol>
+<li>The MRAppMaster reports that the task is finished and the resources are no longer required to the Resource Manager. </li>
+<li>The Resource Manager destroys the containers for the map() functions to free the resources.</li>
+</ol>
 <p><img src="images/hadoop_wordcount_4.png" alt="Hadoop Word Count (4)" style="width: 600px;"/></p>
+<ol>
+<li>The MRAppMaster requests the required resources for the reduce() function. This requires only a single container, because the results are aggregated.</li>
+<li>The Resource Manager allocates the required resources. </li>
+<li>The Resource Manager sends the information where the map() task can be executed to the MRAppMaster. </li>
+<li>The MRAppMaster launches the reduce() function in the allocated container. </li>
+<li>The MRAppMaster triggers the shuffle() function to organize and group the intermediary data from the different nodes and provide the data to the reduce() function. </li>
+<li>The reduce() function writes the output to the HDFS. </li>
+</ol>
 <p><img src="images/hadoop_wordcount_5.png" alt="Hadoop Word Count (5)" style="width: 600px;"/></p>
+<ol>
+<li>The MRAppMaster reports that the task and the execution of the application are finished to the Resource Manager. </li>
+</ol>
 <p><img src="images/hadoop_wordcount_6.png" alt="Hadoop Word Count (6)" style="width: 600px;"/></p>
-<h3 id="Streaming-Mode">Streaming Mode<a class="anchor-link" href="#Streaming-Mode"> </a></h3><h3 id="Additional-Components">Additional Components<a class="anchor-link" href="#Additional-Components"> </a></h3>
+<ol>
+<li>The Resource Manager destroys the containers of the reduce() function and the MRAppMaster to free the resources. </li>
+</ol>
+<h3 id="Streaming-Mode">Streaming Mode<a class="anchor-link" href="#Streaming-Mode"> </a></h3><p>Hadoop also provides a Java Application that can be used to Hadoop in the <em>streaming mode</em>. In the streaming mode, the standard input and standard output are used, similar to Linux pipes. The data from the HDFS is read and forwarded to an arbitrary application that processes the data from the standard input. The results of the computation are written to the standard output. For example, a python script for the map() function of the word count would look like this.</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;mapper.py&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># read from standard input</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">:</span>
+    <span class="c1"># split line into words</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="c1"># create output pairs</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="c1"># print output pairs to standard output</span>
+        <span class="c1"># key and value are separated by tab (standard for Hadoop)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+<p>Similarly, the reduce() function would also use the standard input and output.</p>
+<div class="highlight"><pre><span></span><span class="err">!</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">env</span> <span class="n">python</span>
+<span class="sd">&quot;&quot;&quot;reducer.py&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># init current word and counter as not existing</span>
+<span class="n">current_word</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">current_count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">word</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="c1"># read from standard input</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">:</span>
+    <span class="c1"># read output from mapper.py</span>
+    <span class="n">word</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+
+    <span class="c1"># Hadoop shuffle sorts by key</span>
+    <span class="c1"># -&gt; all values with same key are next to each other</span>
+    <span class="k">if</span> <span class="n">current_word</span><span class="o">==</span><span class="n">word</span><span class="p">:</span>
+        <span class="n">current_count</span> <span class="o">+=</span> <span class="n">count</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current_word</span><span class="p">:</span>
+            <span class="c1"># write result to standard output</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">current_word</span><span class="p">,</span> <span class="n">current_count</span><span class="p">))</span>
+        <span class="c1"># reset counter and update current word</span>
+        <span class="n">current_count</span> <span class="o">=</span> <span class="n">count</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span>
+<span class="c1"># output for last word</span>
+<span class="k">if</span> <span class="n">current_word</span><span class="o">==</span><span class="n">word</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">current_word</span><span class="p">,</span> <span class="n">current_count</span><span class="p">))</span>
+</pre></div>
+<p>The streaming mode can be used with any programming language, as long as inputs are read from the standard input and outputs are written to the standard output stream. Technically, the streaming mode is just a Hadoop MapReduce implementation that is bundled as a jar-Archive and can be used. For example, the following command could be used to run the word count.</p>
+
+<pre><code>hadoop jar hadoop-streaming.jar \
+  - input myInputDirs \
+  - output my OutputDir \
+  - mapper mapper.py \
+  - reducer reducer.py \
+  - file mapper.py \
+  - file reducer.py</code></pre>
+<p>The hadoop-streaming.jar is a normal MapReduce implementation of MapReduce in Java, as we have it explained above. The map() function of this jar calls the mapper.py within its map() function and the reducer.py within its reduce function() and communicates with the python scripts via the standard input/output. The input and output parameters define where the data is read from and where the results will be written to in the HDFS. The final two parameters are required, to make the Python scripts available on the compute nodes.</p>
+<h3 id="Additional-Components">Additional Components<a class="anchor-link" href="#Additional-Components"> </a></h3><p>In addition to the core components we have shown above, there are several other components, that we do not discuss in detail, but want to mention regardless. We briefly want to discuss two of these additional components.</p>
+<p><em>Combiner</em> functions are similar to reduce() function, but are running locally on each DataNode and are executed before shuffling the data to another node. In many use cases, the combiners are identical to reduce(). In the word count example, we can apply reduce() multiple times in a row without problems, since the reducer function creates the sum of the values of the keys. Without a combiner, these values will always be exactly one. With a combiner, we would create a word count locally on each DataNode, then shuffle the word counts of the nodes to reduce() function, that would create the total word count from the word counts on each DataNode. Combiners can, therefore, reduce the traffic between nodes by aggregating results prior to the reduce() function. For example, we would shuffle one pair &lt;bond, 2&gt; instead of two pairs &lt;bond, 1&gt; to the reducer, thereby cutting the traffic in half. The larger the amount of data that is handled locally at each node in the Hadoop cluster, the larger the potential for reducing the traffic with a combiner. The requirement for chaining functions this way is that the functions are <em>idempotent</em>.</p>
+<p>The <em>MapReduce Job History Server</em> is another user-facing component of a Hadoop deployment. Users of a Hadoop cluster can access the Job History Server to access information about submitted Hadoop application. This information includes log files of the job execution, start and end times, as well as the state of the job, e.g., whether it it pending, running, finished, or failing.</p>
+<h3 id="Limitations">Limitations<a class="anchor-link" href="#Limitations"> </a></h3><p>Hadoop has two major limitations. The first is that if an algorithm requires multiple map() and/or reduce() functions, their order of execution must be manually specified through the creation of <code>Job</code> objects and through the definition of their dependencies. This means that we cannot just add multiple map() or reduce() jobs in a specific order to a Job object, but instead have to define multiple Job objects, specify which Job object needs to wait for which other objects, to which Job object the output of a Job object should possibly be forwarded as input, etc. This manual modeling of dependencies is error prone and mistakes are hard to spot.</p>
+<p>Related to this limitation is the the jobs always have to write their intermediary results to the HDFS. While this is not a problem is</p>
+
 </div>
 </div>
 </div>
