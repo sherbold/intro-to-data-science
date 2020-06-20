@@ -13,6 +13,7 @@ regex = (r"\{\n"
 with open('_pdfbuild/latex/introductiontodatascience.tex', 'r') as tex_file:
     tex = tex_file.read()
 
+tex = tex.replace(r'\usepackage{sphinx}', '\\usepackage{sphinx}\n\\usepackage{booktabs}')
 tex = re.sub(regex, '', tex, flags=re.MULTILINE)
 tex = re.sub(r'\\llap\{\\color\{nbsphinxin\}\[\d+\]:\\,\\hspace\{\\fboxrule}\\hspace\{\\fboxsep\}\}', '', tex)
 tex = re.sub(r'\\llap\{\\color\{nbsphinxout\}\[\d+\]:\\,\\hspace\{\\fboxrule}\\hspace\{\\fboxsep\}\}', '', tex)

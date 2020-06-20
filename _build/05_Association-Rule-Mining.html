@@ -123,6 +123,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">mlxtend.frequent_patterns</span> <span class="k">import</span> <span class="n">apriori</span>
 <span class="kn">from</span> <span class="nn">mlxtend.preprocessing</span> <span class="k">import</span> <span class="n">TransactionEncoder</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.latex.repr&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># we first need to create a one-hot encoding of our transactions</span>
 <span class="n">te</span> <span class="o">=</span> <span class="n">TransactionEncoder</span><span class="p">()</span>
@@ -198,7 +199,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <tr>
       <th>5</th>
       <td>0.4</td>
-      <td>(item3, item2)</td>
+      <td>(item2, item3)</td>
     </tr>
     <tr>
       <th>6</th>
@@ -213,7 +214,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <tr>
       <th>8</th>
       <td>0.3</td>
-      <td>(item4, item3, item2)</td>
+      <td>(item4, item2, item3)</td>
     </tr>
   </tbody>
 </table>
@@ -290,33 +291,33 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
   <tbody>
     <tr>
       <th>0</th>
-      <td>(item4, item3)</td>
-      <td>(item2)</td>
-    </tr>
-    <tr>
-      <th>1</th>
       <td>(item4, item2)</td>
       <td>(item3)</td>
     </tr>
     <tr>
+      <th>1</th>
+      <td>(item4, item3)</td>
+      <td>(item2)</td>
+    </tr>
+    <tr>
       <th>2</th>
-      <td>(item3, item2)</td>
+      <td>(item2, item3)</td>
       <td>(item4)</td>
     </tr>
     <tr>
       <th>3</th>
       <td>(item4)</td>
-      <td>(item3, item2)</td>
+      <td>(item2, item3)</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>(item3)</td>
-      <td>(item4, item2)</td>
+      <td>(item2)</td>
+      <td>(item4, item3)</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>(item2)</td>
-      <td>(item4, item3)</td>
+      <td>(item3)</td>
+      <td>(item4, item2)</td>
     </tr>
   </tbody>
 </table>
@@ -412,17 +413,6 @@ $$leverage(X \Rightarrow Y) = support(X \cup Y) - support(X) \cdot support(Y).$$
   <tbody>
     <tr>
       <th>0</th>
-      <td>(item4, item3)</td>
-      <td>(item2)</td>
-      <td>0.3</td>
-      <td>0.6</td>
-      <td>0.3</td>
-      <td>1.00</td>
-      <td>1.666667</td>
-      <td>0.12</td>
-    </tr>
-    <tr>
-      <th>1</th>
       <td>(item4, item2)</td>
       <td>(item3)</td>
       <td>0.5</td>
@@ -433,8 +423,19 @@ $$leverage(X \Rightarrow Y) = support(X \cup Y) - support(X) \cdot support(Y).$$
       <td>0.10</td>
     </tr>
     <tr>
+      <th>1</th>
+      <td>(item4, item3)</td>
+      <td>(item2)</td>
+      <td>0.3</td>
+      <td>0.6</td>
+      <td>0.3</td>
+      <td>1.00</td>
+      <td>1.666667</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
       <th>2</th>
-      <td>(item3, item2)</td>
+      <td>(item2, item3)</td>
       <td>(item4)</td>
       <td>0.4</td>
       <td>0.6</td>
@@ -446,7 +447,7 @@ $$leverage(X \Rightarrow Y) = support(X \cup Y) - support(X) \cdot support(Y).$$
     <tr>
       <th>3</th>
       <td>(item4)</td>
-      <td>(item3, item2)</td>
+      <td>(item2, item3)</td>
       <td>0.6</td>
       <td>0.4</td>
       <td>0.3</td>
@@ -456,17 +457,6 @@ $$leverage(X \Rightarrow Y) = support(X \cup Y) - support(X) \cdot support(Y).$$
     </tr>
     <tr>
       <th>4</th>
-      <td>(item3)</td>
-      <td>(item4, item2)</td>
-      <td>0.4</td>
-      <td>0.5</td>
-      <td>0.3</td>
-      <td>0.75</td>
-      <td>1.500000</td>
-      <td>0.10</td>
-    </tr>
-    <tr>
-      <th>5</th>
       <td>(item2)</td>
       <td>(item4, item3)</td>
       <td>0.6</td>
@@ -475,6 +465,17 @@ $$leverage(X \Rightarrow Y) = support(X \cup Y) - support(X) \cdot support(Y).$$
       <td>0.50</td>
       <td>1.666667</td>
       <td>0.12</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>(item3)</td>
+      <td>(item4, item2)</td>
+      <td>0.4</td>
+      <td>0.5</td>
+      <td>0.3</td>
+      <td>0.75</td>
+      <td>1.500000</td>
+      <td>0.10</td>
     </tr>
   </tbody>
 </table>
