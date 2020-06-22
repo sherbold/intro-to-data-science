@@ -21,8 +21,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <main class="jupyter-page">
     <div id="page-info"><div id="page-title">Text Mining</div>
 </div>
-    
-<div class="jb_cell">
+    <div class="jb_cell">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -37,12 +36,12 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">TextWrapper</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">TextWrapper</span>
 
 <span class="n">tweets_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Oct 4, 2018 08:03:25 PM Beautiful evening in Rochester, Minnesota. VOTE, VOTE, VOTE! https://t.co/SyxrxvTpZE [Twitter for iPhone]&#39;</span><span class="p">,</span>
                <span class="s1">&#39;Oct 4, 2018 07:52:20 PM Thank you Minnesota - I love you! https://t.co/eQC2NqdIil [Twitter for iPhone]&#39;</span><span class="p">,</span>
@@ -130,7 +129,7 @@ iPhone]
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -214,7 +213,7 @@ for the Obstructionist Democrats.
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -293,13 +292,13 @@ obstructionist democrats
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="k">import</span> <span class="n">stopwords</span> 
-<span class="kn">from</span> <span class="nn">nltk.tokenize</span> <span class="k">import</span> <span class="n">word_tokenize</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span> 
+<span class="kn">from</span> <span class="nn">nltk.tokenize</span> <span class="kn">import</span> <span class="n">word_tokenize</span> 
 
 <span class="n">stop_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span> 
 
@@ -373,7 +372,7 @@ good enough obstructionist democrats
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -383,7 +382,7 @@ good enough obstructionist democrats
 <span class="c1"># import nltk</span>
 <span class="c1"># nltk.download(&#39;wordnet&#39;)</span>
 
-<span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="k">import</span> <span class="n">WordNetLemmatizer</span>
+<span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">WordNetLemmatizer</span>
 
 <span class="c1"># the wordnet lemmatizer does not only harmonize synonyms but also performs some stemming</span>
 <span class="n">lemmatizer</span> <span class="o">=</span> <span class="n">WordNetLemmatizer</span><span class="p">()</span> 
@@ -454,12 +453,12 @@ good enough obstructionist democrat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="k">import</span> <span class="n">PorterStemmer</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
 
 <span class="c1"># porter stemming is a linguistic algorithm that provides additional stemming</span>
 <span class="n">stemmer</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
@@ -531,13 +530,13 @@ enough obstructionist democrat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">wordcloud</span> <span class="k">import</span> <span class="n">WordCloud</span>
+<span class="kn">from</span> <span class="nn">wordcloud</span> <span class="kn">import</span> <span class="n">WordCloud</span>
 
 <span class="n">wc_raw</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 <span class="n">wc_raw</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tweets_list</span><span class="p">))</span>
@@ -624,13 +623,13 @@ enough obstructionist democrat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="k">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
 
 <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
 <span class="n">bag_of_words</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">tweets_stemming</span><span class="p">)</span>
@@ -914,12 +913,12 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="k">import</span> <span class="n">TfidfTransformer</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfTransformer</span>
 
 <span class="n">transformer</span> <span class="o">=</span> <span class="n">TfidfTransformer</span><span class="p">(</span><span class="n">smooth_idf</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">tfidf</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">bag_of_words</span><span class="p">)</span>

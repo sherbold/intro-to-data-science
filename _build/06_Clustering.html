@@ -21,8 +21,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <main class="jupyter-page">
     <div id="page-info"><div id="page-title">Clustering</div>
 </div>
-    
-<div class="jb_cell">
+    <div class="jb_cell">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -77,7 +76,7 @@ $$c(x) = argmin_{i=1,...,k} d(x, C_i).$$<p>The following figure visualizes how d
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -85,8 +84,8 @@ $$c(x) = argmin_{i=1,...,k} d(x, C_i).$$<p>The following figure visualizes how d
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># we need matplotlib for plotting</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="c1"># we use sklearn to generate data and for the clustering</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_blobs</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
 
 <span class="c1"># generate sample data, the _ means that we ignore the second return value</span>
 <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">center_box</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
@@ -162,7 +161,7 @@ $$c(x) = argmin_{i=1,...,k} d(x, C_i).$$<p>The following figure visualizes how d
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -226,7 +225,7 @@ $$c(x) = argmin_{i=1,...,k} d(x, C_i).$$<p>The following figure visualizes how d
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -291,7 +290,7 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$<p>We already discussed how go
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -360,14 +359,14 @@ $$WSS = \sum_{i=1}^k\sum_{x \in X_i} d(x, C_i)^2$$<p>We already discussed how go
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_moons</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="kn">import</span> <span class="n">make_moons</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
 
 <span class="c1"># this generates our halfmoon data</span>
 <span class="n">X</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">make_moons</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -426,7 +425,7 @@ $$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -434,8 +433,8 @@ $$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_blobs</span>
-<span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="k">import</span> <span class="n">GaussianMixture</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+<span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="kn">import</span> <span class="n">GaussianMixture</span>
 
 <span class="c1"># we silence some annyoing warnings</span>
 <span class="c1"># if something is not working properly, remove this part and restart the kernel</span>
@@ -532,7 +531,7 @@ $$\mu_i = \frac{1}{|X|}\sum_{x \in X} w_i(x)\cdot x$$</li>
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -613,7 +612,7 @@ $$\mu_i = \frac{1}{|X|}\sum_{x \in X} w_i(x)\cdot x$$</li>
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -685,7 +684,7 @@ $$BIC = \log(|X|)\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$</p>
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -769,15 +768,15 @@ $$AIC = 2\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$<p>AIC is directly 
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_blobs</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">DBSCAN</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">DBSCAN</span>
 
 <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;indigo&#39;</span><span class="p">,</span> <span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="s1">&#39;mediumseagreen&#39;</span><span class="p">,</span> <span class="s1">&#39;gold&#39;</span><span class="p">]</span>
 
@@ -848,7 +847,7 @@ $$AIC = 2\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$<p>AIC is directly 
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -970,7 +969,7 @@ $$AIC = 2\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$<p>AIC is directly 
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1048,12 +1047,12 @@ $$AIC = 2\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$<p>AIC is directly 
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">NearestNeighbors</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">NearestNeighbors</span>
 
 <span class="c1"># we use sklearn to find the nearest neighbors</span>
 <span class="n">neigh</span> <span class="o">=</span> <span class="n">NearestNeighbors</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -1112,12 +1111,12 @@ $$AIC = 2\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$<p>AIC is directly 
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_circles</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="kn">import</span> <span class="n">make_circles</span>
 
 <span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 
@@ -1191,7 +1190,7 @@ $$AIC = 2\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$<p>AIC is directly 
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1199,9 +1198,9 @@ $$AIC = 2\cdot k' - 2\cdot \log(\hat{L}(C_1, ..., C_k; X)).$$<p>AIC is directly 
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_blobs</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">AgglomerativeClustering</span>
-<span class="kn">from</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="k">import</span> <span class="n">dendrogram</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
+<span class="kn">from</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="kn">import</span> <span class="n">dendrogram</span>
 
 <span class="k">def</span> <span class="nf">warn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">pass</span>
@@ -1276,12 +1275,12 @@ $$d(C, C') = \min_{x\in C, x' \in X'} dist(x, x').$$<p>Each cluster that is dete
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="k">import</span> <span class="n">dendrogram</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="kn">import</span> <span class="n">dendrogram</span>
 
 <span class="k">def</span> <span class="nf">plot_dendrogram</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="c1"># Create linkage matrix and then plot the dendrogram</span>
@@ -1363,12 +1362,12 @@ $$d(C, C') = \min_{x\in C, x' \in X'} dist(x, x').$$<p>Each cluster that is dete
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_circles</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="kn">import</span> <span class="n">make_circles</span>
 
 <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -1444,7 +1443,7 @@ $$d(C, C') = \min_{x\in C, x' \in X'} dist(x, x').$$<p>Each cluster that is dete
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1452,10 +1451,10 @@ $$d(C, C') = \min_{x\in C, x' \in X'} dist(x, x').$$<p>Each cluster that is dete
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="k">import</span> <span class="n">make_blobs</span><span class="p">,</span> <span class="n">make_moons</span><span class="p">,</span> <span class="n">make_circles</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">DBSCAN</span><span class="p">,</span> <span class="n">KMeans</span><span class="p">,</span> <span class="n">AgglomerativeClustering</span>
-<span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="k">import</span> <span class="n">GaussianMixture</span>
-<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="k">import</span> <span class="n">ListedColormap</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets.samples_generator</span> <span class="kn">import</span> <span class="n">make_blobs</span><span class="p">,</span> <span class="n">make_moons</span><span class="p">,</span> <span class="n">make_circles</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">DBSCAN</span><span class="p">,</span> <span class="n">KMeans</span><span class="p">,</span> <span class="n">AgglomerativeClustering</span>
+<span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="kn">import</span> <span class="n">GaussianMixture</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span>
 
 <span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Blobs&#39;</span><span class="p">,</span> <span class="s1">&#39;Halfmoons&#39;</span><span class="p">,</span> <span class="s1">&#39;Circles&#39;</span><span class="p">,</span> <span class="s1">&#39;different densities&#39;</span><span class="p">]</span>
 <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">center_box</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">cluster_std</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
@@ -1569,16 +1568,16 @@ $$d(C, C') = \min_{x\in C, x' \in X'} dist(x, x').$$<p>Each cluster that is dete
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_blobs</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">DBSCAN</span><span class="p">,</span> <span class="n">KMeans</span>
-<span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="k">import</span> <span class="n">GaussianMixture</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">DBSCAN</span><span class="p">,</span> <span class="n">KMeans</span>
+<span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="kn">import</span> <span class="n">GaussianMixture</span>
 
 <span class="kn">import</span> <span class="nn">timeit</span>
 

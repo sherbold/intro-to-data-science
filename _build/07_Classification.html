@@ -21,8 +21,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <main class="jupyter-page">
     <div id="page-info"><div id="page-title">Classification</div>
 </div>
-    
-<div class="jb_cell">
+    <div class="jb_cell">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -54,16 +53,16 @@ $$h_t(x) = \begin{cases}\text{positive} &amp; \text{if}~h'(x) \geq t \\ \text{ne
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_blobs</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 
 
 <span class="c1"># generate sample data</span>
@@ -271,12 +270,12 @@ $$h_t(x) = \begin{cases}\text{positive} &amp; \text{if}~h'(x) \geq t \\ \text{ne
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span>
 
 <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_score</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">roc_auc</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
@@ -332,7 +331,7 @@ $$h_t(x) = \begin{cases}\text{positive} &amp; \text{if}~h'(x) \geq t \\ \text{ne
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -393,7 +392,7 @@ $$h_t(x) = \begin{cases}\text{positive} &amp; \text{if}~h'(x) \geq t \\ \text{ne
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -480,14 +479,14 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">load_iris</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
 
 <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">class_names</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">()</span><span class="o">.</span><span class="n">target_names</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -549,7 +548,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -651,12 +650,12 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KNeighborsClassifier</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
 
 <span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces of 1-Nearest Neighbor&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -700,7 +699,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -757,12 +756,12 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">NearestNeighbors</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">NearestNeighbors</span>
 
 <span class="k">def</span> <span class="nf">plot_neighborhood</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">pnt</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">nbrs</span> <span class="o">=</span> <span class="n">NearestNeighbors</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;ball_tree&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -829,12 +828,12 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="k">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
 
 <span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;entropy&#39;</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
@@ -882,7 +881,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -943,7 +942,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -990,7 +989,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1037,13 +1036,13 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="k">import</span> <span class="n">plot_tree</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">plot_tree</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
 
 <span class="c1"># Please note that the parameters we use here are not good and should not be used</span>
 <span class="c1"># for any real examples. We use only four random trees so that we can better demonstrate </span>
@@ -1099,7 +1098,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1152,7 +1151,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1199,7 +1198,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1247,7 +1246,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1314,12 +1313,12 @@ $$logit(P(Y=c)) = \ln \frac{P(Y=c)}{1-P(Y=c)} = b_0 + b_1x_1 + ... + b_mx_m$$<p>
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
 
 <span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces of Logistic Regression&quot;</span><span class="p">)</span>
 </pre></div>
@@ -1370,7 +1369,7 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1485,12 +1484,12 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="k">import</span> <span class="n">GaussianNB</span><span class="p">,</span> <span class="n">MultinomialNB</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span><span class="p">,</span> <span class="n">MultinomialNB</span>
 
 <span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">MultinomialNB</span><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Decision Surfaces of Multinomial Naive Bayes&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -1547,12 +1546,12 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">SVC</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
 
 <span class="c1"># we create 40 separable points</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -1655,18 +1654,18 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="k">import</span> <span class="n">ListedColormap</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_circles</span>
-<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_circles</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
 
 
 <span class="n">X_circles</span><span class="p">,</span> <span class="n">Y_circles</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -1737,7 +1736,7 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -1804,12 +1803,12 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">graphviz</span> <span class="k">import</span> <span class="n">Digraph</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span>
 
 <span class="n">network</span> <span class="o">=</span> <span class="n">Digraph</span><span class="p">()</span>
 <span class="n">network</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="n">splines</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">)</span>
@@ -2180,7 +2179,7 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
@@ -2250,12 +2249,12 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="k">import</span> <span class="n">MLPClassifier</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
 
 <span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">plot_decision_surface</span><span class="p">(</span><span class="n">MLPClassifier</span><span class="p">(</span><span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
@@ -2335,18 +2334,18 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="k">import</span> <span class="n">MLPClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KNeighborsClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">SVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="k">import</span> <span class="n">DecisionTreeClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="k">import</span> <span class="n">GaussianNB</span><span class="p">,</span> <span class="n">MultinomialNB</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span><span class="p">,</span> <span class="n">MultinomialNB</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
 
 <span class="k">def</span> <span class="nf">plot_clf_comparison</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
     <span class="n">classifiers</span> <span class="o">=</span> <span class="p">[</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
@@ -2444,12 +2443,12 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_moons</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_moons</span>
 
 <span class="n">X_moons</span><span class="p">,</span> <span class="n">Y_moons</span> <span class="o">=</span> <span class="n">make_moons</span><span class="p">(</span><span class="n">noise</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">plot_clf_comparison</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_moons</span><span class="o">+</span><span class="mi">3</span><span class="p">),</span><span class="n">Y_moons</span><span class="p">)</span>
@@ -2495,12 +2494,12 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_circles</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_circles</span>
 
 <span class="n">X_circles</span><span class="p">,</span> <span class="n">Y_circles</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">noise</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">plot_clf_comparison</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_circles</span><span class="o">+</span><span class="mi">3</span><span class="p">),</span> <span class="n">Y_circles</span><span class="p">)</span>
@@ -2546,12 +2545,12 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_classification</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_classification</span>
 
 <span class="n">X_linear</span><span class="p">,</span> <span class="n">Y_linear</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_informative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                            <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_clusters_per_class</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -2598,12 +2597,12 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 <div class="jb_cell tag_hide_input">
 
-<div class="cell border-box-sizing code_cell rendered">
+<div class="cell border-box-sizing code_cell rendered tag_hide_input">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">make_moons</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_moons</span>
 <span class="kn">import</span> <span class="nn">timeit</span>
 
 <span class="n">classifiers</span> <span class="o">=</span> <span class="p">[</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>

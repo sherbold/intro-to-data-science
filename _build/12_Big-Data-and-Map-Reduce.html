@@ -21,8 +21,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <main class="jupyter-page">
     <div id="page-info"><div id="page-title">Big Data Processing</div>
 </div>
-    
-<div class="jb_cell">
+    <div class="jb_cell">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -161,68 +160,68 @@ your 1</code></pre>
 </ul>
 <h3 id="MapReduce-with-Hadoop">MapReduce with Hadoop<a class="anchor-link" href="#MapReduce-with-Hadoop"> </a></h3><p>Hadoop provides a MapReduce implementation that uses YARN for the execution. In such a MapReduce application, users define sequences of map()/reduce() tasks to solve their problem. The execution is driven by the MRAppMaster Java application. This application specifies a YARN application master that manages the execution of tasks, in this case of the map() and reduce() tasks. Users specify the MapReduce applications through a Java application. Hadoop also has a <a href="streaming-mode">streaming mode</a> for job execution, which we discuss below.</p>
 <p>The tasks of MapReduce applications are specified through subclassing. Subclasses of the <code>Mapper</code> class define map() functions, subclasses of the <code>Reducer</code> class define <code>reduce()</code>. The code below specifies the map() function for the word count example. Please note that we omit all boilerplate code from the code samples, e.g., import statements. The complete example can be fount in the <a href="https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Example:_WordCount_v1.0">official Hadoop documentation</a>.</p>
-<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TokenizerMapper</span> <span class="kd">extends</span> <span class="n">Mapper</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">IntWritable</span> <span class="n">one</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
-    <span class="kd">private</span> <span class="n">Text</span> <span class="n">word</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Text</span><span class="o">();</span>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TokenizerMapper</span> <span class="kd">extends</span> <span class="n">Mapper</span><span class="o">&lt;</span><span class="n">Object</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">IntWritable</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">IntWritable</span> <span class="n">one</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="kd">private</span> <span class="n">Text</span> <span class="n">word</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Text</span><span class="p">();</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">map</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">,</span> <span class="n">Text</span> <span class="n">value</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span>
-                   <span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">map</span><span class="p">(</span><span class="n">Object</span> <span class="n">key</span><span class="p">,</span> <span class="n">Text</span> <span class="n">value</span><span class="p">,</span> <span class="n">Context</span> <span class="n">context</span>
+                   <span class="p">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="p">,</span> <span class="n">InterruptedException</span> <span class="p">{</span>
         <span class="c1">// text into tokens</span>
-        <span class="n">StringTokenizer</span> <span class="n">itr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringTokenizer</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">().</span><span class="na">toLowerCase</span><span class="o">());</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">its</span><span class="o">.</span><span class="na">hasMoreTokens</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">StringTokenizer</span> <span class="n">itr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringTokenizer</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="na">toString</span><span class="p">().</span><span class="na">toLowerCase</span><span class="p">());</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">its</span><span class="p">.</span><span class="na">hasMoreTokens</span><span class="p">())</span> <span class="p">{</span>
             <span class="c1">// add an output pair &lt;word, 1&gt; for each token</span>
-            <span class="n">word</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">itr</span><span class="o">.</span><span class="na">nextToken</span><span class="o">());</span>
-            <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">one</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+            <span class="n">word</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="n">itr</span><span class="p">.</span><span class="na">nextToken</span><span class="p">());</span>
+            <span class="n">context</span><span class="p">.</span><span class="na">write</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">one</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 <p>The <code>TokenizerMapper</code> class extends to generic class <code>Mapper</code> with four parameters of types <code>Object</code>, <code>Text</code>, <code>Text</code>, and <code>IntWritable</code>. The first two parameters specify the types of the key and value of the input key-value pairs of the map() function, which means we have keys of type <code>Object</code> and values of type <code>Text</code>. the last two parameters specify the type of output key-value pairs, which means we have keys of type <code>Text</code> with values of type <code>IntWritable</code>. <code>Text</code> and <code>IntWritable</code> are data types provided by Hadoop that are similar to their Java counterparts <code>String</code> and <code>Integer</code>. The key differences between the Hadoop types and the standard Java types are that of the Hadoop types are <em>mutable</em>, i.e., the values of objects can be modified, and the Hadoop types are optimized for serialization to improve the efficiency of exchanging key-value pairs between different map() and reduce() tasks.</p>
 <p>The class has two attributes <code>one</code> and <code>word</code>, which are used to generate the output keys and values. These advantage of having these as attributes is that they are not initialized with every call of map(), which improves the efficiency. Finally, we have map() function, defines how the input key values are mapped to the output pairs. In addition to the input key and value, map() gets the <code>context</code>. This context specifies the Hadoop execution environment and contains, e.g., values of environment variables. Moreover, the context receives the output of the map() function through the <code>context.write()</code> method. Thus, the map() function does not return values, but continuously writes results for which the computation finished to the context. The context contains the shuffle() function and can immediately start shuffling the output key-value pair, once it was written. Thus, shuffling can already start before the first map() function finished.</p>
 <p>The code below shows the reduce() function for the word count.</p>
-<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">IntSumReader</span> <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">IntWritable</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="o">();</span>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">IntSumReader</span> <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span><span class="p">,</span> <span class="n">IntWritable</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">IntWritable</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="n">IntWritable</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="p">();</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">Text</span> <span class="n">key</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">IntWritable</span><span class="o">&gt;</span> <span class="n">values</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span>
-                       <span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="p">(</span><span class="n">Text</span> <span class="n">key</span><span class="p">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">IntWritable</span><span class="o">&gt;</span> <span class="n">values</span><span class="p">,</span> <span class="n">Context</span> <span class="n">context</span>
+                       <span class="p">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="p">,</span> <span class="n">InterruptedException</span> <span class="p">{</span>
         <span class="c1">// calculate sum of word counts</span>
-        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="n">IntWritable</span> <span class="n">val</span> <span class="o">:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">sum</span> <span class="o">+=</span> <span class="n">val</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="n">result</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">sum</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">IntWritable</span> <span class="n">val</span> <span class="p">:</span> <span class="n">values</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">val</span><span class="p">.</span><span class="na">get</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">result</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="n">sum</span><span class="p">);</span>
         <span class="c1">// write result</span>
-        <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+        <span class="n">context</span><span class="p">.</span><span class="na">write</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 <p>The <code>IntSumReader</code> class extends the generic class <code>Reducer</code>. Same as for the <code>TokenizerMapper</code>, the parameters describe the types of the input, respectively out, the attribute <code>result</code> is used for efficiency, and the result is written to the context. The only notable difference between the classes is that the reduce function gets an <code>Iterable</code> of values and not a single value, i.e., all values for the key.</p>
 <p>Finally, we need to use these classes in a MapReduce application. The code for the application is below.</p>
-<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordCount</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+<div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordCount</span> <span class="p">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="p">{</span>
         <span class="c1">// Hadoop configuration</span>
-        <span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
+        <span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="p">();</span>
 
         <span class="c1">// Create a Job with the name &quot;word count&quot;</span>
-        <span class="n">Job</span> <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="s">&quot;word count&quot;</span><span class="o">);</span>
-        <span class="n">job</span><span class="o">.</span><span class="na">setJahrByClass</span><span class="o">(</span><span class="n">WordCount</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">Job</span> <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">.</span><span class="na">getInstance</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="s">&quot;word count&quot;</span><span class="p">);</span>
+        <span class="n">job</span><span class="p">.</span><span class="na">setJahrByClass</span><span class="p">(</span><span class="n">WordCount</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
 
         <span class="c1">// set mapper, reducer, and output types</span>
-        <span class="n">job</span><span class="o">.</span><span class="na">setMapperClass</span><span class="o">(</span><span class="n">TokenizerMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-        <span class="n">job</span><span class="o">.</span><span class="na">setReduczer</span><span class="o">(</span><span class="n">IntSumReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-        <span class="n">job</span><span class="o">.</span><span class="na">setOutputKeyClass</span><span class="o">(</span><span class="n">Text</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-        <span class="n">job</span><span class="o">.</span><span class="na">setOutputValueClass</span><span class="o">(</span><span class="n">IntWritable</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">job</span><span class="p">.</span><span class="na">setMapperClass</span><span class="p">(</span><span class="n">TokenizerMapper</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+        <span class="n">job</span><span class="p">.</span><span class="na">setReduczer</span><span class="p">(</span><span class="n">IntSumReducer</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+        <span class="n">job</span><span class="p">.</span><span class="na">setOutputKeyClass</span><span class="p">(</span><span class="n">Text</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+        <span class="n">job</span><span class="p">.</span><span class="na">setOutputValueClass</span><span class="p">(</span><span class="n">IntWritable</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
 
         <span class="c1">// specify input and output files</span>
-        <span class="n">FileInputFormat</span><span class="o">.</span><span class="na">addInputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]));</span>
-        <span class="n">FileOutputFormat</span><span class="o">.</span><span class="na">setOutputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]));</span>
+        <span class="n">FileInputFormat</span><span class="p">.</span><span class="na">addInputPath</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="k">new</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">));</span>
+        <span class="n">FileOutputFormat</span><span class="p">.</span><span class="na">setOutputPath</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="k">new</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">));</span>
 
         <span class="c1">// run job and wait for completion</span>
-        <span class="n">job</span><span class="o">.</span><span class="na">waitForCompletion</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+        <span class="n">job</span><span class="p">.</span><span class="na">waitForCompletion</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 <p>The application is a normal Java application with a main method and the code is more or less self-explanatory. First, we create the configuration of Hadoop application. This object contains, e.g., the context and MapReduce tasks. We use the configuration to create a new MapReduce job. Then, we configure the Job. We define in which class it is defined, which classes are used for the map() and reduce() steps, and what the types of the outputs are. Finally, we specify where the input data come from and where the output should be written, based on the command line arguments of the application. The final line starts the job and blocks further execution, until the job is finished, i.e., all map() and reduce() functions finished their work and the results are available in the file system.</p>
 <h3 id="Word-Count-with-Hadoop">Word Count with Hadoop<a class="anchor-link" href="#Word-Count-with-Hadoop"> </a></h3><p>Since it is not intuitive how Hadoop/YARN orchestrate the execution of a MapReduce application, we now demonstrate this in detail step by step using the word count example.</p>
@@ -275,7 +274,7 @@ your 1</code></pre>
     <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
         <span class="c1"># print output pairs to standard output</span>
         <span class="c1"># key and value are separated by tab (standard for Hadoop)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </pre></div>
 <p>Similarly, the reduce() function would also use the standard input and output.</p>
 <div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
@@ -285,9 +284,9 @@ your 1</code></pre>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="c1"># init current word and counter as not existing</span>
-<span class="n">current_word</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">current_word</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">current_count</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">word</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">word</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="c1"># read from standard input</span>
 <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">:</span>
@@ -302,13 +301,13 @@ your 1</code></pre>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">current_word</span><span class="p">:</span>
             <span class="c1"># write result to standard output</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">current_word</span><span class="p">,</span> <span class="n">current_count</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">current_word</span><span class="p">,</span> <span class="n">current_count</span><span class="p">))</span>
         <span class="c1"># reset counter and update current word</span>
         <span class="n">current_count</span> <span class="o">=</span> <span class="n">count</span>
         <span class="n">word</span> <span class="o">=</span> <span class="n">word</span>
 <span class="c1"># output for last word</span>
 <span class="k">if</span> <span class="n">current_word</span><span class="o">==</span><span class="n">word</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">current_word</span><span class="p">,</span> <span class="n">current_count</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">current_word</span><span class="p">,</span> <span class="n">current_count</span><span class="p">))</span>
 </pre></div>
 <p>The streaming mode can be used with any programming language, as long as inputs are read from the standard input and outputs are written to the standard output stream. Technically, the streaming mode is just a Hadoop MapReduce implementation that is bundled as a jar-Archive and can be used. For example, the following command could be used to run the word count.</p>
 
