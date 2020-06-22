@@ -28,7 +28,7 @@ tex = tex.replace(r'\section{State of the Online Book}', r'\section*{State of th
 tex = tex.replace(r'\chapter{Appendix}', '\\appendix\n\\chapter{Appendix}')
 tex = tex.replace(r'\section{Mathematical Notations}', r'\section*{Mathematical Notations}')
 
-confMatReplace = r'''
+conf_mat_replace = r'''
 \begin{savenotes}\sphinxattablestart
 \centering
 \begin{tabular}{l|l|c|c|c|}
@@ -41,7 +41,7 @@ Predicted class & bear & 2 & 22 & 13 \\ \cline{2-5}
 \par
 \sphinxattableend\end{savenotes}'''
 
-confMat = r'''
+conf_mat = r'''
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{o}{\PYGZlt{}}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td} \PYG{n}{colspan}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{Actual} \PYG{n}{class}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}
 \PYG{o}{\PYGZlt{}}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td} \PYG{n}{rowspan}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{br}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{br}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{Predicted} \PYG{n}{class}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{whale}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{bear}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{other}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}
@@ -50,9 +50,9 @@ confMat = r'''
 \PYG{o}{\PYGZlt{}}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{other}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{l+m+mi}{4}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{l+m+mi}{11}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{l+m+mi}{51}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}
 \end{sphinxVerbatim}'''.strip()
 
-tex = tex.replace(confMat, confMatReplace)
+tex = tex.replace(conf_mat, conf_mat_replace)
 
-confMatReplace = r'''
+conf_mat_replace = r'''
 \begin{savenotes}\sphinxattablestart
 \centering
 \begin{tabular}{l|l|c|c|}
@@ -64,17 +64,16 @@ Predicted class & false & false negative (FN) & true negative (FN) \\ \cline{2-4
 \par
 \sphinxattableend\end{savenotes}'''
 
-confMat = r'''
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
+conf_mat = r'''\begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{o}{\PYGZlt{}}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td} \PYG{n}{colspan}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{Actual} \PYG{n}{class}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}
 \PYG{o}{\PYGZlt{}}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td} \PYG{n}{rowspan}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{br}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{br}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{Predicted} \PYG{n}{class}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{true}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{false}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}
 \PYG{o}{\PYGZlt{}}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{true}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{n}{true} \PYG{n}{positive} \PYG{p}{(}\PYG{n}{TP}\PYG{p}{)}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{n}{false} \PYG{n}{positive} \PYG{p}{(}\PYG{n}{FP}\PYG{p}{)}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}
 \PYG{o}{\PYGZlt{}}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{n}{false}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{b}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{n}{false} \PYG{n}{negative} \PYG{p}{(}\PYG{n}{FN}\PYG{p}{)}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{n}{true} \PYG{n}{negative} \PYG{p}{(}\PYG{n}{TN}\PYG{p}{)}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{td}\PYG{o}{\PYGZgt{}}\PYG{o}{\PYGZlt{}}\PYG{o}{/}\PYG{n}{tr}\PYG{o}{\PYGZgt{}}
-\end{sphinxVerbatim}'''.strip()
+\end{sphinxVerbatim}'''
 
-tex = tex.replace(confMat, confMatReplace)
+tex = tex.replace(conf_mat, conf_mat_replace)
 
-mathTable = r'''\begin{savenotes}\sphinxatlongtablestart\begin{longtable}[c]{|l|l|}
+math_table = r'''\begin{savenotes}\sphinxatlongtablestart\begin{longtable}[c]{|l|l|}
 \hline
 \sphinxstyletheadfamily 
 Notation
@@ -84,7 +83,7 @@ Definition
 \hline
 \endfirsthead'''
 
-mathTableReplace = r'''\begin{savenotes}\sphinxatlongtablestart\begin{longtable}[c]{p{0.28\linewidth}p{0.68\linewidth}}
+math_table_replace = r'''\begin{savenotes}\sphinxatlongtablestart\begin{longtable}[c]{p{0.28\linewidth}p{0.68\linewidth}}
 \hline
 \sphinxstyletheadfamily 
 Notation
@@ -94,8 +93,59 @@ Definition
 \hline
 \endfirsthead'''
 
-tex = tex.replace(mathTable, mathTableReplace)
+tex = tex.replace(math_table, math_table_replace)
 
+assoc_score_mat_replace = r'''\begin{tabular}{lllp{1.5cm}p{1.5cm}rrrr}
+\toprule
+{} &     antecedents'''
+
+assoc_score_mat = r'''\begin{tabular}{lllrrrrrr}
+\toprule
+{} &     antecedents'''
+
+tex = tex.replace(assoc_score_mat, assoc_score_mat_replace)
+
+metrics_replace = r'''\begin{savenotes}\sphinxattablestart
+\centering
+\begin{tabular}{|p{0.25\linewidth}|p{0.35\linewidth}|p{0.33\linewidth}|}
+\hline
+\sphinxstyletheadfamily 
+Metric
+&\sphinxstyletheadfamily 
+Description
+&\sphinxstyletheadfamily 
+Definition
+\\
+\hline
+True positive rate'''
+
+metrics = r'''\begin{savenotes}\sphinxattablestart
+\centering
+\begin{tabulary}{\linewidth}[t]{|T|T|T|}
+\hline
+\sphinxstyletheadfamily 
+Metric
+&\sphinxstyletheadfamily 
+Description
+&\sphinxstyletheadfamily 
+Definition
+\\
+\hline
+True positive rate'''
+
+tex = tex.replace(metrics, metrics_replace)
+
+metrics_replace = r'''(TN+FN)}}\)
+\\
+\hline
+\end{tabular}'''
+
+metrics = r'''(TN+FN)}}\)
+\\
+\hline
+\end{tabulary}'''
+
+tex = tex.replace(metrics, metrics_replace)
 # -
 
 
