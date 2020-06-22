@@ -2,7 +2,7 @@
 
 Source repository for the online book [Introduction to Data Science](https://sherbold.github.io/intro-to-data-science/). 
 
-## Modifying the ContentsBook
+## Modifying the Contents
 
 Modifying the contents of this book is relatively simple. 
 
