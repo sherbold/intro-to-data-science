@@ -99,3 +99,8 @@
   - url: /exercises/Solution_Time_Series_Analysis
   - url: /exercises/Solution_Text_Mining
   - url: /exercises/Solution_Statistics
+  
+- divider: true
+
+- url: /Appendix
+  not_numbered: true

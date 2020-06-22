@@ -7,13 +7,13 @@ kernel_path: content
 has_widgets: false
 title: |-
   Appendix
-pagenum: 29
+pagenum: 34
 prev_page:
-  url: /exercises/Solution_Time_Series_Analysis.html
+  url: /exercises/Solution_Statistics.html
 next_page:
   url: 
 suffix: .ipynb
-search: mathbb e space d r real any n features appendix mathematical notations notation definition less numerical value natural numbers integer greater mathcal f feature values often dimensional case
+search: x variable y random e set k f value n p space classification t association mathbb d regression used g vert distance argmin min h series real any objects feature values features mathcal clustering where finite rule c xt term r map instances either subseteq also classes rules consequent choose function same sim mu sigma hypothesis concept probability xy conditional given entropy information known appendix mathematical notations notation definition less numerical natural numbers integer greater o object world phi defines often dimensional case depending context xn cases instead realizations interest dependent defined yn items im transactions tn ti antecedent rightarrow
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -21,8 +21,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <main class="jupyter-page">
     <div id="page-info"><div id="page-title">Appendix</div>
 </div>
-    
-<div class="jb_cell">
+    <div class="jb_cell">
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -42,8 +41,158 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <td>Natural numbers, i.e., any integer greater than 0.</td>
 </tr>
 <tr>
+<td>$O$</td>
+<td>Object space, i.e., a set of real-world objects.</td>
+</tr>
+<tr>
+<td>$\phi$</td>
+<td>Feature map, i.e., a map that defines the values of the features for objects.</td>
+</tr>
+<tr>
 <td>$\mathcal{F}$</td>
 <td>Feature space, i.e., the values of all features. Often the $\mathbb{R}^d$, i.e., the $d$-dimensional real space. In this case there are $d \in \mathbb{N}$ features.</td>
+</tr>
+<tr>
+<td>$X$ (clustering, classification, regression)</td>
+<td>Used for the instances of objects in the feature space. Depending on the context, $X$ is either a set of instances have $X = \{x_1, ..., x_n\} \subseteq \mathcal{F}$. There are also some cases where $X$ is used as a random variable instead, the set would then be $n$ realizations of this random variable.</td>
+</tr>
+<tr>
+<td>$Y$ (clustering, classification, regression)</td>
+<td>Used for the value of interest, e.g., the classes for classification or the dependent variable in regression. Defined either as a set $Y= \{y_1, ..., y_n\}$ or a random variable (see $X$).</td>
+</tr>
+<tr>
+<td>$I$</td>
+<td>Finite set of items {i_1, ..., i_m}.</td>
+</tr>
+<tr>
+<td>$T$</td>
+<td>Finite set of transactions $T=\{t_1, ..., t_n\}$ where $t_i \subseteq I$ for $i=1, ..., n$.</td>
+</tr>
+<tr>
+<td>$X$ (association rules)</td>
+<td>Antecedent of an association rule.</td>
+</tr>
+<tr>
+<td>$Y$ (association rules)</td>
+<td>Consequent of an association rule.</td>
+</tr>
+<tr>
+<td>$X \Rightarrow Y$</td>
+<td>Association rule where $Y$ is a consequent of $X$.</td>
+</tr>
+<tr>
+<td>${n \choose k}$</td>
+<td>The binomial coefficient ${n \choose k} = \frac{</td>
+<td>I</td>
+<td>!}{(</td>
+<td>I</td>
+<td>-k)!k!}$.</td>
+</tr>
+<tr>
+<td>$\mathcal{P}(I)$</td>
+<td>The power set of a finite set $I$.</td>
+</tr>
+<tr>
+<td>$\vert \cdot \vert$</td>
+<td>Cardinality of a set, e.g., $\vert X \vert$ for the number of elements of $X$</td>
+</tr>
+<tr>
+<td>$d(x,y)$</td>
+<td>Distance between two vectors $x$ and $y$, e.g., Euclidean distance, Manhattan distance, or Chebyshev distance.</td>
+</tr>
+<tr>
+<td>$argmin_{i=1,...,k} f(i)$</td>
+<td>The value of $i$ for which the function $f$ is minimized.</td>
+</tr>
+<tr>
+<td>$argmin_{i \in \{1, ..., k\}} f(i)$</td>
+<td>Same as $argmin_{i=1,...,k} f(i)$.</td>
+</tr>
+<tr>
+<td>$\min_{i=1,...,k} f(i)$</td>
+<td>The minimal value of the function $f$ for any value of $i$.</td>
+</tr>
+<tr>
+<td>$\min_{i \in \{1, ..., k\}} f(i)$</td>
+<td>Same as $\min_{i=1, ..., k}$.</td>
+</tr>
+<tr>
+<td>$argmax$</td>
+<td>See $argmin$.</td>
+</tr>
+<tr>
+<td>$\max$</td>
+<td>See $\min$.</td>
+</tr>
+<tr>
+<td>$\sim$</td>
+<td>Used to define the distribution of a random variable, e.g., $X \sim (\mu, \sigma)$ to specify that $X$ is normally distributed with mean value $\mu$ and standard deviation $\sigma$.</td>
+</tr>
+<tr>
+<td>$C$ (classification)</td>
+<td>Set of classes.</td>
+</tr>
+<tr>
+<td>$C$ (clustering)</td>
+<td>Description of a cluster.</td>
+</tr>
+<tr>
+<td>$h$</td>
+<td>Hypothesis, concept, classifier, classification model.</td>
+</tr>
+<tr>
+<td>$h^*$</td>
+<td>Target concept.</td>
+</tr>
+<tr>
+<td>$h'_c$</td>
+<td>Score based hypothesis that computes the scores for the class $c$</td>
+</tr>
+<tr>
+<td>$P(X=x)$</td>
+<td>Probability that the random variable $X$ is realized by the value $x$. </td>
+</tr>
+<tr>
+<td>$p(x)$</td>
+<td>$p(x) = P(X=x)$ for a random variable $x$.</td>
+</tr>
+<tr>
+<td>$P(X</td>
+<td>Y)$</td>
+<td>Conditional probability of the random variable $X$ given the random variable $Y$. </td>
+</tr>
+<tr>
+<td>$H(X)$</td>
+<td>Entropy of the random variable $X$.</td>
+</tr>
+<tr>
+<td>$H(X</td>
+<td>Y)$</td>
+<td>Conditional entropy of the random variable $X$ given the random variable $Y$.</td>
+</tr>
+<tr>
+<td>$I(X; Y)$</td>
+<td>Information gain for $X$/$Y$ if the other variable is known. Also known as mutual information.</td>
+</tr>
+<tr>
+<td>$e_x$</td>
+<td>Residual of a regression.</td>
+</tr>
+<tr>
+<td>$x_t$</td>
+<td>Values of a time series $\{x_1, ..., x_T\} = \{x_t\}_{t=1}^T$. </td>
+</tr>
+<tr>
+<td>$T_t$</td>
+<td>Trend term of a time series.</td>
+</tr>
+<tr>
+<td>$S_t$</td>
+<td>Seasonal term of a time series.</td>
+</tr>
+<tr>
+<td>$R_t$</td>
+<td>Autoregressive term of a time series.</td>
 </tr>
 </tbody>
 </table>

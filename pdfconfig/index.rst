@@ -23,4 +23,5 @@ Welcome to Introduction to Data Science's documentation!
    10_Text-Mining
    11_Statistics
    12_Big-Data-and-Map-Reduce
+   Appendix
 

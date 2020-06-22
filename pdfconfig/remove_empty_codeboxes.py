@@ -18,12 +18,15 @@ tex = tex.replace(r'\usepackage{sphinx}', '\\usepackage{sphinx}\n\\usepackage{bo
 tex = re.sub(regex, '', tex, flags=re.MULTILINE)
 tex = re.sub(r'\\llap\{\\color\{nbsphinxin\}\[\d+\]:\\,\\hspace\{\\fboxrule}\\hspace\{\\fboxsep\}\}', '', tex)
 tex = re.sub(r'\\llap\{\\color\{nbsphinxout\}\[\d+\]:\\,\\hspace\{\\fboxrule}\\hspace\{\\fboxsep\}\}', '', tex)
+tex = re.sub(r'\\savebox\\nbsphinxpromptbox\[0pt\]\[r\]\{\\color\{nbsphinxout\}\\Verb\|\\strut{\[\d+\]:\}\\,\|\}', '', tex)
 tex = tex.replace(r'\textasciigrave{} \textless{}\textgreater{}\textasciigrave{}\_\_', '')
 tex = tex.replace(r'\chapter{Preface}', r'\chapter*{Preface}')
 tex = tex.replace(r'\section{Target audience}', r'\section*{Target audience}')
 tex = tex.replace(r'\section{Prerequisites}', r'\section*{Prerequisites}')
 tex = tex.replace(r'\section{Installation of Required Software}', r'\section*{Installation of Required Software}')
 tex = tex.replace(r'\section{State of the Online Book}', r'\section*{State of the Book}')
+tex = tex.replace(r'\chapter{Appendix}', '\\appendix\n\\chapter{Appendix}')
+tex = tex.replace(r'\section{Mathematical Notations}', r'\section*{Mathematical Notations}')
 
 confMatReplace = r'''
 \begin{savenotes}\sphinxattablestart
@@ -70,6 +73,29 @@ confMat = r'''
 \end{sphinxVerbatim}'''.strip()
 
 tex = tex.replace(confMat, confMatReplace)
+
+mathTable = r'''\begin{savenotes}\sphinxatlongtablestart\begin{longtable}[c]{|l|l|}
+\hline
+\sphinxstyletheadfamily 
+Notation
+&\sphinxstyletheadfamily 
+Definition
+\\
+\hline
+\endfirsthead'''
+
+mathTableReplace = r'''\begin{savenotes}\sphinxatlongtablestart\begin{longtable}[c]{p{0.28\linewidth}p{0.68\linewidth}}
+\hline
+\sphinxstyletheadfamily 
+Notation
+&\sphinxstyletheadfamily 
+Definition
+\\
+\hline
+\endfirsthead'''
+
+tex = tex.replace(mathTable, mathTableReplace)
+
 # -
 
 

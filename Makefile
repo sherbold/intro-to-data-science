@@ -38,6 +38,7 @@ pdf:
 	mkdir -p _pdfbuild
 	cp -r content/0* _pdfbuild
 	cp -r content/1* _pdfbuild
+	cp -r content/Appendix.ipynb _pdfbuild
 	mkdir _pdfbuild/images
 	cp -r content/images/* _pdfbuild/images
 	cp -r pdfconfig/* _pdfbuild
