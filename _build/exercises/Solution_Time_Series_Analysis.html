@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /exercises/Solution_Text_Mining.html
 suffix: .ipynb
-search: seasonal data values autocorrelation series differencing arma partial results regression effect model adjustment looks trend actual means analysis trends detrending linear likely mean not fit q both good because while exercise effects revenue start plot december monthly visualize adjustments seasonality seems dollars should still p year models forecast approach very learn determine parameters libraries including fitting forecasting provide csv pattern due season drop our solution steps detrend yearly therefore afterwards average increase million order detrended remove clearly through stationary e differences between select account explained only similar forecasts even get better pick suitable based task perform everything need pandas statsmodels
+search: seasonal data values autocorrelation series differencing arma partial results regression effect model adjustment looks trend actual means analysis trends detrending linear likely mean not fit p q both good because while exercise effects revenue start plot december monthly visualize adjustments seasonality seems dollars should still year models forecast approach very learn determine parameters libraries including fitting forecasting provide csv pattern due season drop our solution steps detrend yearly therefore afterwards average increase million order detrended remove clearly through stationary e differences between select account explained only similar forecasts even get better pick suitable based task perform everything need pandas statsmodels
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -429,7 +429,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>For the regression/seasonal mean approach, we select $p=15$, because there is still a direct correlation that has such a long effect. While this is a large model, this should be able to account for the residual seasonal effect that we have, because the seasonal mean approach cannot deal with trends in the season. While the autocorrelation does not tend towards zero until roughly 12 steps passed, it looks like the autocorrelation is largely stable and is likely explained by the carryover. Therefore, we use $q=1$.</p>
-<p>For the differencing, we select $0=2$, because afterwards there is only a very weak partial autocorrelation. Since the autocorrelation has a similar pattern to the partial autocorrelation, we assume that this is mostly explained by the partial autocorrelation and use $q=1$ as well.</p>
+<p>For the differencing, we select $p=2$, because afterwards there is only a very weak partial autocorrelation. Since the autocorrelation has a similar pattern to the partial autocorrelation, we assume that this is mostly explained by the partial autocorrelation and use $q=1$ as well.</p>
 <p>We now fit the ARMA models and predict the next twelve values. It is important that we undo the adjustments for trends and seasonality, if we want to look at the forecasts of the actual values of the time series. First, we have the results with regression/seasonal means.</p>
 
 </div>

@@ -262,7 +262,7 @@ $$\hat{\hat{x}}_t = \hat{x}_t - (mean(\{\hat{x}_{t'}\}_{\{t' \in 1, ..., T: mod(
 <p>Differencing us usually implemented with a variant of the <em>point slope equation</em> to estimate the slope of a line. The slope between two points $(x_1, y_1), (x_2, y_2)$ is defined as $\frac{y_2-y_1}{x_2-x_1}$. We use that we have equidistant time steps $t$, i.e., to points next to each other in the time series are $(t-1, x_{t-1}), (t, x_t)$ and the slope is</p>
 $$\frac{x_t-x_{t-1}}{t-(t-1)} = \frac{x_t-x_{t-1}}{1} = x_t-x_{t-1}.$$<p>The slope between two points of the time series is the <em>first-order difference</em> and we use the notation</p>
 $$\Delta^1 x_t = x_t - x_{t-1}.$$<p>With the first order difference, we detrend time series that have a moving mean value, i.e., $\hat{x}_t = \Delta^1 x_t$. If both the mean value as well as the change of the mean are moving, we can use <em>second-order differencing</em>, which is defined as</p>
-$$\Delta^2 x_t = \Delta^1 x_t - \Delta^1 x_{t-1} ) = x_t - 2\cdot x_{t-1} + x_{t-2}.$$<p>When we apply first-order differencing to our example, we get the following.</p>
+$$\Delta^2 x_t = \Delta^1 x_t - \Delta^1 x_{t-1} = x_t - 2\cdot x_{t-1} + x_{t-2}.$$<p>When we apply first-order differencing to our example, we get the following.</p>
 
 </div>
 </div>
