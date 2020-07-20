@@ -520,7 +520,7 @@ $$c(x) = \max_{i=1,..., k} P(C_i = x).$$</p>
 </ul>
 </li>
 </ol>
-<p>The biggest difference between the EM algorithm and the $k$-Means algorithm are the weights. The weights specify the likelihood that an instance $x \in X$ belongs a specific cluster. For example, if $w_i(x)=0.9$ it means that the likelihood is that $x$ belongs to cluster $C_i$ is 90%. The cluster assignment follows the same rule as above, i.e., $x$ is assigned to the cluster that maximizes the weight $c(x) = max_{i=1, ..., k} w_i(x)$. Still, EM also allows insights if points are uncertain, i.e., multiple clusters have similar likelihoods. This is called <em>soft clustering</em>, because theoretically each point does not belong to a single cluster, but to all clusters with a certain likelihood.</p>
+<p>The biggest difference between the EM algorithm and the $k$-Means algorithm are the weights. The weights specify the likelihood that an instance $x \in X$ belongs a specific cluster. For example, if $w_i(x)=0.9$ it means that the likelihood is that $x$ belongs to cluster $C_i$ is 90%. The cluster assignment follows the same rule as above, i.e., $x$ is assigned to the cluster that maximizes the weight $c(x) = argmax_{i=1, ..., k} w_i(x)$. Still, EM also allows insights if points are uncertain, i.e., multiple clusters have similar likelihoods. This is called <em>soft clustering</em>, because theoretically each point does not belong to a single cluster, but to all clusters with a certain likelihood.</p>
 <p>To better understand how the EM algorithm works, we again look at how the update steps work to fit the data.</p>
 
 </div>
