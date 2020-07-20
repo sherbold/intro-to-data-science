@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /11_Statistics.html
 suffix: .ipynb
-search: words text only mining not tweets also data documents example bag e often such g used n context different stemming meaning following case same lemmatization preprocessing told mistress loved document our relevant because occur textual into well corpus irrelevant get language topic between problems apply terms approach frequency grams techniques structure content good within through just cannot every stop thus stem similar features embeddings information examples analysis reviews related problem natural numeric moreover representation possible however huge works algorithms want cases therefore punctuation sentence mean count inverse very instead large hit man stick else application goal applications categorical challenges learning
+search: words text only mining not tweets also data documents example e bag often g such different n used context case stemming meaning following same lemmatization document preprocessing told mistress loved corpus our relevant because occur textual into well irrelevant get frequency language topic between problems apply terms approach grams techniques structure content good within however through just cannot every stop thus stem similar features inverse very embeddings information examples analysis reviews related problem natural numeric moreover representation possible huge works algorithms want cases does therefore punctuation sentence mean count instead large hit man stick else application goal applications categorical challenges
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -136,9 +136,7 @@ iPhone]
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
 
-<span class="n">wc_raw</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
-<span class="n">wc_raw</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tweets_list</span><span class="p">))</span>
- <span class="o">=</span> <span class="p">[]</span>
+<span class="n">tweets_relevant_content</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets_list</span><span class="p">:</span>
     <span class="c1"># remove the first 24 chars, because they are the time stamp</span>
     <span class="c1"># remove everything after last [ because this is the source of the tweet</span>
@@ -671,22 +669,22 @@ enough obstructionist democrat
       <th>7th</th>
       <th>agenda</th>
       <th>america</th>
-      <th>beautiful</th>
+      <th>beauti</th>
       <th>bishop</th>
       <th>congressman</th>
-      <th>counterterrorism</th>
+      <th>counterterror</th>
       <th>democrat</th>
       <th>dollar</th>
       <th>...</th>
       <th>thank</th>
       <th>thousand</th>
       <th>time</th>
-      <th>tomemmer</th>
+      <th>tomemm</th>
       <th>usa</th>
       <th>vote</th>
-      <th>wasteful</th>
+      <th>wast</th>
       <th>widen</th>
-      <th>working</th>
+      <th>work</th>
       <th>would</th>
     </tr>
   </thead>
@@ -918,12 +916,9 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfTransformer</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="n">transformer</span> <span class="o">=</span> <span class="n">TfidfTransformer</span><span class="p">(</span><span class="n">smooth_idf</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">tfidf</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">bag_of_words</span><span class="p">)</span>
-<span class="n">tfidf_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tfidf</span><span class="o">.</span><span class="n">todense</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">())</span>
-<span class="n">tfidf_df</span>
+<span class="n">bag_of_words_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">col</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">/</span><span class="n">col</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
 </pre></div>
 
     </div>
@@ -960,22 +955,22 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <th>7th</th>
       <th>agenda</th>
       <th>america</th>
-      <th>beautiful</th>
+      <th>beauti</th>
       <th>bishop</th>
       <th>congressman</th>
-      <th>counterterrorism</th>
+      <th>counterterror</th>
       <th>democrat</th>
       <th>dollar</th>
       <th>...</th>
       <th>thank</th>
       <th>thousand</th>
       <th>time</th>
-      <th>tomemmer</th>
+      <th>tomemm</th>
       <th>usa</th>
       <th>vote</th>
-      <th>wasteful</th>
+      <th>wast</th>
       <th>widen</th>
-      <th>working</th>
+      <th>work</th>
       <th>would</th>
     </tr>
   </thead>
@@ -986,10 +981,10 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.283823</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.0</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>...</td>
@@ -998,7 +993,7 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.85147</td>
+      <td>6.238325</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
@@ -1013,16 +1008,16 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.0</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>...</td>
-      <td>0.546004</td>
+      <td>1.386294</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.00000</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
@@ -1033,20 +1028,20 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.208439</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.0</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>...</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.208439</td>
-      <td>0.323043</td>
-      <td>0.00000</td>
+      <td>2.079442</td>
+      <td>2.772589</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
@@ -1056,22 +1051,22 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <th>3</th>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.175141</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.175141</td>
-      <td>0.175141</td>
-      <td>0.0</td>
+      <td>2.079442</td>
+      <td>2.079442</td>
       <td>0.000000</td>
-      <td>0.175141</td>
+      <td>0.000000</td>
+      <td>2.079442</td>
       <td>...</td>
       <td>0.000000</td>
-      <td>0.175141</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.00000</td>
-      <td>0.175141</td>
+      <td>0.000000</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
@@ -1085,7 +1080,7 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.0</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>...</td>
@@ -1093,10 +1088,10 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.361285</td>
-      <td>0.00000</td>
+      <td>1.386294</td>
       <td>0.000000</td>
-      <td>0.466228</td>
+      <td>0.000000</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>0.000000</td>
     </tr>
@@ -1109,7 +1104,7 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.5</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>...</td>
@@ -1118,7 +1113,7 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.00000</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
@@ -1133,44 +1128,44 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.0</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>...</td>
-      <td>0.480535</td>
+      <td>1.386294</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.00000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.620116</td>
+      <td>0.000000</td>
+      <td>2.079442</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>0.271158</td>
-      <td>0.271158</td>
+      <td>2.079442</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.0</td>
-      <td>0.271158</td>
+      <td>0.000000</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>...</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.271158</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.00000</td>
+      <td>2.079442</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.271158</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.079442</td>
     </tr>
   </tbody>
 </table>
@@ -1183,6 +1178,19 @@ $$TFIDF_t = TF_t \cdot IDF_t.$$<p>For our tweets, we get the following when we u
 </div>
 </div>
 
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote><p><strong>Note:</strong></p>
+<p>The inverse document frequency is often defined using a smoothing factors, e.g., as $IDF_t = \log\frac{N}{D_t+1}$ to avoid potentially undefined values in case a word does not appear in a corpus. Please note that there are different variants of smoothing. However, the impact on the results of the different variants of smoothing is usually very small, except that the computations have a better numerical stability.</p>
+</blockquote>
+
+</div>
+</div>
 </div>
 </div>
 
