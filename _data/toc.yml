@@ -102,5 +102,8 @@
   
 - divider: true
 
+- url: /Slides
+  not_numbered: true
+
 - url: /Appendix
   not_numbered: true
