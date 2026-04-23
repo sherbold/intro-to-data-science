@@ -55,7 +55,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
 
 <span class="c1"># first we load the data and print description</span>
-<span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
+<span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">fetch_openml</span><span class="p">(</span><span class="n">data_id</span><span class="o">=</span><span class="mi">531</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">DESCR</span><span class="p">)</span>
 
 <span class="c1"># we convert the data into a data frame and use the convenient describe function from pandas</span>
@@ -74,57 +74,37 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>.. _boston_dataset:
-
-Boston house prices dataset
----------------------------
-
-**Data Set Characteristics:**  
-
-    :Number of Instances: 506 
-
-    :Number of Attributes: 13 numeric/categorical predictive. Median Value (attribute 14) is usually the target.
-
-    :Attribute Information (in order):
-        - CRIM     per capita crime rate by town
-        - ZN       proportion of residential land zoned for lots over 25,000 sq.ft.
-        - INDUS    proportion of non-retail business acres per town
-        - CHAS     Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
-        - NOX      nitric oxides concentration (parts per 10 million)
-        - RM       average number of rooms per dwelling
-        - AGE      proportion of owner-occupied units built prior to 1940
-        - DIS      weighted distances to five Boston employment centres
-        - RAD      index of accessibility to radial highways
-        - TAX      full-value property-tax rate per $10,000
-        - PTRATIO  pupil-teacher ratio by town
-        - B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
-        - LSTAT    % lower status of the population
-        - MEDV     Median value of owner-occupied homes in $1000&#39;s
-
-    :Missing Attribute Values: None
-
-    :Creator: Harrison, D. and Rubinfeld, D.L.
-
-This is a copy of UCI ML housing dataset.
-https://archive.ics.uci.edu/ml/machine-learning-databases/housing/
-
-
-This dataset was taken from the StatLib library which is maintained at Carnegie Mellon University.
+<pre>**Author**:   
+**Source**: Unknown - Date unknown  
+**Please cite**:   
 
 The Boston house-price data of Harrison, D. and Rubinfeld, D.L. &#39;Hedonic
 prices and the demand for clean air&#39;, J. Environ. Economics &amp; Management,
 vol.5, 81-102, 1978.   Used in Belsley, Kuh &amp; Welsch, &#39;Regression diagnostics
 ...&#39;, Wiley, 1980.   N.B. Various transformations are used in the table on
 pages 244-261 of the latter.
+Variables in order:
+CRIM     per capita crime rate by town
+ZN       proportion of residential land zoned for lots over 25,000 sq.ft.
+INDUS    proportion of non-retail business acres per town
+CHAS     Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
+NOX      nitric oxides concentration (parts per 10 million)
+RM       average number of rooms per dwelling
+AGE      proportion of owner-occupied units built prior to 1940
+DIS      weighted distances to five Boston employment centres
+RAD      index of accessibility to radial highways
+TAX      full-value property-tax rate per $10,000
+PTRATIO  pupil-teacher ratio by town
+B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
+LSTAT    % lower status of the population
+MEDV     Median value of owner-occupied homes in $1000&#39;s
 
-The Boston house-price data has been used in many machine learning papers that address regression
-problems.   
-     
-.. topic:: References
 
-   - Belsley, Kuh &amp; Welsch, &#39;Regression diagnostics: Identifying Influential Data and Sources of Collinearity&#39;, Wiley, 1980. 244-261.
-   - Quinlan,R. (1993). Combining Instance-Based and Model-Based Learning. In Proceedings on the Tenth International Conference of Machine Learning, 236-243, University of Massachusetts, Amherst. Morgan Kaufmann.
+Information about the dataset
+CLASSTYPE: numeric
+CLASSINDEX: last
 
+Downloaded from openml.org.
 </pre>
 </div>
 </div>
@@ -155,12 +135,10 @@ problems.
       <th>CRIM</th>
       <th>ZN</th>
       <th>INDUS</th>
-      <th>CHAS</th>
       <th>NOX</th>
       <th>RM</th>
       <th>AGE</th>
       <th>DIS</th>
-      <th>RAD</th>
       <th>TAX</th>
       <th>PTRATIO</th>
       <th>B</th>
@@ -181,20 +159,16 @@ problems.
       <td>506.000000</td>
       <td>506.000000</td>
       <td>506.000000</td>
-      <td>506.000000</td>
-      <td>506.000000</td>
     </tr>
     <tr>
       <th>mean</th>
       <td>3.613524</td>
       <td>11.363636</td>
       <td>11.136779</td>
-      <td>0.069170</td>
       <td>0.554695</td>
       <td>6.284634</td>
       <td>68.574901</td>
       <td>3.795043</td>
-      <td>9.549407</td>
       <td>408.237154</td>
       <td>18.455534</td>
       <td>356.674032</td>
@@ -205,12 +179,10 @@ problems.
       <td>8.601545</td>
       <td>23.322453</td>
       <td>6.860353</td>
-      <td>0.253994</td>
       <td>0.115878</td>
       <td>0.702617</td>
       <td>28.148861</td>
       <td>2.105710</td>
-      <td>8.707259</td>
       <td>168.537116</td>
       <td>2.164946</td>
       <td>91.294864</td>
@@ -221,12 +193,10 @@ problems.
       <td>0.006320</td>
       <td>0.000000</td>
       <td>0.460000</td>
-      <td>0.000000</td>
       <td>0.385000</td>
       <td>3.561000</td>
       <td>2.900000</td>
       <td>1.129600</td>
-      <td>1.000000</td>
       <td>187.000000</td>
       <td>12.600000</td>
       <td>0.320000</td>
@@ -237,12 +207,10 @@ problems.
       <td>0.082045</td>
       <td>0.000000</td>
       <td>5.190000</td>
-      <td>0.000000</td>
       <td>0.449000</td>
       <td>5.885500</td>
       <td>45.025000</td>
       <td>2.100175</td>
-      <td>4.000000</td>
       <td>279.000000</td>
       <td>17.400000</td>
       <td>375.377500</td>
@@ -253,12 +221,10 @@ problems.
       <td>0.256510</td>
       <td>0.000000</td>
       <td>9.690000</td>
-      <td>0.000000</td>
       <td>0.538000</td>
       <td>6.208500</td>
       <td>77.500000</td>
       <td>3.207450</td>
-      <td>5.000000</td>
       <td>330.000000</td>
       <td>19.050000</td>
       <td>391.440000</td>
@@ -269,12 +235,10 @@ problems.
       <td>3.677083</td>
       <td>12.500000</td>
       <td>18.100000</td>
-      <td>0.000000</td>
       <td>0.624000</td>
       <td>6.623500</td>
       <td>94.075000</td>
       <td>5.188425</td>
-      <td>24.000000</td>
       <td>666.000000</td>
       <td>20.200000</td>
       <td>396.225000</td>
@@ -285,12 +249,10 @@ problems.
       <td>88.976200</td>
       <td>100.000000</td>
       <td>27.740000</td>
-      <td>1.000000</td>
       <td>0.871000</td>
       <td>8.780000</td>
       <td>100.000000</td>
       <td>12.126500</td>
-      <td>24.000000</td>
       <td>711.000000</td>
       <td>22.000000</td>
       <td>396.900000</td>
@@ -371,13 +333,20 @@ problems.
 <div class="jb_output_wrapper }}">
 <div class="output_area">
 
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/tmp/ipykernel_68484/73965141.py:6: UserWarning: 
 
+`distplot` is a deprecated function and will be removed in seaborn v0.14.0.
 
-<div class="output_png output_subarea ">
-<img src="../images/exercises/Solution_Data_Exploration_5_0.png"
->
+Please adapt your code to use either `displot` (a figure-level function with
+similar flexibility) or `histplot` (an axes-level function for histograms).
+
+For a guide to updating your code to use the new functions, please see
+https://gist.github.com/mwaskom/de44147ed2974457ad6372750bbe5751
+
+  sns.distplot(boston_df[&#39;ZN&#39;], rug=True)
+</pre>
 </div>
-
 </div>
 </div>
 <div class="jb_output_wrapper }}">
@@ -387,6 +356,37 @@ problems.
 
 <div class="output_png output_subarea ">
 <img src="../images/exercises/Solution_Data_Exploration_5_1.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/tmp/ipykernel_68484/73965141.py:12: UserWarning: 
+
+`distplot` is a deprecated function and will be removed in seaborn v0.14.0.
+
+Please adapt your code to use either `displot` (a figure-level function with
+similar flexibility) or `histplot` (an axes-level function for histograms).
+
+For a guide to updating your code to use the new functions, please see
+https://gist.github.com/mwaskom/de44147ed2974457ad6372750bbe5751
+
+  sns.distplot(np.log1p(boston_df[&#39;ZN&#39;]), rug=True)
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/exercises/Solution_Data_Exploration_5_3.png"
 >
 </div>
 
@@ -439,10 +439,29 @@ problems.
 <div class="jb_output_wrapper }}">
 <div class="output_area">
 
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/tmp/ipykernel_68484/1774370577.py:2: UserWarning: 
+
+`distplot` is a deprecated function and will be removed in seaborn v0.14.0.
+
+Please adapt your code to use either `displot` (a figure-level function with
+similar flexibility) or `histplot` (an axes-level function for histograms).
+
+For a guide to updating your code to use the new functions, please see
+https://gist.github.com/mwaskom/de44147ed2974457ad6372750bbe5751
+
+  sns.distplot(boston_df[&#39;INDUS&#39;], rug=True)
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
 
 
 <div class="output_png output_subarea ">
-<img src="../images/exercises/Solution_Data_Exploration_7_0.png"
+<img src="../images/exercises/Solution_Data_Exploration_7_1.png"
 >
 </div>
 

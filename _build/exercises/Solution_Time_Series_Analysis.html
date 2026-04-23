@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /exercises/Solution_Text_Mining.html
 suffix: .ipynb
-search: seasonal data values autocorrelation series differencing arma partial results regression effect model adjustment looks trend actual means analysis trends detrending linear likely mean not fit p q both good because while exercise effects revenue start plot december monthly visualize adjustments seasonality seems dollars should still year models forecast approach very learn determine parameters libraries including fitting forecasting provide csv pattern due season drop our solution steps detrend yearly therefore afterwards average increase million order detrended remove clearly through stationary e differences between select account explained only similar forecasts even get better pick suitable based task perform everything need pandas statsmodels
+search: seasonal data values autocorrelation series differencing arma partial results regression effect model adjustment looks trend actual means analysis trends detrending linear likely mean not fit p q both good because while exercise effects revenue start plot december monthly visualize adjustments seasonality seems dollars should still year models forecast approach very learn determine parameters libraries including fitting forecasting provide onlineandmailshopping csv pattern due season drop our solution steps detrend yearly therefore afterwards average increase million order detrended remove clearly through stationary e differences between select account explained only similar forecasts even get better pick suitable based task perform everything need pandas
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -37,7 +37,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>Your task in this exercise is to perform time series analysis, including detrending, seasonal adjustment, ARMA model fitting, and forecasting. You can find everything you need in <code>pandas</code> and <code>statsmodels</code>.</p>
-<p>For this exercise set, we provide revenue data about online and mail retail business in the US. The data we provide is for the years 2002-2014. You can download a CSV file with the data <a href="https://user.informatik.uni-goettingen.de/~sherbold/online_and_mail_shopping.csv">here</a>.</p>
+<p>For this exercise set, we provide revenue data about <a href="https://sherbold.github.io/intro-to-data-science/data/online_and_mail_shopping.csv">online and mail retail business</a> in the US. The data we provide is for the years 2002-2014 and can be found in the <code>data</code> folder under the name <code>online_and_mail_shopping.csv</code>.</p>
 <p>We start by loading the required libraries, the data, and showing a plot of the time series.</p>
 
 </div>
@@ -52,17 +52,15 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
-
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">statsmodels.tsa.arima_model</span> <span class="kn">import</span> <span class="n">ARMA</span>
+<span class="kn">from</span> <span class="nn">statsmodels.tsa.arima.model</span> <span class="kn">import</span> <span class="n">ARIMA</span>
 <span class="kn">from</span> <span class="nn">statsmodels.graphics.tsaplots</span> <span class="kn">import</span> <span class="n">plot_acf</span><span class="p">,</span> <span class="n">plot_pacf</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
 
 
-<span class="n">revenue_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;https://user.informatik.uni-goettingen.de/~sherbold/online_and_mail_shopping.csv&#39;</span><span class="p">,</span>
+<span class="n">revenue_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/online_and_mail_shopping.csv&#39;</span><span class="p">,</span>
                         <span class="n">header</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">parse_dates</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">,</span> <span class="s1">&#39;mdollars&#39;</span><span class="p">],</span> <span class="n">index_col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">revenue_df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -132,7 +130,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <span class="n">revenue_df</span><span class="p">[</span><span class="s1">&#39;mdollars_lin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">revenue_df</span><span class="p">[</span><span class="s1">&#39;mdollars&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">T_pred</span>
 
 <span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.2f</span><span class="s1"> more revenue every month (linear trend)&#39;</span> <span class="o">%</span> <span class="n">regr</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.2f</span><span class="s1"> more revenue every month (linear trend)&#39;</span> <span class="o">%</span> <span class="n">regr</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">T_pred</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time $t$&#39;</span><span class="p">)</span>
@@ -446,16 +444,16 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">Y_train</span> <span class="o">=</span> <span class="n">revenue_df</span><span class="p">[</span><span class="n">revenue_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">!=</span> <span class="mi">2013</span><span class="p">][</span><span class="s1">&#39;mdollars_lin_adj&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">ARMA</span><span class="p">(</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">model_fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ARIMA</span><span class="p">(</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">model_fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 
-<span class="n">y_pred</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">model_fit</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model_fit</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 
 <span class="c1"># we must not forget to add the trend and the seasonal effect</span>
 <span class="n">y_pred_lin_adj</span> <span class="o">=</span> <span class="n">y_pred</span><span class="o">+</span><span class="n">T_pred</span><span class="p">[</span><span class="n">revenue_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="s1">&#39;2013-01-01&#39;</span><span class="p">):]</span><span class="o">+</span><span class="n">monthly_means</span><span class="o">.</span><span class="n">values</span>
 
-<span class="n">revenue_df</span><span class="p">[</span><span class="s1">&#39;mdollars_lin_pred_arma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
-<span class="n">revenue_df</span><span class="p">[</span><span class="s1">&#39;mdollars_lin_pred_total&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+<span class="n">revenue_df</span><span class="p">[</span><span class="s1">&#39;mdollars_lin_pred_arma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">revenue_df</span><span class="p">[</span><span class="s1">&#39;mdollars_lin_pred_total&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 <span class="n">revenue_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">revenue_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="mi">2013</span><span class="p">,</span> <span class="s1">&#39;mdollars_lin_pred_arma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred</span>
 <span class="n">revenue_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">revenue_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="mi">2013</span><span class="p">,</span> <span class="s1">&#39;mdollars_lin_pred_total&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred_lin_adj</span>
 
@@ -475,10 +473,20 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="jb_output_wrapper }}">
 <div class="output_area">
 
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/l-schulte/VCS/teaching/intro-to-data-science/venv/lib/python3.12/site-packages/statsmodels/base/model.py:607: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  warnings.warn(&#34;Maximum Likelihood optimization failed to &#34;
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
 
 
 <div class="output_png output_subarea ">
-<img src="../images/exercises/Solution_Time_Series_Analysis_17_0.png"
+<img src="../images/exercises/Solution_Time_Series_Analysis_17_1.png"
 >
 </div>
 
@@ -511,10 +519,10 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">Y_train</span> <span class="o">=</span> <span class="n">revenue_df</span><span class="p">[</span><span class="n">revenue_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">year</span> <span class="o">!=</span> <span class="mi">2013</span><span class="p">][</span><span class="s1">&#39;mdollars_diff_adj&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">ARMA</span><span class="p">(</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-<span class="n">model_fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ARIMA</span><span class="p">(</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">model_fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 
-<span class="n">y_pred</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">model_fit</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model_fit</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 
 <span class="n">y_pred_diff_adj</span> <span class="o">=</span> <span class="n">y_pred</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="c1"># add season -&gt; add values prior to seasonal adjustment</span>

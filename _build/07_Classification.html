@@ -23,6 +23,25 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 </div>
     <div class="jb_cell">
 
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Overview">Overview<a class="anchor-link" href="#Overview"> </a></h2><p>Classification is about assigning categories to objects. Consider the following example.</p>
@@ -36,10 +55,13 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <p>The classification is defined by a <em>target concept</em> that maps objects to classes, i.e.,  $$h^*: O \to C.$$ The target concept is our ground truth, i.e., a perfect assignment of objects to the classes. Usually, we have no mathematical description for the target concept. For example, there is no such mathematical description for the classification of images as whale pictures and bear pictures. The <em>hypothesis</em> maps features to classes</p>
 $$h: \mathcal{F} \to C.$$<p>The hypothesis is determined by a classification algorithm with the goal to approximate the target concept such that</p>
 $$h^*(o) \approx h(\phi(o)).$$<h3 id="Scores">Scores<a class="anchor-link" href="#Scores"> </a></h3><p>A variant of classification is that the hypothesis computes <em>scores</em> for each class $c \in C$. In this case, we have a scoring function for each class of the form</p>
-$$h_c': \mathcal{F} \to \mathbb{R}.$$<p></p>
-<p>Scores are similar to <em>soft clustering</em>: instead of deciding for only a single class, the classification determines a value for each class, which we can use to evaluate how certain the algorithm is with the decision for a class. When we want to assign the class based on the scores, we usually just assign the class with the highest score. Thus, we have $$h(x) = \arg\max_{c \in C} h_c'(x)$$ for $x \in \mathcal{F}$.</p>
+$$
+h_c': \mathcal{F} \to \mathbb{R}.
+$$<p>Scores are similar to <em>soft clustering</em>: instead of deciding for only a single class, the classification determines a value for each class, which we can use to evaluate how certain the algorithm is with the decision for a class. When we want to assign the class based on the scores, we usually just assign the class with the highest score. Thus, we have $$h(x) = \arg\max_{c \in C} h_c'(x)$$ for $x \in \mathcal{F}$.</p>
 <p>Often, the scores are probability distributions, i.e., the scores for each class are in the interval [0,1] and the sum of all scores is 1, i.e.,</p>
-$$\sum_{c \in C} h_c'(x) = 1$$<p></p>
+$$
+\sum_{c \in C} h_c'(x) = 1
+$$<p></p>
 <p>for all $x \in \mathcal{F}.$</p>
 <h3 id="Binary-Classification-and-Thresholds">Binary Classification and Thresholds<a class="anchor-link" href="#Binary-Classification-and-Thresholds"> </a></h3><p>A special case of classification problems is where we have exactly two classes. While this is a strong restriction, there are many problems that can be solved using binary classification. For example, the prediction if a borrower will pay back money, the prediction if a transaction is fraudulent, or the prediction of whether an email is spam or not.</p>
 <p>For binary classification, we usually say that one class is <em>positive</em> and the other class is <em>negative</em>. Thus, we have exactly two classes. If we have only two classes $C = \{positive, negative\}$ and the scores, we can calculate the score of one class based on the score of the other class, in case the scores are a probability distribution, i.e.,</p>
@@ -102,7 +124,7 @@ $$h_t(x) = \begin{cases}\text{positive} &amp; \text{if}~h'(x) \geq t \\ \text{ne
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_1_0.png"
+<img src="images/07_Classification_2_0.png"
 >
 </div>
 
@@ -306,7 +328,7 @@ $$h_t(x) = \begin{cases}\text{positive} &amp; \text{if}~h'(x) \geq t \\ \text{ne
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_4_0.png"
+<img src="images/07_Classification_5_0.png"
 >
 </div>
 
@@ -367,7 +389,7 @@ $$h_t(x) = \begin{cases}\text{positive} &amp; \text{if}~h'(x) \geq t \\ \text{ne
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_6_0.png"
+<img src="images/07_Classification_7_0.png"
 >
 </div>
 
@@ -424,7 +446,7 @@ $$h_t(x) = \begin{cases}\text{positive} &amp; \text{if}~h'(x) \geq t \\ \text{ne
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_8_0.png"
+<img src="images/07_Classification_9_0.png"
 >
 </div>
 
@@ -517,7 +539,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_11_0.png"
+<img src="images/07_Classification_12_0.png"
 >
 </div>
 
@@ -604,7 +626,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_13_0.png"
+<img src="images/07_Classification_14_0.png"
 >
 </div>
 
@@ -674,7 +696,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_17_0.png"
+<img src="images/07_Classification_18_0.png"
 >
 </div>
 
@@ -731,7 +753,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_19_0.png"
+<img src="images/07_Classification_20_0.png"
 >
 </div>
 
@@ -803,7 +825,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_21_0.png"
+<img src="images/07_Classification_22_0.png"
 >
 </div>
 
@@ -855,7 +877,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_23_0.png"
+<img src="images/07_Classification_24_0.png"
 >
 </div>
 
@@ -903,7 +925,7 @@ $$ TPR_{micro} = \frac{\sum_{c \in C} TP_C}{\sum_{c \in C} TP_C + \sum_{c \in C}
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_25_0.png"
+<img src="images/07_Classification_26_0.png"
 >
 </div>
 
@@ -964,7 +986,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_27_0.png"
+<img src="images/07_Classification_28_0.png"
 >
 </div>
 
@@ -1011,7 +1033,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_29_0.png"
+<img src="images/07_Classification_30_0.png"
 >
 </div>
 
@@ -1073,7 +1095,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_31_0.png"
+<img src="images/07_Classification_32_0.png"
 >
 </div>
 
@@ -1126,7 +1148,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_33_0.png"
+<img src="images/07_Classification_34_0.png"
 >
 </div>
 
@@ -1173,7 +1195,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_35_0.png"
+<img src="images/07_Classification_36_0.png"
 >
 </div>
 
@@ -1220,7 +1242,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_37_0.png"
+<img src="images/07_Classification_38_0.png"
 >
 </div>
 
@@ -1269,7 +1291,7 @@ $$I(C; X') = H(C)-H(C|X').$$<p>Thus, the most informative feature is the feature
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_39_0.png"
+<img src="images/07_Classification_40_0.png"
 >
 </div>
 
@@ -1336,7 +1358,7 @@ $$logit(P(Y=c)) = \ln \frac{P(Y=c)}{1-P(Y=c)} = b_0 + b_1x_1 + ... + b_mx_m$$<p>
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_42_0.png"
+<img src="images/07_Classification_43_0.png"
 >
 </div>
 
@@ -1419,20 +1441,20 @@ $$<p>Thus, the odds of the class are the product of these exponentials. The impa
   <tbody>
     <tr>
       <th>setosa</th>
-      <td>0.066610</td>
-      <td>10.216701</td>
-      <td>2733.180675</td>
+      <td>0.066631</td>
+      <td>10.216725</td>
+      <td>2728.207373</td>
     </tr>
     <tr>
       <th>versicolor</th>
-      <td>1.845467</td>
-      <td>0.207923</td>
-      <td>6.328398</td>
+      <td>1.845224</td>
+      <td>0.207836</td>
+      <td>6.340628</td>
     </tr>
     <tr>
       <th>virginica</th>
-      <td>8.134952</td>
-      <td>0.470746</td>
+      <td>8.133435</td>
+      <td>0.470942</td>
       <td>0.000058</td>
     </tr>
   </tbody>
@@ -1510,7 +1532,7 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_47_0.png"
+<img src="images/07_Classification_48_0.png"
 >
 </div>
 
@@ -1619,7 +1641,7 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_50_0.png"
+<img src="images/07_Classification_51_0.png"
 >
 </div>
 
@@ -1678,14 +1700,14 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_circles</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_circles</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="n">Y_circles</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">X_circles</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">X_circles</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">X_circles</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">X_circles</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Non-lineary seperable data in $\mathbb</span><span class="si">{R}</span><span class="s1">^2$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Non-lineary seperable data in $</span><span class="se">\\</span><span class="s1">mathbb</span><span class="si">{R}</span><span class="s1">^2$&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;$x_1$&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$x_2$&#39;</span><span class="p">)</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">zaxis</span><span class="o">.</span><span class="n">set_rotate_label</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_circles</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_circles</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">Z_circles</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">Y_circles</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Lineary sepearable in $\mathbb</span><span class="si">{R}</span><span class="s1">^3$ using $x_1^2+x_2^2$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Lineary sepearable in $</span><span class="se">\\</span><span class="s1">mathbb</span><span class="si">{R}</span><span class="s1">^3$ using $x_1^2+x_2^2$&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;$x_1$&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$x_2$&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;$x_1^2+x_2^2$&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
@@ -1709,7 +1731,7 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_52_0.png"
+<img src="images/07_Classification_53_0.png"
 >
 </div>
 
@@ -1764,7 +1786,7 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_54_0.png"
+<img src="images/07_Classification_55_0.png"
 >
 </div>
 
@@ -1871,285 +1893,284 @@ $$score(c|x_1, ..., x_m) = \Pi_{i=1}^m P(x_i|c)P(c).$$<p>We can calculate this s
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+<!-- Generated by graphviz version 14.0.0 (0)
  -->
-<!-- Title: %3 Pages: 1 -->
-<svg width="332pt" height="206pt"
- viewBox="0.00 0.00 332.00 206.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!-- Pages: 1 -->
+<svg width="355pt" height="206pt"
+ viewBox="0.00 0.00 355.00 206.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 202)">
-<title>%3</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-202 328,-202 328,4 -4,4"/>
+<polygon fill="white" stroke="none" points="-4,4 -4,-202 351.19,-202 351.19,4 -4,4"/>
 <!-- x_1 -->
 <g id="node1" class="node">
 <title>x_1</title>
-<ellipse fill="#ffa500" stroke="#ffa500" cx="27" cy="-153" rx="27" ry="18"/>
-<text text-anchor="middle" x="27" y="-149.3" font-family="Times,serif" font-size="14.00" fill="#000000">x_1</text>
+<ellipse fill="orange" stroke="orange" cx="28.06" cy="-153" rx="28.06" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="28.06" y="-148.32" font-family="Times,serif" font-size="14.00">x_1</text>
 </g>
 <!-- x_2 -->
 <g id="node2" class="node">
 <title>x_2</title>
-<ellipse fill="#ffa500" stroke="#ffa500" cx="27" cy="-99" rx="27" ry="18"/>
-<text text-anchor="middle" x="27" y="-95.3" font-family="Times,serif" font-size="14.00" fill="#000000">x_2</text>
+<ellipse fill="orange" stroke="orange" cx="28.06" cy="-99" rx="28.06" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="28.06" y="-94.33" font-family="Times,serif" font-size="14.00">x_2</text>
 </g>
 <!-- x_1&#45;&gt;x_2 -->
 <!-- f1_1 -->
 <g id="node4" class="node">
 <title>f1_1</title>
-<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="117" cy="-180" rx="27" ry="18"/>
-<text text-anchor="middle" x="117" y="-176.3" font-family="Times,serif" font-size="14.00" fill="#000000">f1_1</text>
+<ellipse fill="grey" stroke="grey" cx="124.39" cy="-180" rx="32.27" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="124.39" y="-175.32" font-family="Times,serif" font-size="14.00">f1_1</text>
 </g>
 <!-- x_1&#45;&gt;f1_1 -->
 <g id="edge1" class="edge">
 <title>x_1&#45;&gt;f1_1</title>
-<path fill="none" stroke="#000000" d="M52.07,-160.521C61.5102,-163.3531 72.4169,-166.6251 82.564,-169.6692"/>
-<polygon fill="#000000" stroke="#000000" points="81.7915,-173.0915 92.3755,-172.6126 83.803,-166.3867 81.7915,-173.0915"/>
+<path fill="none" stroke="black" d="M54.34,-160.24C63.46,-162.85 73.98,-165.86 84.02,-168.73"/>
+<polygon fill="black" stroke="black" points="83.01,-172.08 93.59,-171.47 84.94,-165.35 83.01,-172.08"/>
 </g>
 <!-- f1_2 -->
 <g id="node5" class="node">
 <title>f1_2</title>
-<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="117" cy="-126" rx="27" ry="18"/>
-<text text-anchor="middle" x="117" y="-122.3" font-family="Times,serif" font-size="14.00" fill="#000000">f1_2</text>
+<ellipse fill="grey" stroke="grey" cx="124.39" cy="-126" rx="32.27" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="124.39" y="-121.33" font-family="Times,serif" font-size="14.00">f1_2</text>
 </g>
 <!-- x_1&#45;&gt;f1_2 -->
 <g id="edge2" class="edge">
 <title>x_1&#45;&gt;f1_2</title>
-<path fill="none" stroke="#000000" d="M52.07,-145.479C61.5102,-142.6469 72.4169,-139.3749 82.564,-136.3308"/>
-<polygon fill="#000000" stroke="#000000" points="83.803,-139.6133 92.3755,-133.3874 81.7915,-132.9085 83.803,-139.6133"/>
+<path fill="none" stroke="black" d="M54.34,-145.76C63.46,-143.15 73.98,-140.14 84.02,-137.27"/>
+<polygon fill="black" stroke="black" points="84.94,-140.65 93.59,-134.53 83.01,-133.92 84.94,-140.65"/>
 </g>
 <!-- f1_3 -->
 <g id="node6" class="node">
 <title>f1_3</title>
-<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="117" cy="-72" rx="27" ry="18"/>
-<text text-anchor="middle" x="117" y="-68.3" font-family="Times,serif" font-size="14.00" fill="#000000">f1_3</text>
+<ellipse fill="grey" stroke="grey" cx="124.39" cy="-72" rx="32.27" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="124.39" y="-67.33" font-family="Times,serif" font-size="14.00">f1_3</text>
 </g>
 <!-- x_1&#45;&gt;f1_3 -->
 <g id="edge3" class="edge">
 <title>x_1&#45;&gt;f1_3</title>
-<path fill="none" stroke="#000000" d="M43.0902,-138.5188C56.9542,-126.0413 77.1669,-107.8498 92.9519,-93.6433"/>
-<polygon fill="#000000" stroke="#000000" points="95.6541,-95.9201 100.7457,-86.6289 90.9713,-90.717 95.6541,-95.9201"/>
+<path fill="none" stroke="black" d="M45.49,-138.89C59.74,-126.65 80.62,-108.72 97.18,-94.5"/>
+<polygon fill="black" stroke="black" points="99.41,-97.2 104.72,-88.03 94.85,-91.89 99.41,-97.2"/>
 </g>
 <!-- f1_4 -->
 <g id="node7" class="node">
 <title>f1_4</title>
-<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="117" cy="-18" rx="27" ry="18"/>
-<text text-anchor="middle" x="117" y="-14.3" font-family="Times,serif" font-size="14.00" fill="#000000">f1_4</text>
+<ellipse fill="grey" stroke="grey" cx="124.39" cy="-18" rx="32.27" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="124.39" y="-13.32" font-family="Times,serif" font-size="14.00">f1_4</text>
 </g>
 <!-- x_1&#45;&gt;f1_4 -->
 <g id="edge4" class="edge">
 <title>x_1&#45;&gt;f1_4</title>
-<path fill="none" stroke="#000000" d="M38.0358,-136.4464C53.5549,-113.1677 81.9587,-70.5619 100.1352,-43.2972"/>
-<polygon fill="#000000" stroke="#000000" points="103.2391,-44.951 105.874,-34.6891 97.4147,-41.0681 103.2391,-44.951"/>
+<path fill="none" stroke="black" d="M40.63,-136.45C56.75,-113.37 86.14,-71.3 105.21,-44.01"/>
+<polygon fill="black" stroke="black" points="108,-46.13 110.86,-35.93 102.26,-42.12 108,-46.13"/>
 </g>
 <!-- x_3 -->
 <g id="node3" class="node">
 <title>x_3</title>
-<ellipse fill="#ffa500" stroke="#ffa500" cx="27" cy="-45" rx="27" ry="18"/>
-<text text-anchor="middle" x="27" y="-41.3" font-family="Times,serif" font-size="14.00" fill="#000000">x_3</text>
+<ellipse fill="orange" stroke="orange" cx="28.06" cy="-45" rx="28.06" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="28.06" y="-40.33" font-family="Times,serif" font-size="14.00">x_3</text>
 </g>
 <!-- x_2&#45;&gt;x_3 -->
 <!-- x_2&#45;&gt;f1_1 -->
 <g id="edge5" class="edge">
 <title>x_2&#45;&gt;f1_1</title>
-<path fill="none" stroke="#000000" d="M43.0902,-113.4812C56.9542,-125.9587 77.1669,-144.1502 92.9519,-158.3567"/>
-<polygon fill="#000000" stroke="#000000" points="90.9713,-161.283 100.7457,-165.3711 95.6541,-156.0799 90.9713,-161.283"/>
+<path fill="none" stroke="black" d="M45.49,-113.11C59.74,-125.35 80.62,-143.28 97.18,-157.5"/>
+<polygon fill="black" stroke="black" points="94.85,-160.11 104.72,-163.97 99.41,-154.8 94.85,-160.11"/>
 </g>
 <!-- x_2&#45;&gt;f1_2 -->
 <g id="edge6" class="edge">
 <title>x_2&#45;&gt;f1_2</title>
-<path fill="none" stroke="#000000" d="M52.07,-106.521C61.5102,-109.3531 72.4169,-112.6251 82.564,-115.6692"/>
-<polygon fill="#000000" stroke="#000000" points="81.7915,-119.0915 92.3755,-118.6126 83.803,-112.3867 81.7915,-119.0915"/>
+<path fill="none" stroke="black" d="M54.34,-106.24C63.46,-108.85 73.98,-111.86 84.02,-114.73"/>
+<polygon fill="black" stroke="black" points="83.01,-118.08 93.59,-117.47 84.94,-111.35 83.01,-118.08"/>
 </g>
 <!-- x_2&#45;&gt;f1_3 -->
 <g id="edge7" class="edge">
 <title>x_2&#45;&gt;f1_3</title>
-<path fill="none" stroke="#000000" d="M52.07,-91.479C61.5102,-88.6469 72.4169,-85.3749 82.564,-82.3308"/>
-<polygon fill="#000000" stroke="#000000" points="83.803,-85.6133 92.3755,-79.3874 81.7915,-78.9085 83.803,-85.6133"/>
+<path fill="none" stroke="black" d="M54.34,-91.76C63.46,-89.15 73.98,-86.14 84.02,-83.27"/>
+<polygon fill="black" stroke="black" points="84.94,-86.65 93.59,-80.53 83.01,-79.92 84.94,-86.65"/>
 </g>
 <!-- x_2&#45;&gt;f1_4 -->
 <g id="edge8" class="edge">
 <title>x_2&#45;&gt;f1_4</title>
-<path fill="none" stroke="#000000" d="M43.0902,-84.5188C56.9542,-72.0413 77.1669,-53.8498 92.9519,-39.6433"/>
-<polygon fill="#000000" stroke="#000000" points="95.6541,-41.9201 100.7457,-32.6289 90.9713,-36.717 95.6541,-41.9201"/>
+<path fill="none" stroke="black" d="M45.49,-84.89C59.74,-72.65 80.62,-54.72 97.18,-40.5"/>
+<polygon fill="black" stroke="black" points="99.41,-43.2 104.72,-34.03 94.85,-37.89 99.41,-43.2"/>
 </g>
 <!-- x_3&#45;&gt;f1_1 -->
 <g id="edge9" class="edge">
 <title>x_3&#45;&gt;f1_1</title>
-<path fill="none" stroke="#000000" d="M38.0358,-61.5536C53.5549,-84.8323 81.9587,-127.4381 100.1352,-154.7028"/>
-<polygon fill="#000000" stroke="#000000" points="97.4147,-156.9319 105.874,-163.3109 103.2391,-153.049 97.4147,-156.9319"/>
+<path fill="none" stroke="black" d="M40.63,-61.55C56.75,-84.63 86.14,-126.7 105.21,-153.99"/>
+<polygon fill="black" stroke="black" points="102.26,-155.88 110.86,-162.07 108,-151.87 102.26,-155.88"/>
 </g>
 <!-- x_3&#45;&gt;f1_2 -->
 <g id="edge10" class="edge">
 <title>x_3&#45;&gt;f1_2</title>
-<path fill="none" stroke="#000000" d="M43.0902,-59.4812C56.9542,-71.9587 77.1669,-90.1502 92.9519,-104.3567"/>
-<polygon fill="#000000" stroke="#000000" points="90.9713,-107.283 100.7457,-111.3711 95.6541,-102.0799 90.9713,-107.283"/>
+<path fill="none" stroke="black" d="M45.49,-59.11C59.74,-71.35 80.62,-89.28 97.18,-103.5"/>
+<polygon fill="black" stroke="black" points="94.85,-106.11 104.72,-109.97 99.41,-100.8 94.85,-106.11"/>
 </g>
 <!-- x_3&#45;&gt;f1_3 -->
 <g id="edge11" class="edge">
 <title>x_3&#45;&gt;f1_3</title>
-<path fill="none" stroke="#000000" d="M52.07,-52.521C61.5102,-55.3531 72.4169,-58.6251 82.564,-61.6692"/>
-<polygon fill="#000000" stroke="#000000" points="81.7915,-65.0915 92.3755,-64.6126 83.803,-58.3867 81.7915,-65.0915"/>
+<path fill="none" stroke="black" d="M54.34,-52.24C63.46,-54.85 73.98,-57.86 84.02,-60.73"/>
+<polygon fill="black" stroke="black" points="83.01,-64.08 93.59,-63.47 84.94,-57.35 83.01,-64.08"/>
 </g>
 <!-- x_3&#45;&gt;f1_4 -->
 <g id="edge12" class="edge">
 <title>x_3&#45;&gt;f1_4</title>
-<path fill="none" stroke="#000000" d="M52.07,-37.479C61.5102,-34.6469 72.4169,-31.3749 82.564,-28.3308"/>
-<polygon fill="#000000" stroke="#000000" points="83.803,-31.6133 92.3755,-25.3874 81.7915,-24.9085 83.803,-31.6133"/>
+<path fill="none" stroke="black" d="M54.34,-37.76C63.46,-35.15 73.98,-32.14 84.02,-29.27"/>
+<polygon fill="black" stroke="black" points="84.94,-32.65 93.59,-26.53 83.01,-25.92 84.94,-32.65"/>
 </g>
 <!-- f1_1&#45;&gt;f1_2 -->
 <!-- f2_1 -->
 <g id="node8" class="node">
 <title>f2_1</title>
-<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="207" cy="-180" rx="27" ry="18"/>
-<text text-anchor="middle" x="207" y="-176.3" font-family="Times,serif" font-size="14.00" fill="#000000">f2_1</text>
+<ellipse fill="grey" stroke="grey" cx="224.92" cy="-180" rx="32.27" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="224.92" y="-175.32" font-family="Times,serif" font-size="14.00">f2_1</text>
 </g>
 <!-- f1_1&#45;&gt;f2_1 -->
 <g id="edge13" class="edge">
 <title>f1_1&#45;&gt;f2_1</title>
-<path fill="none" stroke="#000000" d="M144.003,-180C152.0277,-180 160.9665,-180 169.5309,-180"/>
-<polygon fill="#000000" stroke="#000000" points="169.7051,-183.5001 179.705,-180 169.705,-176.5001 169.7051,-183.5001"/>
+<path fill="none" stroke="black" d="M157.11,-180C164.67,-180 172.86,-180 180.83,-180"/>
+<polygon fill="black" stroke="black" points="180.75,-183.5 190.75,-180 180.75,-176.5 180.75,-183.5"/>
 </g>
 <!-- f2_2 -->
 <g id="node9" class="node">
 <title>f2_2</title>
-<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="207" cy="-126" rx="27" ry="18"/>
-<text text-anchor="middle" x="207" y="-122.3" font-family="Times,serif" font-size="14.00" fill="#000000">f2_2</text>
+<ellipse fill="grey" stroke="grey" cx="224.92" cy="-126" rx="32.27" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="224.92" y="-121.33" font-family="Times,serif" font-size="14.00">f2_2</text>
 </g>
 <!-- f1_1&#45;&gt;f2_2 -->
 <g id="edge14" class="edge">
 <title>f1_1&#45;&gt;f2_2</title>
-<path fill="none" stroke="#000000" d="M137.4224,-167.7466C149.3897,-160.5662 164.7024,-151.3785 177.9143,-143.4514"/>
-<polygon fill="#000000" stroke="#000000" points="179.8842,-146.3512 186.6584,-138.2049 176.2827,-140.3487 179.8842,-146.3512"/>
+<path fill="none" stroke="black" d="M148.24,-167.48C161.05,-160.46 177.24,-151.58 191.36,-143.85"/>
+<polygon fill="black" stroke="black" points="192.78,-147.06 199.87,-139.18 189.41,-140.92 192.78,-147.06"/>
 </g>
 <!-- f2_3 -->
 <g id="node10" class="node">
 <title>f2_3</title>
-<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="207" cy="-72" rx="27" ry="18"/>
-<text text-anchor="middle" x="207" y="-68.3" font-family="Times,serif" font-size="14.00" fill="#000000">f2_3</text>
+<ellipse fill="grey" stroke="grey" cx="224.92" cy="-72" rx="32.27" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="224.92" y="-67.33" font-family="Times,serif" font-size="14.00">f2_3</text>
 </g>
 <!-- f1_1&#45;&gt;f2_3 -->
 <g id="edge15" class="edge">
 <title>f1_1&#45;&gt;f2_3</title>
-<path fill="none" stroke="#000000" d="M130.2798,-164.0642C145.3017,-146.0379 169.9189,-116.4973 187.2077,-95.7507"/>
-<polygon fill="#000000" stroke="#000000" points="189.9526,-97.924 193.6657,-88.0012 184.575,-93.4427 189.9526,-97.924"/>
+<path fill="none" stroke="black" d="M139.93,-164.06C156.23,-146.2 182.85,-117.02 201.75,-96.3"/>
+<polygon fill="black" stroke="black" points="204.15,-98.87 208.3,-89.12 198.98,-94.15 204.15,-98.87"/>
 </g>
 <!-- f2_4 -->
 <g id="node11" class="node">
 <title>f2_4</title>
-<ellipse fill="#c0c0c0" stroke="#c0c0c0" cx="207" cy="-18" rx="27" ry="18"/>
-<text text-anchor="middle" x="207" y="-14.3" font-family="Times,serif" font-size="14.00" fill="#000000">f2_4</text>
+<ellipse fill="grey" stroke="grey" cx="224.92" cy="-18" rx="32.27" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="224.92" y="-13.32" font-family="Times,serif" font-size="14.00">f2_4</text>
 </g>
 <!-- f1_1&#45;&gt;f2_4 -->
 <g id="edge16" class="edge">
 <title>f1_1&#45;&gt;f2_4</title>
-<path fill="none" stroke="#000000" d="M126.4615,-162.9694C142.22,-134.604 173.9424,-77.5036 192.5256,-44.0539"/>
-<polygon fill="#000000" stroke="#000000" points="195.5975,-45.7314 197.3944,-35.29 189.4784,-42.3319 195.5975,-45.7314"/>
+<path fill="none" stroke="black" d="M135.75,-162.97C152.85,-134.85 187.14,-78.48 207.55,-44.92"/>
+<polygon fill="black" stroke="black" points="210.41,-46.95 212.62,-36.58 204.43,-43.31 210.41,-46.95"/>
 </g>
 <!-- f1_2&#45;&gt;f1_3 -->
 <!-- f1_2&#45;&gt;f2_1 -->
 <g id="edge18" class="edge">
 <title>f1_2&#45;&gt;f2_1</title>
-<path fill="none" stroke="#000000" d="M137.4224,-138.2534C149.3897,-145.4338 164.7024,-154.6215 177.9143,-162.5486"/>
-<polygon fill="#000000" stroke="#000000" points="176.2827,-165.6513 186.6584,-167.7951 179.8842,-159.6488 176.2827,-165.6513"/>
+<path fill="none" stroke="black" d="M148.24,-138.52C161.05,-145.54 177.24,-154.42 191.36,-162.15"/>
+<polygon fill="black" stroke="black" points="189.41,-165.08 199.87,-166.82 192.78,-158.94 189.41,-165.08"/>
 </g>
 <!-- f1_2&#45;&gt;f2_2 -->
 <g id="edge19" class="edge">
 <title>f1_2&#45;&gt;f2_2</title>
-<path fill="none" stroke="#000000" d="M144.003,-126C152.0277,-126 160.9665,-126 169.5309,-126"/>
-<polygon fill="#000000" stroke="#000000" points="169.7051,-129.5001 179.705,-126 169.705,-122.5001 169.7051,-129.5001"/>
+<path fill="none" stroke="black" d="M157.11,-126C164.67,-126 172.86,-126 180.83,-126"/>
+<polygon fill="black" stroke="black" points="180.75,-129.5 190.75,-126 180.75,-122.5 180.75,-129.5"/>
 </g>
 <!-- f1_2&#45;&gt;f2_3 -->
 <g id="edge20" class="edge">
 <title>f1_2&#45;&gt;f2_3</title>
-<path fill="none" stroke="#000000" d="M137.4224,-113.7466C149.3897,-106.5662 164.7024,-97.3785 177.9143,-89.4514"/>
-<polygon fill="#000000" stroke="#000000" points="179.8842,-92.3512 186.6584,-84.2049 176.2827,-86.3487 179.8842,-92.3512"/>
+<path fill="none" stroke="black" d="M148.24,-113.48C161.05,-106.46 177.24,-97.58 191.36,-89.85"/>
+<polygon fill="black" stroke="black" points="192.78,-93.06 199.87,-85.18 189.41,-86.92 192.78,-93.06"/>
 </g>
 <!-- f1_2&#45;&gt;f2_4 -->
 <g id="edge21" class="edge">
 <title>f1_2&#45;&gt;f2_4</title>
-<path fill="none" stroke="#000000" d="M130.2798,-110.0642C145.3017,-92.0379 169.9189,-62.4973 187.2077,-41.7507"/>
-<polygon fill="#000000" stroke="#000000" points="189.9526,-43.924 193.6657,-34.0012 184.575,-39.4427 189.9526,-43.924"/>
+<path fill="none" stroke="black" d="M139.93,-110.06C156.23,-92.2 182.85,-63.02 201.75,-42.3"/>
+<polygon fill="black" stroke="black" points="204.15,-44.87 208.3,-35.12 198.98,-40.15 204.15,-44.87"/>
 </g>
 <!-- f1_3&#45;&gt;f1_4 -->
 <!-- f1_3&#45;&gt;f2_1 -->
 <g id="edge23" class="edge">
 <title>f1_3&#45;&gt;f2_1</title>
-<path fill="none" stroke="#000000" d="M130.2798,-87.9358C145.3017,-105.9621 169.9189,-135.5027 187.2077,-156.2493"/>
-<polygon fill="#000000" stroke="#000000" points="184.575,-158.5573 193.6657,-163.9988 189.9526,-154.076 184.575,-158.5573"/>
+<path fill="none" stroke="black" d="M139.93,-87.94C156.23,-105.8 182.85,-134.98 201.75,-155.7"/>
+<polygon fill="black" stroke="black" points="198.98,-157.85 208.3,-162.88 204.15,-153.13 198.98,-157.85"/>
 </g>
 <!-- f1_3&#45;&gt;f2_2 -->
 <g id="edge24" class="edge">
 <title>f1_3&#45;&gt;f2_2</title>
-<path fill="none" stroke="#000000" d="M137.4224,-84.2534C149.3897,-91.4338 164.7024,-100.6215 177.9143,-108.5486"/>
-<polygon fill="#000000" stroke="#000000" points="176.2827,-111.6513 186.6584,-113.7951 179.8842,-105.6488 176.2827,-111.6513"/>
+<path fill="none" stroke="black" d="M148.24,-84.52C161.05,-91.54 177.24,-100.42 191.36,-108.15"/>
+<polygon fill="black" stroke="black" points="189.41,-111.08 199.87,-112.82 192.78,-104.94 189.41,-111.08"/>
 </g>
 <!-- f1_3&#45;&gt;f2_3 -->
 <g id="edge25" class="edge">
 <title>f1_3&#45;&gt;f2_3</title>
-<path fill="none" stroke="#000000" d="M144.003,-72C152.0277,-72 160.9665,-72 169.5309,-72"/>
-<polygon fill="#000000" stroke="#000000" points="169.7051,-75.5001 179.705,-72 169.705,-68.5001 169.7051,-75.5001"/>
+<path fill="none" stroke="black" d="M157.11,-72C164.67,-72 172.86,-72 180.83,-72"/>
+<polygon fill="black" stroke="black" points="180.75,-75.5 190.75,-72 180.75,-68.5 180.75,-75.5"/>
 </g>
 <!-- f1_3&#45;&gt;f2_4 -->
 <g id="edge26" class="edge">
 <title>f1_3&#45;&gt;f2_4</title>
-<path fill="none" stroke="#000000" d="M137.4224,-59.7466C149.3897,-52.5662 164.7024,-43.3785 177.9143,-35.4514"/>
-<polygon fill="#000000" stroke="#000000" points="179.8842,-38.3512 186.6584,-30.2049 176.2827,-32.3487 179.8842,-38.3512"/>
+<path fill="none" stroke="black" d="M148.24,-59.48C161.05,-52.46 177.24,-43.58 191.36,-35.85"/>
+<polygon fill="black" stroke="black" points="192.78,-39.06 199.87,-31.18 189.41,-32.92 192.78,-39.06"/>
 </g>
 <!-- f1_4&#45;&gt;f2_1 -->
 <g id="edge28" class="edge">
 <title>f1_4&#45;&gt;f2_1</title>
-<path fill="none" stroke="#000000" d="M126.4615,-35.0306C142.22,-63.396 173.9424,-120.4964 192.5256,-153.9461"/>
-<polygon fill="#000000" stroke="#000000" points="189.4784,-155.6681 197.3944,-162.71 195.5975,-152.2686 189.4784,-155.6681"/>
+<path fill="none" stroke="black" d="M135.75,-35.03C152.85,-63.15 187.14,-119.52 207.55,-153.08"/>
+<polygon fill="black" stroke="black" points="204.43,-154.69 212.62,-161.42 210.41,-151.05 204.43,-154.69"/>
 </g>
 <!-- f1_4&#45;&gt;f2_2 -->
 <g id="edge29" class="edge">
 <title>f1_4&#45;&gt;f2_2</title>
-<path fill="none" stroke="#000000" d="M130.2798,-33.9358C145.3017,-51.9621 169.9189,-81.5027 187.2077,-102.2493"/>
-<polygon fill="#000000" stroke="#000000" points="184.575,-104.5573 193.6657,-109.9988 189.9526,-100.076 184.575,-104.5573"/>
+<path fill="none" stroke="black" d="M139.93,-33.94C156.23,-51.8 182.85,-80.98 201.75,-101.7"/>
+<polygon fill="black" stroke="black" points="198.98,-103.85 208.3,-108.88 204.15,-99.13 198.98,-103.85"/>
 </g>
 <!-- f1_4&#45;&gt;f2_3 -->
 <g id="edge30" class="edge">
 <title>f1_4&#45;&gt;f2_3</title>
-<path fill="none" stroke="#000000" d="M137.4224,-30.2534C149.3897,-37.4338 164.7024,-46.6215 177.9143,-54.5486"/>
-<polygon fill="#000000" stroke="#000000" points="176.2827,-57.6513 186.6584,-59.7951 179.8842,-51.6488 176.2827,-57.6513"/>
+<path fill="none" stroke="black" d="M148.24,-30.52C161.05,-37.54 177.24,-46.42 191.36,-54.15"/>
+<polygon fill="black" stroke="black" points="189.41,-57.08 199.87,-58.82 192.78,-50.94 189.41,-57.08"/>
 </g>
 <!-- f1_4&#45;&gt;f2_4 -->
 <g id="edge31" class="edge">
 <title>f1_4&#45;&gt;f2_4</title>
-<path fill="none" stroke="#000000" d="M144.003,-18C152.0277,-18 160.9665,-18 169.5309,-18"/>
-<polygon fill="#000000" stroke="#000000" points="169.7051,-21.5001 179.705,-18 169.705,-14.5001 169.7051,-21.5001"/>
+<path fill="none" stroke="black" d="M157.11,-18C164.67,-18 172.86,-18 180.83,-18"/>
+<polygon fill="black" stroke="black" points="180.75,-21.5 190.75,-18 180.75,-14.5 180.75,-21.5"/>
 </g>
 <!-- f2_1&#45;&gt;f2_2 -->
 <!-- c -->
 <g id="node12" class="node">
 <title>c</title>
-<ellipse fill="#add8e6" stroke="#add8e6" cx="297" cy="-99" rx="27" ry="18"/>
-<text text-anchor="middle" x="297" y="-95.3" font-family="Times,serif" font-size="14.00" fill="#000000">c</text>
+<ellipse fill="lightblue" stroke="lightblue" cx="320.19" cy="-99" rx="27" ry="18"/>
+<text xml:space="preserve" text-anchor="middle" x="320.19" y="-94.33" font-family="Times,serif" font-size="14.00">c</text>
 </g>
 <!-- f2_1&#45;&gt;c -->
 <g id="edge17" class="edge">
 <title>f2_1&#45;&gt;c</title>
-<path fill="none" stroke="#000000" d="M223.0902,-165.5188C236.9542,-153.0413 257.1669,-134.8498 272.9519,-120.6433"/>
-<polygon fill="#000000" stroke="#000000" points="275.6541,-122.9201 280.7457,-113.6289 270.9713,-117.717 275.6541,-122.9201"/>
+<path fill="none" stroke="black" d="M243.47,-164.76C257.89,-152.24 278.5,-134.34 294.58,-120.38"/>
+<polygon fill="black" stroke="black" points="296.58,-123.28 301.83,-114.08 291.99,-117.99 296.58,-123.28"/>
 </g>
 <!-- f2_2&#45;&gt;f2_3 -->
 <!-- f2_2&#45;&gt;c -->
 <g id="edge22" class="edge">
 <title>f2_2&#45;&gt;c</title>
-<path fill="none" stroke="#000000" d="M232.07,-118.479C241.5102,-115.6469 252.4169,-112.3749 262.564,-109.3308"/>
-<polygon fill="#000000" stroke="#000000" points="263.803,-112.6133 272.3755,-106.3874 261.7915,-105.9085 263.803,-112.6133"/>
+<path fill="none" stroke="black" d="M254.16,-117.83C263.59,-115.1 274.21,-112.02 284.09,-109.16"/>
+<polygon fill="black" stroke="black" points="284.75,-112.61 293.38,-106.47 282.8,-105.89 284.75,-112.61"/>
 </g>
 <!-- f2_3&#45;&gt;f2_4 -->
 <!-- f2_3&#45;&gt;c -->
 <g id="edge27" class="edge">
 <title>f2_3&#45;&gt;c</title>
-<path fill="none" stroke="#000000" d="M232.07,-79.521C241.5102,-82.3531 252.4169,-85.6251 262.564,-88.6692"/>
-<polygon fill="#000000" stroke="#000000" points="261.7915,-92.0915 272.3755,-91.6126 263.803,-85.3867 261.7915,-92.0915"/>
+<path fill="none" stroke="black" d="M254.16,-80.17C263.59,-82.9 274.21,-85.98 284.09,-88.84"/>
+<polygon fill="black" stroke="black" points="282.8,-92.11 293.38,-91.53 284.75,-85.39 282.8,-92.11"/>
 </g>
 <!-- f2_4&#45;&gt;c -->
 <g id="edge32" class="edge">
 <title>f2_4&#45;&gt;c</title>
-<path fill="none" stroke="#000000" d="M223.0902,-32.4812C236.9542,-44.9587 257.1669,-63.1502 272.9519,-77.3567"/>
-<polygon fill="#000000" stroke="#000000" points="270.9713,-80.283 280.7457,-84.3711 275.6541,-75.0799 270.9713,-80.283"/>
+<path fill="none" stroke="black" d="M243.47,-33.24C257.89,-45.76 278.5,-63.66 294.58,-77.62"/>
+<polygon fill="black" stroke="black" points="291.99,-80.01 301.83,-83.92 296.58,-74.72 291.99,-80.01"/>
 </g>
 </g>
 </svg>
@@ -2223,7 +2244,7 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_59_0.png"
+<img src="images/07_Classification_60_0.png"
 >
 </div>
 
@@ -2283,7 +2304,7 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_61_0.png"
+<img src="images/07_Classification_62_0.png"
 >
 </div>
 
@@ -2416,7 +2437,7 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_64_0.png"
+<img src="images/07_Classification_65_0.png"
 >
 </div>
 
@@ -2468,7 +2489,7 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_66_0.png"
+<img src="images/07_Classification_67_0.png"
 >
 </div>
 
@@ -2519,7 +2540,7 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_68_0.png"
+<img src="images/07_Classification_69_0.png"
 >
 </div>
 
@@ -2571,7 +2592,7 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_70_0.png"
+<img src="images/07_Classification_71_0.png"
 >
 </div>
 
@@ -2699,7 +2720,7 @@ $$f_{1,3} = f_{act}(\sum_{i=1}^3 w_i x_i)$$<p>where $f_{act}$ is the <em>activat
 
 
 <div class="output_png output_subarea ">
-<img src="images/07_Classification_72_0.png"
+<img src="images/07_Classification_73_0.png"
 >
 </div>
 

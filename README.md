@@ -13,14 +13,16 @@ Modifying the contents of this book is relatively simple.
 
 ## Building the Book
 
-The online book is created with [jupyter-book 0.6.4](https://legacy.jupyterbook.org/intro), the PDF version with [nbsphinx 0.7.0](https://nbsphinx.readthedocs.io/en/0.7.0/). To build the book, you need to clone the repository and setup a virtual environment in which the dependencies for building the book are installed. 
+The online book is created with [jupyter-book 0.6.4](https://legacy.jupyterbook.org/intro), the PDF version with [nbsphinx 0.7.0](https://nbsphinx.readthedocs.io/en/0.7.0/). To build the book, you need to clone the repository and setup a virtual environment in which the dependencies for building the book are installed. The build dependencies are listed in the `requirements-build.txt` file and require Python 3.10.
 
 ```sh
 git clone https://github.com/sherbold/intro-to-data-science
 cd intro-to-data-science
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+pyenv install 3.10
+pyenv local 3.10
+python3 -m venv venv-build
+source venv-build/bin/activate
+pip install -r requirements-build.txt
 ```
 
 You can now build the Website and the PDF. To ensure that the latest PDF is part of the online book, you must build the pdf first. 

@@ -73,7 +73,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <span class="k">def</span> <span class="nf">wrap_print</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">string</span><span class="p">)))</span>
 
-
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading the iris dataset...&quot;</span><span class="p">)</span>
 <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -193,107 +193,108 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>----------------------------------------------------------------
+<pre>Loading the iris dataset...
+----------------------------------------------------------------
 estimating performances of KNN and random forest with 5
 train/test splits
 
-Random Forest: mean   = 0.9183 [0.9051,0.9315]
-               sd     = 0.0151
-               median = 0.9210
-               min    = 0.9022
-               max    = 0.9423
-KNN:           mean   = 0.9377 [0.9187,0.9566]
-               sd     = 0.0216
-               median = 0.9403
-               min    = 0.9061
+Random Forest: mean   = 0.9407 [0.9184,0.9629]
+               sd     = 0.0254
+               median = 0.9600
+               min    = 0.9002
                max    = 0.9610
+KNN:           mean   = 0.9405 [0.9074,0.9737]
+               sd     = 0.0379
+               median = 0.9423
+               min    = 0.9002
+               max    = 1.0000
 
-p-value of Shapiro-Wilk test for random forest data:   0.3981
+p-value of Shapiro-Wilk test for random forest data:   0.0523
 The test found that the data sample was normal, failing to reject
 the null hypothesis at significance level alpha=0.005
 
-p-value of Shapiro-Wilk test for KNN data: 0.4484
+p-value of Shapiro-Wilk test for KNN data: 0.4647
 The test found that the data sample was normal, failing to reject
 the null hypothesis at significance level alpha=0.005
 
 Both populations normal. Using Welch&#39;s t-test.
 
-p-value of Welch&#39;s t-tests: 0.183827
+p-value of Welch&#39;s t-tests: 0.996420
 The test found that the population means are equal, failing to
 reject the null hypothesis at significance level alpha=0.005
 ----------------------------------------------------------------
 estimating performances of KNN and random forest with 10
 train/test splits
 
-Random Forest: mean   = 0.9233 [0.9066,0.9401]
-               sd     = 0.0331
-               median = 0.9210
-               min    = 0.8658
-               max    = 0.9803
-KNN:           mean   = 0.9478 [0.9369,0.9587]
-               sd     = 0.0215
+Random Forest: mean   = 0.9354 [0.9235,0.9473]
+               sd     = 0.0235
+               median = 0.9403
+               min    = 0.9002
+               max    = 0.9610
+KNN:           mean   = 0.9512 [0.9361,0.9663]
+               sd     = 0.0298
                median = 0.9600
-               min    = 0.9061
-               max    = 0.9803
+               min    = 0.9002
+               max    = 1.0000
 
-p-value of Shapiro-Wilk test for random forest data:   0.2464
+p-value of Shapiro-Wilk test for random forest data:   0.0109
 The test found that the data sample was normal, failing to reject
 the null hypothesis at significance level alpha=0.005
 
-p-value of Shapiro-Wilk test for KNN data: 0.1937
+p-value of Shapiro-Wilk test for KNN data: 0.3269
 The test found that the data sample was normal, failing to reject
 the null hypothesis at significance level alpha=0.005
 
 Both populations normal. Using Welch&#39;s t-test.
 
-p-value of Welch&#39;s t-tests: 0.029240
+p-value of Welch&#39;s t-tests: 0.132898
 The test found that the population means are equal, failing to
 reject the null hypothesis at significance level alpha=0.005
 ----------------------------------------------------------------
 estimating performances of KNN and random forest with 50
 train/test splits
 
-Random Forest: mean   = 0.9255 [0.9184,0.9326]
-               sd     = 0.0291
-               median = 0.9210
+Random Forest: mean   = 0.9308 [0.9250,0.9366]
+               sd     = 0.0238
+               median = 0.9240
                min    = 0.8658
                max    = 0.9803
-KNN:           mean   = 0.9386 [0.9318,0.9454]
-               sd     = 0.0281
-               median = 0.9403
-               min    = 0.8222
+KNN:           mean   = 0.9490 [0.9427,0.9552]
+               sd     = 0.0258
+               median = 0.9600
+               min    = 0.9002
                max    = 1.0000
 
-p-value of Shapiro-Wilk test for random forest data:   0.0211
-The test found that the data sample was normal, failing to reject
-the null hypothesis at significance level alpha=0.005
+p-value of Shapiro-Wilk test for random forest data:   0.0027
+The test found that the data sample was not normal, rejecting the
+null hypothesis at significance level alpha=0.005
 
-p-value of Shapiro-Wilk test for KNN data: 0.0005
+p-value of Shapiro-Wilk test for KNN data: 0.0008
 The test found that the data sample was not normal, rejecting the
 null hypothesis at significance level alpha=0.005
 
 At least one population not normal. Using Mann-Whitney-U test.
 
-p-value of Mann-Whitney-U test: 0.002456
+p-value of Mann-Whitney-U test: 0.000321
 The test found that the population means are not equal, rejecting
 the null hypothesis at significance level alpha=0.005
-Effect size (Cohen&#39;s d): -0.454 - small effect
+Effect size (Cohen&#39;s d): -0.724 - medium effect
 ----------------------------------------------------------------
 estimating performances of KNN and random forest with 100
 train/test splits
 
-Random Forest: mean   = 0.9255 [0.9213,0.9297]
-               sd     = 0.0277
-               median = 0.9210
+Random Forest: mean   = 0.9290 [0.9251,0.9329]
+               sd     = 0.0255
+               median = 0.9240
                min    = 0.8602
                max    = 0.9803
-KNN:           mean   = 0.9411 [0.9374,0.9448]
-               sd     = 0.0242
-               median = 0.9403
-               min    = 0.8222
+KNN:           mean   = 0.9435 [0.9392,0.9477]
+               sd     = 0.0278
+               median = 0.9423
+               min    = 0.8482
                max    = 1.0000
 
-p-value of Shapiro-Wilk test for random forest data:   0.0002
+p-value of Shapiro-Wilk test for random forest data:   0.0000
 The test found that the data sample was not normal, rejecting the
 null hypothesis at significance level alpha=0.005
 
@@ -303,10 +304,10 @@ null hypothesis at significance level alpha=0.005
 
 At least one population not normal. Using Mann-Whitney-U test.
 
-p-value of Mann-Whitney-U test: 0.000000
+p-value of Mann-Whitney-U test: 0.000001
 The test found that the population means are not equal, rejecting
 the null hypothesis at significance level alpha=0.005
-Effect size (Cohen&#39;s d): -0.600 - medium effect
+Effect size (Cohen&#39;s d): -0.541 - medium effect
 </pre>
 </div>
 </div>

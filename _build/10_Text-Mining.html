@@ -298,6 +298,10 @@ obstructionist democrats
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span> 
 <span class="kn">from</span> <span class="nn">nltk.tokenize</span> <span class="kn">import</span> <span class="n">word_tokenize</span> 
 
+<span class="c1"># this needs only to be run once</span>
+<span class="c1"># uncomment this line to download the stopword and punctuation lists</span>
+<span class="c1"># import nltk; nltk.download(&#39;stopwords&#39;); nltk.download(&#39;punkt&#39;); nltk.download(&#39;punkt_tab&#39;)</span>
+
 <span class="n">stop_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span> 
 
 <span class="n">tweets_no_stopwords</span> <span class="o">=</span> <span class="p">[]</span>
@@ -631,7 +635,8 @@ enough obstructionist democrat
 
 <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
 <span class="n">bag_of_words</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">tweets_stemming</span><span class="p">)</span>
-<span class="n">bag_of_words_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">bag_of_words</span><span class="o">.</span><span class="n">todense</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">())</span>
+<span class="c1"># from scikit-learn 1.0 onwards, we need to use get_feature_names_out instead of get_feature_names</span>
+<span class="n">bag_of_words_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">bag_of_words</span><span class="o">.</span><span class="n">todense</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">())</span>
 <span class="n">bag_of_words_df</span>
 </pre></div>
 

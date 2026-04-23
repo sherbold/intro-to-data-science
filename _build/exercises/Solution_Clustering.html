@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /exercises/Solution_Classification.html
 suffix: .ipynb
-search: clusters data clustering between results city cluster dbscan not means minpts also k different separation values regions similar green very only sklearn algorithms features pca plots good three because difference analysis exercise within large centers suburbs em bic using should thus suitable determine e scatterplot blue center while seven small boundary mean boston both version scatterplots already scaled plot clear pairwise indus nox less orange rural areas algorithm differences value epsilon dendrogram slink least get based well scale effects indicates seems due density degree close single even consider note zero exactly result here region split into hierarchical does any same
+search: clusters data clustering between results city cluster dbscan not means minpts also k different separation values regions similar green very only sklearn algorithms features pca plots good three because difference analysis exercise within large blue centers orange suburbs em bic using should thus suitable determine e scatterplot center while seven small boundary mean boston both version scatterplots already scaled plot clear pairwise indus nox less rural areas algorithm differences value epsilon dendrogram slink least get based well scale effects indicates seems due density degree close single even consider note zero exactly result here region split into hierarchical does any same
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -57,7 +57,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 
 <span class="c1"># first we load the data and print description</span>
-<span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
+<span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">fetch_openml</span><span class="p">(</span><span class="n">data_id</span><span class="o">=</span><span class="mi">531</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
 <span class="n">boston_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">boston</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
 <span class="n">boston_df</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span>
 
@@ -93,7 +93,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Variance explained by the principle components: [0.46757068 0.11782371]
-Ratio of variance explained:  0.5853943917417506
+Ratio of variance explained:  0.585394391742112
 </pre>
 </div>
 </div>
@@ -219,7 +219,7 @@ Ratio of variance explained:  0.5853943917417506
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 <span class="n">y_kmeans</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 
@@ -228,7 +228,7 @@ Ratio of variance explained:  0.5853943917417506
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$k$-Means with 3 clusters (PCA)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 <span class="n">y_kmeans</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 <span class="n">centers</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
@@ -280,7 +280,7 @@ Ratio of variance explained:  0.5853943917417506
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The plot of the clusters in the first two principle components indicates that three clusters is the better choice. With three clusters we see a relatively clear separation of the clusters in the plots. With four clusters, there seems to be a relatively random cluster (yellow), that is overlapping with all three other clusters. This may be due to artificially splitting the clusters more than they should be.</p>
+<p>The plot of the clusters in the first two principle components indicates that three clusters is the better choice. With three clusters we see a relatively clear separation of the clusters in the plots. With four clusters, there seems to be a relatively random cluster (purple), that is overlapping with all three other clusters. This may be due to artificially splitting the clusters more than they should be.</p>
 <p>From the PCA, we cannot infer if the three clusters have any meaning, i.e., what they represent in the data. To infer this, we now look at a pairwise scatterplot of the clusters with all features.</p>
 
 </div>
@@ -314,22 +314,10 @@ Ratio of variance explained:  0.5853943917417506
 <div class="jb_output_wrapper }}">
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kde.py:487: RuntimeWarning: invalid value encountered in true_divide
-  binned = fast_linbin(X, a, b, gridsize) / (delta * nobs)
-/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kdetools.py:34: RuntimeWarning: invalid value encountered in double_scalars
-  FAC1 = 2*(np.pi*bw/RANGE)**2
-</pre>
-</div>
-</div>
-</div>
-<div class="jb_output_wrapper }}">
-<div class="output_area">
-
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;seaborn.axisgrid.PairGrid at 0x7fad15a120b8&gt;</pre>
+<pre>&lt;seaborn.axisgrid.PairGrid at 0x7f7826626300&gt;</pre>
 </div>
 
 </div>
@@ -340,7 +328,7 @@ Ratio of variance explained:  0.5853943917417506
 
 
 <div class="output_png output_subarea ">
-<img src="../images/exercises/Solution_Clustering_9_2.png"
+<img src="../images/exercises/Solution_Clustering_9_1.png"
 >
 </div>
 
@@ -430,54 +418,54 @@ Ratio of variance explained:  0.5853943917417506
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.407993</td>
-      <td>1.516136</td>
-      <td>-1.069871</td>
-      <td>-0.049523</td>
-      <td>-0.997236</td>
-      <td>0.924923</td>
-      <td>-1.168782</td>
-      <td>1.196052</td>
-      <td>-0.598919</td>
-      <td>-0.662294</td>
-      <td>-0.744519</td>
-      <td>0.354232</td>
-      <td>-0.949036</td>
-      <td>0.979868</td>
+      <td>-0.205033</td>
+      <td>-0.156629</td>
+      <td>0.230882</td>
+      <td>3.668398</td>
+      <td>0.334568</td>
+      <td>0.334746</td>
+      <td>0.317382</td>
+      <td>-0.363816</td>
+      <td>-0.027030</td>
+      <td>-0.130546</td>
+      <td>-0.445766</td>
+      <td>0.178976</td>
+      <td>-0.197834</td>
+      <td>0.642924</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.376463</td>
-      <td>-0.342050</td>
-      <td>-0.297142</td>
-      <td>0.011287</td>
-      <td>-0.334920</td>
-      <td>-0.092372</td>
-      <td>-0.029696</td>
-      <td>0.057015</td>
-      <td>-0.580969</td>
-      <td>-0.603617</td>
-      <td>-0.086998</td>
-      <td>0.286587</td>
-      <td>-0.180297</td>
-      <td>0.035814</td>
+      <td>0.743430</td>
+      <td>-0.487722</td>
+      <td>1.135576</td>
+      <td>-0.272599</td>
+      <td>1.005447</td>
+      <td>-0.481031</td>
+      <td>0.806455</td>
+      <td>-0.829499</td>
+      <td>1.054472</td>
+      <td>1.141851</td>
+      <td>0.581687</td>
+      <td>-0.657993</td>
+      <td>0.892113</td>
+      <td>-0.723637</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.805442</td>
-      <td>-0.487722</td>
-      <td>1.119096</td>
-      <td>0.015767</td>
-      <td>1.126513</td>
-      <td>-0.464891</td>
-      <td>0.798165</td>
-      <td>-0.855104</td>
-      <td>1.223134</td>
-      <td>1.296687</td>
-      <td>0.606407</td>
-      <td>-0.641361</td>
-      <td>0.872853</td>
-      <td>-0.684867</td>
+      <td>-0.392263</td>
+      <td>0.291083</td>
+      <td>-0.662229</td>
+      <td>-0.272599</td>
+      <td>-0.601425</td>
+      <td>0.230391</td>
+      <td>-0.488077</td>
+      <td>0.506354</td>
+      <td>-0.586953</td>
+      <td>-0.623853</td>
+      <td>-0.273852</td>
+      <td>0.347473</td>
+      <td>-0.476301</td>
+      <td>0.330438</td>
     </tr>
   </tbody>
 </table>
@@ -562,54 +550,54 @@ Ratio of variance explained:  0.5853943917417506
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.107626</td>
-      <td>4.668868e+01</td>
-      <td>3.804340</td>
-      <td>0.056604</td>
-      <td>0.439252</td>
-      <td>6.933858</td>
-      <td>35.707547</td>
-      <td>6.311092</td>
-      <td>4.339623</td>
-      <td>296.726415</td>
-      <td>16.845283</td>
-      <td>388.981604</td>
-      <td>5.882642</td>
-      <td>31.535849</td>
+      <td>1.851670</td>
+      <td>7.714286e+00</td>
+      <td>12.719143</td>
+      <td>1.000000e+00</td>
+      <td>0.593426</td>
+      <td>6.519600</td>
+      <td>77.500000</td>
+      <td>3.029709</td>
+      <td>9.314286</td>
+      <td>386.257143</td>
+      <td>17.491429</td>
+      <td>372.997429</td>
+      <td>11.241714</td>
+      <td>28.440000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.378562</td>
-      <td>3.394068e+00</td>
-      <td>9.100297</td>
-      <td>0.072034</td>
-      <td>0.515924</td>
-      <td>6.219797</td>
-      <td>67.739831</td>
-      <td>3.914981</td>
-      <td>4.495763</td>
-      <td>306.605932</td>
-      <td>18.267373</td>
-      <td>382.812119</td>
-      <td>11.366822</td>
-      <td>22.861864</td>
+      <td>10.001848</td>
+      <td>1.598721e-14</td>
+      <td>18.919527</td>
+      <td>-1.110223e-16</td>
+      <td>0.671089</td>
+      <td>5.946988</td>
+      <td>91.253254</td>
+      <td>2.050085</td>
+      <td>18.721893</td>
+      <td>600.491124</td>
+      <td>19.713609</td>
+      <td>296.662012</td>
+      <td>19.017396</td>
+      <td>15.884024</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>10.534719</td>
-      <td>-1.776357e-15</td>
-      <td>18.806585</td>
-      <td>0.073171</td>
-      <td>0.685104</td>
-      <td>5.958317</td>
-      <td>91.020122</td>
-      <td>1.996222</td>
-      <td>20.189024</td>
-      <td>626.560976</td>
-      <td>19.767073</td>
-      <td>298.178963</td>
-      <td>18.880000</td>
-      <td>16.240244</td>
+      <td>0.242789</td>
+      <td>1.814570e+01</td>
+      <td>6.598146</td>
+      <td>-1.387779e-16</td>
+      <td>0.485072</td>
+      <td>6.446351</td>
+      <td>54.849669</td>
+      <td>4.860223</td>
+      <td>4.443709</td>
+      <td>303.198675</td>
+      <td>17.863245</td>
+      <td>388.365132</td>
+      <td>9.255132</td>
+      <td>25.568874</td>
     </tr>
   </tbody>
 </table>
@@ -729,7 +717,7 @@ Ratio of variance explained:  0.5853943917417506
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">em</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">em</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">em</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 <span class="n">y_em</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 
@@ -768,7 +756,7 @@ Ratio of variance explained:  0.5853943917417506
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There seems to a fairly good separation between most clusters. Some clusters (toirtoise on the bottom left, green between the two purple clusters) are not well separated from others, but it looks like these are clusters in the border regions of other clusters. We now look at the scatterplots in order to determine if the seven clusters are a good choice and what the meaning of the clusters is.</p>
+<p>There seems to a fairly good separation between most clusters. Some clusters (dark blue on the bottom left, purple between the light green and yellow clusters) are not well separated from others, but it looks like these are clusters in the border regions of other clusters. We now look at the scatterplots in order to determine if the seven clusters are a good choice and what the meaning of the clusters is.</p>
 
 </div>
 </div>
@@ -797,22 +785,10 @@ Ratio of variance explained:  0.5853943917417506
 <div class="jb_output_wrapper }}">
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kde.py:487: RuntimeWarning: invalid value encountered in true_divide
-  binned = fast_linbin(X, a, b, gridsize) / (delta * nobs)
-/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kdetools.py:34: RuntimeWarning: invalid value encountered in double_scalars
-  FAC1 = 2*(np.pi*bw/RANGE)**2
-</pre>
-</div>
-</div>
-</div>
-<div class="jb_output_wrapper }}">
-<div class="output_area">
-
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;seaborn.axisgrid.PairGrid at 0x7fad054366d8&gt;</pre>
+<pre>&lt;seaborn.axisgrid.PairGrid at 0x7f782fe22870&gt;</pre>
 </div>
 
 </div>
@@ -823,7 +799,7 @@ Ratio of variance explained:  0.5853943917417506
 
 
 <div class="output_png output_subarea ">
-<img src="../images/exercises/Solution_Clustering_21_2.png"
+<img src="../images/exercises/Solution_Clustering_21_1.png"
 >
 </div>
 
@@ -907,91 +883,74 @@ Ratio of variance explained:  0.5853943917417506
   <tbody>
     <tr>
       <th>0</th>
-      <td>13.209833</td>
-      <td>2.131628e-14</td>
-      <td>18.100000</td>
-      <td>-8.326673e-17</td>
-      <td>0.669605</td>
-      <td>5.984137</td>
-      <td>89.731452</td>
-      <td>2.074494</td>
-      <td>24.000000</td>
-      <td>666.000000</td>
-      <td>20.200000</td>
-      <td>282.584032</td>
-      <td>19.172823</td>
-      <td>15.438710</td>
+      <td>3.319049</td>
+      <td>3.552714e-15</td>
+      <td>21.070936</td>
+      <td>1.387779e-17</td>
+      <td>0.601219</td>
+      <td>5.794345</td>
+      <td>75.278487</td>
+      <td>2.566074</td>
+      <td>17.836232</td>
+      <td>679.868478</td>
+      <td>20.169181</td>
+      <td>374.177887</td>
+      <td>13.190216</td>
+      <td>23.310173</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.442719</td>
-      <td>1.050973e+00</td>
-      <td>8.954199</td>
-      <td>-1.387779e-17</td>
-      <td>0.537326</td>
-      <td>6.043697</td>
-      <td>75.021775</td>
-      <td>3.647576</td>
-      <td>4.519359</td>
-      <td>333.645158</td>
-      <td>19.417505</td>
-      <td>379.175081</td>
-      <td>13.683432</td>
-      <td>19.535313</td>
+      <td>0.087862</td>
+      <td>3.144118e+01</td>
+      <td>5.622755</td>
+      <td>-5.551115e-17</td>
+      <td>0.438748</td>
+      <td>6.426099</td>
+      <td>39.286638</td>
+      <td>6.296687</td>
+      <td>4.225853</td>
+      <td>302.940262</td>
+      <td>17.262009</td>
+      <td>390.491057</td>
+      <td>8.348714</td>
+      <td>25.142180</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.084548</td>
-      <td>2.765630e+01</td>
-      <td>5.641546</td>
-      <td>-4.163336e-17</td>
-      <td>0.443721</td>
-      <td>6.416816</td>
-      <td>39.083782</td>
-      <td>5.993622</td>
-      <td>4.296153</td>
-      <td>296.376755</td>
-      <td>17.698690</td>
-      <td>390.455896</td>
-      <td>7.922226</td>
-      <td>25.100947</td>
+      <td>0.061919</td>
+      <td>7.692902e+01</td>
+      <td>2.367159</td>
+      <td>7.143138e-02</td>
+      <td>0.409800</td>
+      <td>6.958094</td>
+      <td>29.435850</td>
+      <td>8.246266</td>
+      <td>3.571417</td>
+      <td>299.354009</td>
+      <td>17.278552</td>
+      <td>382.538440</td>
+      <td>6.229283</td>
+      <td>33.300320</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.059578</td>
-      <td>7.975000e+01</td>
-      <td>2.480000</td>
-      <td>8.333334e-02</td>
-      <td>0.409600</td>
-      <td>7.079167</td>
-      <td>29.808333</td>
-      <td>7.835667</td>
-      <td>3.500000</td>
-      <td>280.750001</td>
-      <td>17.108333</td>
-      <td>382.702500</td>
-      <td>6.160833</td>
-      <td>35.291666</td>
+      <td>0.396516</td>
+      <td>7.566568e+00</td>
+      <td>4.990883</td>
+      <td>-1.387779e-17</td>
+      <td>0.531364</td>
+      <td>7.206821</td>
+      <td>73.538525</td>
+      <td>2.923470</td>
+      <td>5.142219</td>
+      <td>271.082701</td>
+      <td>16.370153</td>
+      <td>388.198477</td>
+      <td>6.825768</td>
+      <td>35.712250</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>1.175292</td>
-      <td>-1.776357e-15</td>
-      <td>22.089362</td>
-      <td>-4.163336e-17</td>
-      <td>0.675830</td>
-      <td>5.845809</td>
-      <td>95.140426</td>
-      <td>1.907649</td>
-      <td>4.127660</td>
-      <td>414.595745</td>
-      <td>18.004255</td>
-      <td>348.715106</td>
-      <td>17.784255</td>
-      <td>17.793617</td>
-    </tr>
-    <tr>
-      <th>5</th>
       <td>1.905690</td>
       <td>5.294118e+00</td>
       <td>13.057647</td>
@@ -1008,21 +967,38 @@ Ratio of variance explained:  0.5853943917417506
       <td>27.805882</td>
     </tr>
     <tr>
+      <th>5</th>
+      <td>0.625081</td>
+      <td>5.329071e-15</td>
+      <td>12.048877</td>
+      <td>-5.551115e-17</td>
+      <td>0.570444</td>
+      <td>6.021831</td>
+      <td>75.532149</td>
+      <td>3.152611</td>
+      <td>4.398412</td>
+      <td>335.299052</td>
+      <td>18.991346</td>
+      <td>371.795303</td>
+      <td>13.540280</td>
+      <td>19.903665</td>
+    </tr>
+    <tr>
       <th>6</th>
-      <td>0.388249</td>
-      <td>4.722476e+00</td>
-      <td>5.106270</td>
-      <td>-1.387779e-17</td>
-      <td>0.533668</td>
-      <td>7.097995</td>
-      <td>73.895243</td>
-      <td>2.890533</td>
-      <td>4.981623</td>
-      <td>277.753620</td>
-      <td>16.235409</td>
-      <td>388.336113</td>
-      <td>7.055379</td>
-      <td>34.762562</td>
+      <td>14.053771</td>
+      <td>5.329071e-15</td>
+      <td>18.100000</td>
+      <td>-2.775558e-17</td>
+      <td>0.676756</td>
+      <td>5.993762</td>
+      <td>92.011414</td>
+      <td>1.994948</td>
+      <td>24.000000</td>
+      <td>666.000000</td>
+      <td>20.200000</td>
+      <td>273.235031</td>
+      <td>20.097901</td>
+      <td>14.189342</td>
     </tr>
   </tbody>
 </table>
@@ -1237,22 +1213,10 @@ Ratio of variance explained:  0.5853943917417506
 <div class="jb_output_wrapper }}">
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kde.py:487: RuntimeWarning: invalid value encountered in true_divide
-  binned = fast_linbin(X, a, b, gridsize) / (delta * nobs)
-/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kdetools.py:34: RuntimeWarning: invalid value encountered in double_scalars
-  FAC1 = 2*(np.pi*bw/RANGE)**2
-</pre>
-</div>
-</div>
-</div>
-<div class="jb_output_wrapper }}">
-<div class="output_area">
-
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;seaborn.axisgrid.PairGrid at 0x7facfac85080&gt;</pre>
+<pre>&lt;seaborn.axisgrid.PairGrid at 0x7f781690be90&gt;</pre>
 </div>
 
 </div>
@@ -1263,7 +1227,7 @@ Ratio of variance explained:  0.5853943917417506
 
 
 <div class="output_png output_subarea ">
-<img src="../images/exercises/Solution_Clustering_31_2.png"
+<img src="../images/exercises/Solution_Clustering_31_1.png"
 >
 </div>
 
@@ -1388,7 +1352,7 @@ Ratio of variance explained:  0.5853943917417506
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The dendrogram shows that this threshold is reasonable. We could even decrease the threshold to 2.6, without changing anything. In the dendrogram without cutoff, we see that most data is within a two clusters (green, tortoise). The dendrogram on the right is misleading with respect to the size of the clusters, because there are many more instance on the lower levels in the green and the tortoise cluster, than in the other clusters. We now look at the results in the PCA to see how well the clusters are separated.</p>
+<p>The dendrogram shows that this threshold is reasonable. We could even decrease the threshold to 2.6, without changing anything. In the dendrogram without cutoff, we see that most data is within a two clusters (orange, green). The dendrogram on the right is misleading with respect to the size of the clusters, because there are many more instance on the lower levels in the orange and the green cluster, than in the other clusters. We now look at the results in the PCA to see how well the clusters are separated.</p>
 
 </div>
 </div>
@@ -1472,26 +1436,10 @@ Ratio of variance explained:  0.5853943917417506
 <div class="jb_output_wrapper }}">
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/usr/local/lib/python3.6/dist-packages/numpy/core/_methods.py:140: RuntimeWarning: Degrees of freedom &lt;= 0 for slice
-  keepdims=keepdims)
-/usr/local/lib/python3.6/dist-packages/numpy/core/_methods.py:132: RuntimeWarning: invalid value encountered in double_scalars
-  ret = ret.dtype.type(ret / rcount)
-/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kde.py:487: RuntimeWarning: invalid value encountered in true_divide
-  binned = fast_linbin(X, a, b, gridsize) / (delta * nobs)
-/usr/local/lib/python3.6/dist-packages/statsmodels/nonparametric/kdetools.py:34: RuntimeWarning: invalid value encountered in double_scalars
-  FAC1 = 2*(np.pi*bw/RANGE)**2
-</pre>
-</div>
-</div>
-</div>
-<div class="jb_output_wrapper }}">
-<div class="output_area">
-
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;seaborn.axisgrid.PairGrid at 0x7f98646d5d30&gt;</pre>
+<pre>&lt;seaborn.axisgrid.PairGrid at 0x7f780efee300&gt;</pre>
 </div>
 
 </div>
@@ -1502,7 +1450,7 @@ Ratio of variance explained:  0.5853943917417506
 
 
 <div class="output_png output_subarea ">
-<img src="../images/exercises/Solution_Clustering_39_2.png"
+<img src="../images/exercises/Solution_Clustering_39_1.png"
 >
 </div>
 
@@ -1555,11 +1503,11 @@ Ratio of variance explained:  0.5853943917417506
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 <span class="n">y_kmeans</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 
-<span class="n">em</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">em</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">em</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 <span class="n">y_em</span> <span class="o">=</span> <span class="n">em</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boston_scaled</span><span class="p">)</span>
 

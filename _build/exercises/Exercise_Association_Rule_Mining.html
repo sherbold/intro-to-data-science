@@ -13,7 +13,7 @@ prev_page:
 next_page:
   url: /exercises/Exercise_Clustering.html
 suffix: .ipynb
-search: rules data mining association rule exercise records frequent itemsets threshold sets good part code list apriori algorithm suitable support determine both within get deeper understanding learn identify sample set libraries python mlxtend library store baskets user informatik uni goettingen de sherbold storedata csv following load creates where record items transaction finding once transactional try minimal such state clear reason why picked results lift confidence metrics evaluations validation randomly split into roughly similar does similarity differences indicate
+search: data rules mining association rule exercise records frequent itemsets threshold sets good part code list apriori algorithm suitable support determine both within get deeper understanding learn identify sample set libraries python mlxtend library store baskets sherbold github io intro science exercises storedata csv following load creates where record items transaction finding once transactional try minimal such state clear reason why picked results lift confidence metrics evaluations validation randomly split into roughly similar does similarity differences indicate
 
 comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
 ---
@@ -27,7 +27,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Within this exercise, you can get a deeper understanding of association rule mining and learn how to identify good rules for a sample data set.</p>
 <h2 id="Libraries-and-Data">Libraries and Data<a class="anchor-link" href="#Libraries-and-Data"> </a></h2><p>The first part of the exercise is about association rule mining. In Python, you can use the <code>mlxtend</code> library for the mining of association rules.</p>
-<p>We use data about <a href="https://user.informatik.uni-goettingen.de/~sherbold/store_data.csv">store baskets</a> in this exercise. You can use the following code to load the data. The code creates a list of records, where each record is a list of the items that are part of the transaction.</p>
+<p>We use data about <a href="https://sherbold.github.io/intro-to-data-science/exercises/data/store_data.csv">store baskets</a> in this exercise. You can use the following code to load the data. The code creates a list of records, where each record is a list of the items that are part of the transaction.</p>
 
 </div>
 </div>
@@ -41,7 +41,7 @@ comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /con
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;store_data.csv&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/store_data.csv&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span>
